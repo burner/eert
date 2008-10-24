@@ -53,7 +53,6 @@ public class ObjParse {
 		buffer[0] = new StringBuffer();
 		buffer[1] = new StringBuffer();
 		buffer[2] = new StringBuffer();
-		short idx = 2;
 		byte fIdx = 0;
 		for(int i = 2; i < curLine.length(); i++) {
 			if(curLine.charAt(i) == ' ')
@@ -69,9 +68,8 @@ public class ObjParse {
 		buffer[0] = new StringBuffer();
 		buffer[1] = new StringBuffer();
 		buffer[2] = new StringBuffer();
-		short idx = 2;
 		byte fIdx = 0;
-		for(int i = 2; i < curLine.length(); i++) {
+		for(int i = 3; i < curLine.length(); i++) {
 			if(curLine.charAt(i) == ' ')
 				fIdx++;
 			else
@@ -86,9 +84,8 @@ public class ObjParse {
 		buffer[0] = new StringBuffer();
 		buffer[1] = new StringBuffer();
 		buffer[2] = new StringBuffer();
-		short idx = 2;
 		byte fIdx = 0;
-		for(int i = 2; i < curLine.length(); i++) {
+		for(int i = 3; i < curLine.length(); i++) {
 			if(curLine.charAt(i) == ' ')
 				fIdx++;
 			else
@@ -98,6 +95,23 @@ public class ObjParse {
 	}
 
 	private void addFace() {
+		StringBuffer[] buffer = new StringBuffer[3];
+		buffer[0] = new StringBuffer();
+		buffer[1] = new StringBuffer();
+		buffer[2] = new StringBuffer();
+		buffer[3] = new StringBuffer();
+		buffer[4] = new StringBuffer();
+		buffer[5] = new StringBuffer();
+		buffer[6] = new StringBuffer();
+		buffer[7] = new StringBuffer();
+		buffer[8] = new StringBuffer();
+		int fIdx = 0;
+		for(int i = 2; i < curLine.length(); i++) {
+			if(curLine.charAt(i) == '/') 
+				fIdx++;
+			else 
+				buffer[fIdx].append(curLine.charAt(i));
+		}
 
 	}
 }
