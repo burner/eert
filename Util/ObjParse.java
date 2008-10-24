@@ -1,3 +1,9 @@
+package Util;
+
+import Types.Face;
+import Types.Normal;
+import Types.Vector;
+import Types.TexCoor;
 import java.io.*;
 import java.util.*;
 public class ObjParse {
@@ -10,8 +16,6 @@ public class ObjParse {
 	private LinkedList<Face> tempFac;
 
 	public ObjParse(String file) {
-		File dir = new File();
-		System.out.println(dir.getPath());
 		this.file = file;
 		this.tempVec = new LinkedList<Vector>();
 		this.tempNor = new LinkedList<Normal>();
@@ -36,11 +40,14 @@ public class ObjParse {
 	}
 	
 	private void parse() {
-		FileReader input;
+		FileInputStream input;
+                DataInputStream data;
 		BufferedReader reader;
 		try {
-			input = new FileReader(this.file);
-			reader = new BufferedReader(input);
+                        System.out.println(new File(".").getAbsolutePath());
+			input = new FileInputStream(this.file);
+                        data = new DataInputStream(input);
+			reader = new BufferedReader(new InputStreamReader(data));
 
 			curLine = reader.readLine();
 
@@ -114,7 +121,7 @@ public class ObjParse {
 	}
 
 	private void addFace() {
-		StringBuffer[] buffer = new StringBuffer[3];
+		StringBuffer[] buffer = new StringBuffer[9];
 		buffer[0] = new StringBuffer();
 		buffer[1] = new StringBuffer();
 		buffer[2] = new StringBuffer();
