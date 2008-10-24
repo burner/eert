@@ -1,7 +1,7 @@
 class Face {
-	public int v1, vt1, vn1;
-	public int v2, vt2, vn2;
-	public int v3, vt3, vn3;
+	public int v1 = 0, vt1 = 0, vn1 = 0;
+	public int v2 = 0, vt2 = 0, vn2 = 0;
+	public int v3 = 0, vt3 = 0, vn3 = 0;
 	public Face(int v1, int vt1, int  vn1, int v2, int vt2, int vn2, int v3, int vt3, int vn3) {
 		this.v1 = v1;
 		this.vt1 = vt1;

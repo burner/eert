@@ -7,15 +7,34 @@ public class ObjParse {
 	private LinkedList<Vector> tempVec;
 	private LinkedList<Normal> tempNor;
 	private LinkedList<TexCoor> tempTex;
+	private LinkedList<Face> tempFac;
 
 	public ObjParse(String file) {
+		File dir = new File();
+		System.out.println(dir.getPath());
 		this.file = file;
 		this.tempVec = new LinkedList<Vector>();
 		this.tempNor = new LinkedList<Normal>();
 		this.tempTex = new LinkedList<TexCoor>();
+		this.tempFac = new LinkedList<Face>();
 		parse();
 	}
+	
+	public Vector[] getVec() {
+		return (Vector[])this.tempVec.toArray();
+	}
+	public Normal[] getNor() {
+		return (Normal[])this.tempNor.toArray();
+	}
+	
+	public TexCoor[] getTex() {
+		return (TexCoor[])this.tempTex.toArray();
+	}
 
+	public Face[] getFace() {
+		return (Face[])this.tempFac.toArray();
+	}
+	
 	private void parse() {
 		FileReader input;
 		BufferedReader reader;
@@ -112,6 +131,6 @@ public class ObjParse {
 			else 
 				buffer[fIdx].append(curLine.charAt(i));
 		}
-
+		this.tempFac.add(new Face(new Integer(buffer[0].toString()).intValue(), new Integer(buffer[1].toString()).intValue(), new Integer(buffer[2].toString()).intValue(), new Integer(buffer[3].toString()).intValue(), new Integer(buffer[4].toString()).intValue(), new Integer(buffer[5].toString()).intValue(), new Integer(buffer[6].toString()).intValue(), new Integer(buffer[7].toString()).intValue(), new Integer(buffer[8].toString()).intValue()));
 	}
 }
