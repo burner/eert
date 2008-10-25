@@ -1,5 +1,10 @@
+import Engine.*;
+import util.*;
+import Types.*;
 public class Eert {
-    public static void main(String[] args) {
-        
-    }
+	private Thread erun;
+	public static void main(String[] args) {
+		this.erun = new Thread(new ERun());
+		erun.start();
+	}
 }

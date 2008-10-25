@@ -5,15 +5,14 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class EFrame extends Frame {
-
-    private GLCanvas canvas;
-
-    public EFrame() {
-        this.setTitle("EERT");
-        this.add(this.canvas);
-        this.setSize(1024, 640);
-        this.setVisible(true);
-        this.canvas.display();
-    }
+public class EFrame implements Frame {
+	public GLCanvas canvas;
+	public EFrame(GLCanvas canvas) {
+		this.canvas = canvas;
+		this.canvas.addGLEventListener(new Engine());
+		this.add(this.canvas);
+		this.setTitle("EERT");
+		this.setSize(1024, 640);
+		this.setVisible(true);
+	}
 }
