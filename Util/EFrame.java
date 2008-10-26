@@ -9,10 +9,12 @@ import java.awt.event.WindowEvent;
 public class EFrame extends Frame {
     public boolean quit;
     public GLCanvas canvas;
+    private Camera cam;
 
     public EFrame() {
         this.canvas = new GLCanvas();
-        this.canvas.addGLEventListener(new Engine());
+        this.cam = new Camera();
+        this.canvas.addGLEventListener(new Engine(this.cam));
         this.add(this.canvas);
         this.setTitle("EERT");        
         this.addWindowListener(new WindowAdapter() {

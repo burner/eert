@@ -6,18 +6,31 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
 import Types.*;
+import Util.Camera;
+import java.util.Calendar;
 
 public class Engine implements GLEventListener {
 
     private Obj obj;
+    private Calendar now = null;
+    private long ms = 0;
+    private int frames = 0;
+    public Camera cam;
+
+    public Engine(Camera cam) {
+        this.cam = cam;
+    }
 
     public void display(GLAutoDrawable glDrawable) {
         GL gl = glDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        gl.glTranslatef(-1.0f, -2.0f, -5.0f);
+
         this.obj.render(gl);
+        this.obj.rotate(0.5f, 0.04f, 0.07f);
+        this.obj.move(0.001f, 0.001f, -0.0001f);
+        frame();
     }
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
@@ -29,9 +42,11 @@ public class Engine implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDisable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("box.obj");
+        obj = new Obj("suzann.obj");
+        setCam(gl);
     }
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {
@@ -46,5 +61,23 @@ public class Engine implements GLEventListener {
         glu.gluPerspective(50.0f, h, 1.0, 1000.0);
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
+    }
+
+    private void setCam(GL gl) {
+        gl.glTranslatef(this.cam.x, this.cam.y, this.cam.z);
+        gl.glRotatef(this.cam.xRot, this.cam.yRot, this.cam.zRot, 1);
+        System.out.println("cam");
+        gl.glTranslatef(0.0f, 0.0f, 0.0f);
+    }
+
+    private void frame() {
+        now = Calendar.getInstance();
+        if (now.getTimeInMillis() >= (ms + 1000)) {
+            ms = now.getTimeInMillis();
+            System.out.println(obj.fac.length + " faces at " + frames);
+            frames = 1;
+        } else {
+            frames++;
+        }
     }
 }
