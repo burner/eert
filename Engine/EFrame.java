@@ -5,10 +5,10 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class EFrame implements Frame {
+public class EFrame extends Frame {
 	public GLCanvas canvas;
-	public EFrame(GLCanvas canvas) {
-		this.canvas = canvas;
+	public EFrame() {
+		this.canvas = new GLCanvas();
 		this.canvas.addGLEventListener(new Engine());
 		this.add(this.canvas);
 		this.setTitle("EERT");

@@ -1,31 +1,29 @@
 package Util;
 
-import Types.Face;
-import Types.Normal;
-import Types.Vector;
-import Types.TexCoor;
 import java.io.*;
 import java.util.*;
+
+import Types.*;
 public class ObjParse {
 	private int vecIdx = 0;
 	private String file;
 	private String curLine;
-	private LinkedList<Vector> tempVec;
+	private LinkedList<Types.Vector> tempVec;
 	private LinkedList<Normal> tempNor;
 	private LinkedList<TexCoor> tempTex;
 	private LinkedList<Face> tempFac;
 
 	public ObjParse(String file) {
 		this.file = file;
-		this.tempVec = new LinkedList<Vector>();
+		this.tempVec = new LinkedList<Types.Vector>();
 		this.tempNor = new LinkedList<Normal>();
 		this.tempTex = new LinkedList<TexCoor>();
 		this.tempFac = new LinkedList<Face>();
 		parse();
 	}
 	
-	public Vector[] getVec() {
-		return (Vector[])this.tempVec.toArray();
+	public Types.Vector[] getVec() {
+		return (Types.Vector[])this.tempVec.toArray();
 	}
 	public Normal[] getNor() {
 		return (Normal[])this.tempNor.toArray();
@@ -86,7 +84,7 @@ public class ObjParse {
 			else
 				buffer[fIdx].append(curLine.charAt(i));
 		}
-		this.tempVec.add(new Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
+		this.tempVec.add(new Types.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
 	}
 
 	private void addVertexN() {

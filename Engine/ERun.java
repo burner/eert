@@ -7,6 +7,6 @@ public class ERun implements Runnable {
 	}
 	
 	public void run() {
-		this.frame.canvas.run();
+		this.frame.canvas.display();
 	}
 }
