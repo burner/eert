@@ -16,18 +16,13 @@
  *this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-import Engine.*;
 import Util.*;
-import Types.*;
 
 public class Eert {
-
-    private static Thread erun;
-    private static Obj obj;
+    private static EFrame frame;
 
     public static void main(String[] args) {
-        erun = new Thread(new ERun());
-        erun.start();
+        frame = new EFrame();
 
     }
 }

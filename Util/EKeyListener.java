@@ -14,15 +14,34 @@ public class EKeyListener implements KeyListener {
         this.cam = cam;
     }
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        switch(e.getKeyChar()) {
+            case 'a': 
+                this.cam.x -=0.09f;
+                break;
+            case 'd':
+                this.cam.x +=0.09f;
+                break;
+            case 's':
+                this.cam.z -=0.09f;
+                break;
+            case 'w':
+                this.cam.z +=0.09f;
+                break;
+            case 'o':
+                this.cam.y -=0.09f;
+                break;                
+            case 'l':
+                this.cam.y +=0.09f;
+                break;
+        }
     }
 
     public void keyPressed(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
     public void keyReleased(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
     }
 
 }

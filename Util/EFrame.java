@@ -18,10 +18,9 @@
 package Util;
 
 import Engine.*;
-import java.awt.event.KeyEvent;
+import com.sun.opengl.util.Animator;
 import javax.media.opengl.GLCanvas;
 import java.awt.Frame;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -30,26 +29,38 @@ public class EFrame extends Frame {
     public boolean quit;
     public GLCanvas canvas;
     private Camera cam;
+    private final Animator animator;
 
     public EFrame() {
+
         this.canvas = new GLCanvas();
         this.cam = new Camera();
         this.canvas.addGLEventListener(new Engine(this.cam, this));
+        this.canvas.addKeyListener(new EKeyListener(this.cam));
+        this.canvas.addMouseListener(new EMouseListener(this.cam));
+        this.animator = new Animator(this.canvas);
         this.add(this.canvas);
         this.setTitle("EERT");
         this.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
-                quit = true;
-                System.exit(0);
+                // Run this on another thread than the AWT event queue to
+                // make sure the call to Animator.stop() completes before
+                // exiting
+                new Thread(new Runnable() {
+
+                    public void run() {
+                        animator.stop();
+                        System.exit(0);
+                    }
+                }).start();
             }
         });
         this.setSize(1024, 640);
-        this.addKeyListener(new EKeyListener(this.cam));
-        this.addMouseListener(new EMouseListener(this.cam));
-        
-        this.setVisible(true);
 
+
+        this.setVisible(true);
+        this.animator.start();
         this.canvas.requestFocus();
 
     }

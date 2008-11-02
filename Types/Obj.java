@@ -29,10 +29,8 @@ public class Obj {
     public TexCoor[] tex = null;
     public Face[] fac = null;
     public String name;
-    private float x = 0.0f;                 //Object origin
-
-    private float y = 0.0f;
-    private float z = -8.0f;
+    public Vector origin;                 //Object origin
+    
     private float xR = 0.0f;                //Object rotation
 
     private float yR = 0.0f;
@@ -43,11 +41,24 @@ public class Obj {
 
     public Obj(String file) {
         ObjParse parse = new ObjParse(file);
+        this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.vec = parse.getVec();
         this.nor = parse.getNor();
         this.tex = parse.getTex();
         this.fac = parse.getFace();
+        calcObjCenter();
         makeBoundingSphere();
+    }
+    
+    private void calcObjCenter() {
+        for(Vector vecIdx : this.vec) {
+            this.origin.x += (vecIdx.x / this.vec.length); 
+            this.origin.y += (vecIdx.y / this.vec.length); 
+            this.origin.z += (vecIdx.z / this.vec.length);        
+        }
+        this.origin.x = this.origin.x * -1;
+        this.origin.y = this.origin.y * -1;
+        this.origin.z = this.origin.z * -1;       
     }
 
     private void makeBoundingSphere() {
@@ -60,9 +71,9 @@ public class Obj {
     }
 
     public void conMove(float x, float y, float z) {
-        this.x += x * UHPT.getETime() / 1000000000;
-        this.y += y * UHPT.getETime() / 1000000000;
-        this.z += z * UHPT.getETime() / 1000000000;
+        this.origin.x += x * UHPT.getETime() / 1000000000;
+        this.origin.y += y * UHPT.getETime() / 1000000000;
+        this.origin.z += z * UHPT.getETime() / 1000000000;
     }
 
     public void conRotate(float rX, float rY, float rZ) {
@@ -72,9 +83,9 @@ public class Obj {
     }
 
     public void setPos(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.origin.x = x;
+        this.origin.y = y;
+        this.origin.z = z;
     }
 
     public void setRot(float xR, float yR, float zR) {
@@ -87,7 +98,7 @@ public class Obj {
         Random r = new Random();
         gl.glPushMatrix();
         gl.glColor3f(0.65f, 0.32f, 0.89f);
-        gl.glTranslatef(x, y, z);
+        gl.glTranslatef(this.origin.x, this.origin.y, this.origin.z);
         gl.glRotatef(xR, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(yR, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(zR, 0.0f, 0.0f, 1.0f);

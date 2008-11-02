@@ -32,7 +32,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Calendar;
 
-public class Engine implements GLEventListener, KeyListener, MouseListener {
+public class Engine implements GLEventListener {
 
     private Obj obj;
     private Calendar now = null;
@@ -46,9 +46,6 @@ public class Engine implements GLEventListener, KeyListener, MouseListener {
 
     public Engine(Camera cam, EFrame frame) {
         this.cam = cam;
-        this.cam.xRot = -30.0f;
-        this.cam.yRot = 0.0f;
-        this.cam.y = 5.0f;
         this.frame = frame;
     }
 
@@ -58,7 +55,7 @@ public class Engine implements GLEventListener, KeyListener, MouseListener {
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
         cam.drawCam(gl);
-
+        
         this.obj.setRot(90.0f, 0.0f, 0.0f);
         this.obj.render(gl);
         //this.obj.conMove(0.001f, 0.001f, -0.0001f);
@@ -82,9 +79,8 @@ public class Engine implements GLEventListener, KeyListener, MouseListener {
         gl.glDisable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        glDrawable.addMouseListener(this);
+        this.cam.z = -8.0f;
         obj = new Obj("suzann2.obj");
-
     }
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {
@@ -110,61 +106,5 @@ public class Engine implements GLEventListener, KeyListener, MouseListener {
         } else {
             frames++;
         }
-    }
-
-    public void keyTyped(KeyEvent e) {
-    }
-
-    public void keyPressed(KeyEvent e) {
-        this.frame.setTitle("bla");
-        System.out.println("bla");
-        System.out.println(e.getKeyChar());
-    }
-
-    public void keyReleased(KeyEvent e) {
-        System.out.println("bla");
-        System.out.println(e.getKeyChar());
-    }
-
-    public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void mouseDragged(MouseEvent e) {
-        System.out.println("within MouseDragged");
-        int x = e.getX();
-        int y = e.getY();
-        Dimension size = e.getComponent().getSize();
-
-        float thetaY = 360.0f * ((float) (x - prevMouseX) / (float) this.frame.getWidth());
-        float thetaX = 360.0f * ((float) (prevMouseY - y) / (float) this.frame.getHeight());
-
-        prevMouseX = x;
-        prevMouseY = y;
-
-        this.cam.xRot += thetaX;
-        this.cam.yRot += thetaY;
-    }
-
-    public void mousePressed(MouseEvent e) {
-        prevMouseX = e.getX();
-        prevMouseY = e.getY();
-        if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
-            mouseRButtonDown = true;
-        }
-    }
-
-    public void mouseReleased(MouseEvent e) {
-        if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
-            mouseRButtonDown = false;
-        }
-    }
-
-    public void mouseEntered(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void mouseExited(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported ");
     }
 }
