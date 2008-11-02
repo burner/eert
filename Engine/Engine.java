@@ -17,6 +17,8 @@
  */
 package Engine;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLAutoDrawable;
@@ -24,18 +26,30 @@ import javax.media.opengl.glu.GLU;
 
 import Types.*;
 import Util.Camera;
+import Util.EFrame;
+import java.awt.Dimension;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.util.Calendar;
 
-public class Engine implements GLEventListener {
+public class Engine implements GLEventListener, KeyListener, MouseListener {
 
     private Obj obj;
     private Calendar now = null;
     private long ms = 0;
     private int frames = 0;
     public Camera cam;
+    private EFrame frame;
+    private int prevMouseX;
+    private int prevMouseY;
+    private boolean mouseRButtonDown;
 
-    public Engine(Camera cam) {
+    public Engine(Camera cam, EFrame frame) {
         this.cam = cam;
+        this.cam.xRot = -30.0f;
+        this.cam.yRot = 0.0f;
+        this.cam.y = 5.0f;
+        this.frame = frame;
     }
 
     public void display(GLAutoDrawable glDrawable) {
@@ -43,10 +57,12 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
+        cam.drawCam(gl);
 
+        this.obj.setRot(90.0f, 0.0f, 0.0f);
         this.obj.render(gl);
-        this.obj.rotate(0.5f, 0.04f, 0.07f);
-        this.obj.move(0.001f, 0.001f, -0.0001f);
+        //this.obj.conMove(0.001f, 0.001f, -0.0001f);
+        //System.out.println(this.cam.xRot + " " + this.cam.yRot);
         frame();
     }
 
@@ -59,11 +75,16 @@ public class Engine implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glEnable(GL.GL_LIGHTING);
+        gl.glPushMatrix();
+        gl.glEnable(GL.GL_LIGHT0);
+        gl.glPopMatrix();
         gl.glDisable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("suzann.obj");
-        setCam(gl);
+        glDrawable.addMouseListener(this);
+        obj = new Obj("suzann2.obj");
+
     }
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {
@@ -80,21 +101,70 @@ public class Engine implements GLEventListener {
         gl.glLoadIdentity();
     }
 
-    private void setCam(GL gl) {
-        gl.glTranslatef(this.cam.x, this.cam.y, this.cam.z);
-        gl.glRotatef(this.cam.xRot, this.cam.yRot, this.cam.zRot, 1);
-        System.out.println("cam");
-        gl.glTranslatef(0.0f, 0.0f, 0.0f);
-    }
-
     private void frame() {
         now = Calendar.getInstance();
         if (now.getTimeInMillis() >= (ms + 1000)) {
             ms = now.getTimeInMillis();
-            System.out.println(obj.fac.length + " faces at " + frames);
+            this.frame.setTitle(obj.fac.length + " faces at " + frames + " FPS");
             frames = 1;
         } else {
             frames++;
         }
+    }
+
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void keyPressed(KeyEvent e) {
+        this.frame.setTitle("bla");
+        System.out.println("bla");
+        System.out.println(e.getKeyChar());
+    }
+
+    public void keyReleased(KeyEvent e) {
+        System.out.println("bla");
+        System.out.println(e.getKeyChar());
+    }
+
+    public void mouseClicked(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        System.out.println("within MouseDragged");
+        int x = e.getX();
+        int y = e.getY();
+        Dimension size = e.getComponent().getSize();
+
+        float thetaY = 360.0f * ((float) (x - prevMouseX) / (float) this.frame.getWidth());
+        float thetaX = 360.0f * ((float) (prevMouseY - y) / (float) this.frame.getHeight());
+
+        prevMouseX = x;
+        prevMouseY = y;
+
+        this.cam.xRot += thetaX;
+        this.cam.yRot += thetaY;
+    }
+
+    public void mousePressed(MouseEvent e) {
+        prevMouseX = e.getX();
+        prevMouseY = e.getY();
+        if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
+            mouseRButtonDown = true;
+        }
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
+            mouseRButtonDown = false;
+        }
+    }
+
+    public void mouseEntered(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void mouseExited(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported ");
     }
 }

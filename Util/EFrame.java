@@ -18,12 +18,15 @@
 package Util;
 
 import Engine.*;
+import java.awt.event.KeyEvent;
 import javax.media.opengl.GLCanvas;
 import java.awt.Frame;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class EFrame extends Frame {
+
     public boolean quit;
     public GLCanvas canvas;
     private Camera cam;
@@ -31,18 +34,24 @@ public class EFrame extends Frame {
     public EFrame() {
         this.canvas = new GLCanvas();
         this.cam = new Camera();
-        this.canvas.addGLEventListener(new Engine(this.cam));
+        this.canvas.addGLEventListener(new Engine(this.cam, this));
         this.add(this.canvas);
-        this.setTitle("EERT");        
+        this.setTitle("EERT");
         this.addWindowListener(new WindowAdapter() {
+
             public void windowClosing(WindowEvent e) {
                 quit = true;
                 System.exit(0);
             }
         });
         this.setSize(1024, 640);
+        this.addKeyListener(new EKeyListener(this.cam));
+        this.addMouseListener(new EMouseListener(this.cam));
+        
         this.setVisible(true);
+
         this.canvas.requestFocus();
 
     }
 }
+

@@ -16,31 +16,15 @@
  *this program; if not, see <http://www.gnu.org/licenses/>.
  */
 package Util;
-
-import javax.media.opengl.GL;
-
-public class Camera {
-
-    public float x;
-    public float y;
-    public float z;
-    public float xRot;
-    public float yRot;
-    public float zRot;
-
-    public Camera() {
-        this.x = 0.0f;
-        this.y = 0.0f;
-        this.z = 0.0f;
-        this.xRot = 0.0f;
-        this.yRot = 0.0f;
-        this.zRot = 0.0f;
+public final class UHPT {
+    public static final long time = System.nanoTime();
+        
+    public static final long getETime() {
+        return (long) (System.nanoTime() - UHPT.time);
+    }
+    
+    public static final long starTime() {
+        return UHPT.time;
     }
 
-    public void drawCam(GL gl) {
-        gl.glTranslatef(x, y, z);        
-        gl.glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-        gl.glRotatef(zRot, 0.0f, 0.0f, 1.0f);
-    }
 }
