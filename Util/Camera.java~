@@ -43,8 +43,4 @@ public class Camera {
         gl.glRotatef(yRot, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(zRot, 0.0f, 0.0f, 1.0f);
     }
-
-    float x = (float)( dx*cos(yRot) + dy*sin(xRot)*sin(yRot) - dz*cos(xRot)*sin(yRot) );
-    float y = (float)(              + dy*cos(xRot)           + dz*sin(xRot)           );
-    float z = (float)( dx*sin(yRot) - dy*sin(xRot)*cos(yRot) + dz*cos(xRot)*cos(yRot) );
 }
