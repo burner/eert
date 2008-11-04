@@ -54,7 +54,7 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        cam.drawCam(gl);
+        cam.lookAt(glDrawable);
         
         this.obj.setRot(90.0f, 0.0f, 0.0f);
         this.obj.render(gl);
@@ -76,10 +76,9 @@ public class Engine implements GLEventListener {
         gl.glPushMatrix();
         gl.glEnable(GL.GL_LIGHT0);
         gl.glPopMatrix();
-        gl.glDisable(GL.GL_CULL_FACE);
+        gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        this.cam.z = -8.0f;
         obj = new Obj("suzann2.obj");
     }
 

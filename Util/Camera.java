@@ -17,34 +17,68 @@
  */
 package Util;
 
+import Types.Vector;
 import javax.media.opengl.GL;
+import javax.media.opengl.GLDrawable;
+import javax.media.opengl.glu.GLU;
 
 public class Camera {
 
-    public float x;
-    public float y;
-    public float z;
-    public float xRot;
-    public float yRot;
-    public float zRot;
+    public Vector loc;
+    public Vector ori;
+
 
     public Camera() {
-        this.x = 0.0f;
-        this.y = 0.0f;
-        this.z = 0.0f;
-        this.xRot = 0.0f;
-        this.yRot = 0.0f;
-        this.zRot = 0.0f;
+        this.loc = new Vector(0.0f, 0.0f, 8.0f);
+        this.ori = new Vector(0.0f, 0.0f, 1.0f);
+
     }
 
-    public void drawCam(GL gl) {
-        gl.glTranslatef(x, y, z);        
-        gl.glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-        gl.glRotatef(zRot, 0.0f, 0.0f, 1.0f);
+    public void update() {
     }
 
-    float x = (float)( dx*cos(yRot) + dy*sin(xRot)*sin(yRot) - dz*cos(xRot)*sin(yRot) );
-    float y = (float)(              + dy*cos(xRot)           + dz*sin(xRot)           );
-    float z = (float)( dx*sin(yRot) - dy*sin(xRot)*cos(yRot) + dz*cos(xRot)*cos(yRot) );
+    public void rotate(float angleX, float angleY) {
+        this.ori.x = (this.ori.x + angleX) % 360.0f;
+        this.ori.y = (this.ori.y + angleY) % 360.0f;
+    }
+
+    public void update(GL gl) {
+
+    }
+
+    public Vector toVectorInFixedSystem1(float dx, float dy, float dz) {
+        //Don't calculate for nothing ...
+        if (dx == 0.0f & dy == 0.0f && dz == 0.0f) {
+            return new Vector(0.0f, 0.0f, 0.0f);        //Convert to Radian : 360° = 2PI
+        }
+        double xRot = Math.toRadians(ori.x);    //Math.toRadians is toRadians in Java 1.5 (static import)
+        double yRot = Math.toRadians(ori.y);
+
+        //Calculate the formula
+        float x = (float) (dx * Math.cos(yRot) + dy * Math.sin(xRot) * Math.sin(yRot) - dz * Math.cos(xRot) * Math.sin(yRot));
+        float y = (float) (+dy * Math.cos(xRot) + dz * Math.sin(xRot));
+        float z = (float) (dx * Math.sin(yRot) - dy * Math.sin(xRot) * Math.cos(yRot) + dz * Math.cos(xRot) * Math.cos(yRot));
+
+        //Return the vector expressed in the global axis system
+        return new Vector(x, y, z);
+    }
+
+    public void lookAt(GLDrawable glDrawable) {
+        //Get upward and forward vector, convert vectors to fixed coordinate sstem (similar than for translation 1)
+        Vector up = toVectorInFixedSystem1(0.0f, 1.0f, 0.0f);        //Note: need to calculate at each frame
+        Vector forward = toVectorInFixedSystem1(0.0f, 0.0f, 1.0f);
+        Vector pos = this.loc;
+
+        /*
+         * Read Lesson 02 for more explanation of gluLookAt.
+         */
+        GLU glu = new GLU();
+        glu.gluLookAt(
+                //Position
+                this.loc.x, this.loc.y, this.loc.z,
+                //Orientation
+                this.ori.x, this.ori.y, this.ori.z,
+                //Upward vector
+                up.x, up.y, up.z);
+    }
 }

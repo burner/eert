@@ -32,12 +32,12 @@ public class EFrame extends Frame {
     private final Animator animator;
 
     public EFrame() {
-
-        this.canvas = new GLCanvas();
         this.cam = new Camera();
+        this.canvas = new GLCanvas();
         this.canvas.addGLEventListener(new Engine(this.cam, this));
         this.canvas.addKeyListener(new EKeyListener(this.cam));
         this.canvas.addMouseListener(new EMouseListener(this.cam));
+
         this.animator = new Animator(this.canvas);
         this.add(this.canvas);
         this.setTitle("EERT");
