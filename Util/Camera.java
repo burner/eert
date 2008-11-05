@@ -26,7 +26,24 @@ public class Camera {
 
     public Vector loc;
     public Vector ori;
-
+    public int prevX,  prevY;
+    boolean mouseRButtonDown;
+    int prevMouseX;
+    int prevMouseY;    // Camera angle in degree (0-360).
+    float camPitch = 0.0f; // up-down
+    float camHeading = 0.0f; // left-right
+    float camRoll = 0.0f;    // Vector in camera direction: look-at-vector
+    float lookatVecX = 0f;
+    float lookatVecY = 0f;
+    float lookatVecZ = -1f;    // Vector perpendicular to look-at-vecor
+    float rightVecX = 1f;
+    float rightVecY = 0f;
+    float rightVecZ = 0f;    // Normalized projection of the right vector 
+    // on the X-Z-plane.
+    // Used to change heading.
+    float rightVecProjectX = 1f;
+    float rightVecProjectY = 0f;
+    float rightVecProjectZ = 0f;
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
@@ -34,15 +51,21 @@ public class Camera {
 
     }
 
-    public void update() {
+    public void giveInfo() {
+        System.out.println("Loc: x " + this.loc.x + " y " + this.loc.y + " z " + this.loc.z);
+        System.out.println("Ori x " + this.ori.x + " y " + this.ori.y + " z " + this.ori.z);
     }
 
     public void rotate(float angleX, float angleY) {
-        this.ori.x = (this.ori.x + angleX) % 360.0f;
-        this.ori.y = (this.ori.y + angleY) % 360.0f;
-    }
+        this.camHeading = (this.ori.x + angleX) % 360.0f;
+        this.camPitch = (this.ori.y + angleY) % 360.0f;
+        float camHeadingRad = (float) Math.toRadians(camHeading);
+        float camPitchRad = (float) Math.toRadians(camPitch);
+        float cosPitch = (float) Math.cos(camPitchRad);
 
-    public void update(GL gl) {
+        this.ori.x = (float) (Math.sin(camHeadingRad) * cosPitch);
+        this.ori.y = (float) Math.sin(camPitchRad);
+        this.ori.z = (float) (-Math.cos(camHeadingRad) * cosPitch);
 
     }
 

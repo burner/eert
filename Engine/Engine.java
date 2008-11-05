@@ -55,6 +55,7 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
         cam.lookAt(glDrawable);
+        cam.giveInfo();
         
         this.obj.setRot(90.0f, 0.0f, 0.0f);
         this.obj.render(gl);
