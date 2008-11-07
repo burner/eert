@@ -18,12 +18,36 @@
 package Types;
 
 public class Vector {
-	public float x;
-	public float y;
-	public float z;
-	public Vector(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
+
+    public float x;
+    public float y;
+    public float z;
+
+    public Vector(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public float getLength() {
+        return (float) Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+
+    public void normalize() {
+        float f = 1.0f / this.getLength();
+        this.mult(f);
+    }
+
+    public void mult(float scalar) {
+        this.x *= scalar;
+        this.y *= scalar;
+        this.z *= scalar;
+    }
+
+    public Vector getCrossProd(Vector vector) {
+        return new Vector(
+                this.y * vector.z - this.z * vector.y,
+                this.z * vector.x - this.x * vector.z,
+                this.x * vector.y - this.y * vector.x);
+    }
 }

@@ -30,25 +30,53 @@ public class Camera {
     boolean mouseRButtonDown;
     int prevMouseX;
     int prevMouseY;    // Camera angle in degree (0-360).
+    float keyTurn;
+    float turnSens;
     float camPitch = 0.0f; // up-down
-    float camHeading = 0.0f; // left-right
+    float camHeading = 90.0f; // left-right
     float camRoll = 0.0f;    // Vector in camera direction: look-at-vector
-    float lookatVecX = 0f;
-    float lookatVecY = 0f;
-    float lookatVecZ = -1f;    // Vector perpendicular to look-at-vecor
-    float rightVecX = 1f;
-    float rightVecY = 0f;
-    float rightVecZ = 0f;    // Normalized projection of the right vector 
-    // on the X-Z-plane.
-    // Used to change heading.
-    float rightVecProjectX = 1f;
-    float rightVecProjectY = 0f;
-    float rightVecProjectZ = 0f;
+    float speed;
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
         this.ori = new Vector(0.0f, 0.0f, 1.0f);
 
+        this.camPitch = 0.0f;
+        this.camHeading = 0.0f;
+
+        this.turnSens = 0.5f;
+        this.keyTurn = 0.5f;
+
+        this.speed = 0.5f;
+
+    }
+
+    public void forward() {
+        this.loc.x += this.ori.x * this.speed;
+        this.loc.y += this.ori.y * this.speed;
+        this.loc.z += this.ori.z * this.speed;
+    }
+
+    public void backward() {
+        this.loc.x -= this.ori.x * this.speed;
+        this.loc.y -= this.ori.y * this.speed;
+        this.loc.z -= this.ori.z * this.speed;
+    }
+
+    public void strafeLeft() {
+        float x = this.loc.x * this.ori.y - this.loc.y * this.ori.x;
+        float z = this.loc.z * this.ori.x - this.loc.x * this.ori.z;
+
+        this.loc.x -= x;
+        this.loc.z -= z;
+    }
+
+    public void strafeRight() {
+        float x = this.loc.x * this.ori.y - this.loc.y * this.ori.x;
+        float z = this.loc.z * this.ori.x - this.loc.x * this.ori.z;
+
+        this.loc.x += x;
+        this.loc.z += z;
     }
 
     public void giveInfo() {
@@ -56,52 +84,79 @@ public class Camera {
         System.out.println("Ori x " + this.ori.x + " y " + this.ori.y + " z " + this.ori.z);
     }
 
-    public void rotate(float angleX, float angleY) {
-        this.camHeading = (this.ori.x + angleX) % 360.0f;
-        this.camPitch = (this.ori.y + angleY) % 360.0f;
-        float camHeadingRad = (float) Math.toRadians(camHeading);
-        float camPitchRad = (float) Math.toRadians(camPitch);
-        float cosPitch = (float) Math.cos(camPitchRad);
-
-        this.ori.x = (float) (Math.sin(camHeadingRad) * cosPitch);
-        this.ori.y = (float) Math.sin(camPitchRad);
-        this.ori.z = (float) (-Math.cos(camHeadingRad) * cosPitch);
-
-    }
-
-    public Vector toVectorInFixedSystem1(float dx, float dy, float dz) {
-        //Don't calculate for nothing ...
-        if (dx == 0.0f & dy == 0.0f && dz == 0.0f) {
-            return new Vector(0.0f, 0.0f, 0.0f);        //Convert to Radian : 360° = 2PI
+    public void turnLeft(int delta) {
+        // Wenn delta -1 ist, dann wurde eine Taste gedrueckt und daher wird der keyTurn Parameter verwendet.
+        if (delta == -1) {
+            this.camHeading += this.keyTurn;
+        } else {
+            this.camHeading += (this.turnSens * (float) delta);
         }
-        double xRot = Math.toRadians(ori.x);    //Math.toRadians is toRadians in Java 1.5 (static import)
-        double yRot = Math.toRadians(ori.y);
-
-        //Calculate the formula
-        float x = (float) (dx * Math.cos(yRot) + dy * Math.sin(xRot) * Math.sin(yRot) - dz * Math.cos(xRot) * Math.sin(yRot));
-        float y = (float) (+dy * Math.cos(xRot) + dz * Math.sin(xRot));
-        float z = (float) (dx * Math.sin(yRot) - dy * Math.sin(xRot) * Math.cos(yRot) + dz * Math.cos(xRot) * Math.cos(yRot));
-
-        //Return the vector expressed in the global axis system
-        return new Vector(x, y, z);
+        updateDirection();
     }
 
-    public void lookAt(GLDrawable glDrawable) {
-        //Get upward and forward vector, convert vectors to fixed coordinate sstem (similar than for translation 1)
-        Vector up = toVectorInFixedSystem1(0.0f, 1.0f, 0.0f);        //Note: need to calculate at each frame
-        Vector forward = toVectorInFixedSystem1(0.0f, 0.0f, 1.0f);
-        Vector pos = this.loc;
+    /**
+     * Turn the camera right (look).
+     *
+     */
+    public void turnRight(int delta) {
+        if (delta == -1) {
+            this.camHeading -= this.keyTurn;
+        } else {
+            this.camHeading -= (this.turnSens * (float) delta);
+        }
+        updateDirection();
+    }
 
-        /*
-         * Read Lesson 02 for more explanation of gluLookAt.
-         */
-        GLU glu = new GLU();
-        glu.gluLookAt(
-                //Position
-                this.loc.x, this.loc.y, this.loc.z,
-                //Orientation
-                this.ori.x, this.ori.y, this.ori.z,
-                //Upward vector
-                up.x, up.y, up.z);
+    /**
+     *  Turn the camera up (look).
+     *
+     */
+    public void turnUp(int delta) {
+        // if delta is -1 we have a keystroke
+        if (delta == -1) {
+            this.camPitch += this.keyTurn;
+        } else {
+            this.camPitch += (this.turnSens * (float) delta);
+        }
+        updateDirection();
+    }
+
+    /**
+     *  Turn the camera down (look).
+     *
+     */
+    public void turnDown(int delta) {
+
+        // if delta is -1 we have a keystroke
+        if (delta == -1) {
+            this.camHeading -= this.keyTurn;
+        } else {
+            this.camHeading -= (this.turnSens * (float) delta);
+        }
+
+        updateDirection();
+    }
+
+    private void updateDirection() {
+        float x;
+        float y;
+        float z;
+        x = (float) Math.sin(Math.toRadians(this.camHeading));
+        y = (float) Math.sin(Math.toRadians(this.camRoll));
+        z = (float) Math.cos(Math.toRadians(this.camPitch));
+
+        this.ori = new Vector(x, y, z);
+    }
+
+    public void drawCam() {
+    }
+
+    public void camLoc(GL gl) {
+        gl.glTranslatef(this.loc.x, this.loc.y, this.loc.z);
+    }
+
+    public void camRot(GL gl) {
+        gl.glRotatef(-this.camPitch, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(180.0f - this.camHeading, 0.0f, 1.0f, 0.0f);
     }
 }

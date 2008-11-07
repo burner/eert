@@ -30,16 +30,13 @@ public class Obj {
     public Face[] fac = null;
     public String name;
     public Vector origin;                 //Object origin
-    
     private float xR = 0.0f;                //Object rotation
-
     private float yR = 0.0f;
     private float zR = 0.0f;
     private float bR = 0.0f;                //bounding Sphere radius
+    private int display_list_handle;
 
-    private long time = System.nanoTime();
-
-    public Obj(String file) {
+    public Obj(String file, GL gl) {
         ObjParse parse = new ObjParse(file);
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.vec = parse.getVec();
@@ -48,17 +45,35 @@ public class Obj {
         this.fac = parse.getFace();
         calcObjCenter();
         makeBoundingSphere();
+
+        //Put Object into glList
+        this.display_list_handle = gl.glGenLists(1);
+
+        gl.glNewList(display_list_handle, GL.GL_COMPILE);
+        gl.glBegin(GL.GL_TRIANGLES);
+        for (int i = 0; i < fac.length; i++) {
+            Random r = new Random();
+            gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
+            gl.glNormal3f(nor[fac[i].v1].x, nor[fac[i].v1].y, nor[fac[i].v1].z);
+            gl.glVertex3f(vec[fac[i].v1].x, vec[fac[i].v1].y, vec[fac[i].v1].z);
+            gl.glNormal3f(nor[fac[i].v2].x, nor[fac[i].v2].y, nor[fac[i].v2].z);
+            gl.glVertex3f(vec[fac[i].v2].x, vec[fac[i].v2].y, vec[fac[i].v2].z);
+            gl.glNormal3f(nor[fac[i].v3].x, nor[fac[i].v3].y, nor[fac[i].v3].z);
+            gl.glVertex3f(vec[fac[i].v3].x, vec[fac[i].v3].y, vec[fac[i].v3].z);
+        }
+        gl.glEnd();
+        gl.glEndList();
     }
-    
+
     private void calcObjCenter() {
-        for(Vector vecIdx : this.vec) {
-            this.origin.x += (vecIdx.x / this.vec.length); 
-            this.origin.y += (vecIdx.y / this.vec.length); 
-            this.origin.z += (vecIdx.z / this.vec.length);        
+        for (Vector vecIdx : this.vec) {
+            this.origin.x += (vecIdx.x / this.vec.length);
+            this.origin.y += (vecIdx.y / this.vec.length);
+            this.origin.z += (vecIdx.z / this.vec.length);
         }
         this.origin.x = this.origin.x * -1;
         this.origin.y = this.origin.y * -1;
-        this.origin.z = this.origin.z * -1;       
+        this.origin.z = this.origin.z * -1;
     }
 
     private void makeBoundingSphere() {
@@ -95,25 +110,16 @@ public class Obj {
     }
 
     public void render(GL gl) {
-        Random r = new Random();
+
         gl.glPushMatrix();
         gl.glColor3f(0.65f, 0.32f, 0.89f);
         gl.glTranslatef(this.origin.x, this.origin.y, this.origin.z);
         gl.glRotatef(xR, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(yR, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(zR, 0.0f, 0.0f, 1.0f);
+        
+        gl.glCallList(display_list_handle);
 
-        gl.glBegin(GL.GL_TRIANGLES);
-        for (int i = 0; i < fac.length; i++) {
-            gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
-            gl.glNormal3f(nor[fac[i].v1].x, nor[fac[i].v1].y, nor[fac[i].v1].z);
-            gl.glVertex3f(vec[fac[i].v1].x, vec[fac[i].v1].y, vec[fac[i].v1].z);
-            gl.glNormal3f(nor[fac[i].v2].x, nor[fac[i].v2].y, nor[fac[i].v2].z);
-            gl.glVertex3f(vec[fac[i].v2].x, vec[fac[i].v2].y, vec[fac[i].v2].z);
-            gl.glNormal3f(nor[fac[i].v3].x, nor[fac[i].v3].y, nor[fac[i].v3].z);
-            gl.glVertex3f(vec[fac[i].v3].x, vec[fac[i].v3].y, vec[fac[i].v3].z);
-        }
-        gl.glEnd();
         gl.glPopMatrix();
     }
 }

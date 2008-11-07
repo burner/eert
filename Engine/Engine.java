@@ -40,8 +40,6 @@ public class Engine implements GLEventListener {
     private int frames = 0;
     public Camera cam;
     private EFrame frame;
-    private int prevMouseX;
-    private int prevMouseY;
     private boolean mouseRButtonDown;
 
     public Engine(Camera cam, EFrame frame) {
@@ -54,13 +52,14 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        cam.lookAt(glDrawable);
+        cam.camLoc(gl);
+        cam.camRot(gl);
         cam.giveInfo();
         
         this.obj.setRot(90.0f, 0.0f, 0.0f);
         this.obj.render(gl);
-        //this.obj.conMove(0.001f, 0.001f, -0.0001f);
-        //System.out.println(this.cam.xRot + " " + this.cam.yRot);
+
+
         frame();
     }
 
@@ -80,7 +79,7 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("suzann2.obj");
+        obj = new Obj("suzann2.obj", gl);
     }
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {

@@ -16,17 +16,17 @@ public class EMouseListener implements MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-        this.cam.prevX = e.getX();
+        /*this.cam.prevX = e.getX();
         this.cam.prevY = e.getY();
         if ((e.getModifiers() & e.BUTTON3_MASK) != 0) {
             this.cam.mouseRButtonDown = true;
-        }
+        }*/
     }
 
     public void mouseReleased(MouseEvent e) {
-        if ((e.getModifiers() & e.BUTTON3_MASK) != 0) {
+        /*if ((e.getModifiers() & e.BUTTON3_MASK) != 0) {
             this.cam.mouseRButtonDown = false;
-        }
+        }*/
     }
 
     public void mouseEntered(MouseEvent e) {
