@@ -19,8 +19,7 @@ package Util;
 
 import Types.Vector;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLDrawable;
-import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.*;
 
 public class Camera {
 
@@ -30,37 +29,51 @@ public class Camera {
     boolean mouseRButtonDown;
     int prevMouseX;
     int prevMouseY;    // Camera angle in degree (0-360).
+
     float keyTurn;
     float turnSens;
     float camPitch = 0.0f; // up-down
+
     float camHeading = 90.0f; // left-right
+
     float camRoll = 0.0f;    // Vector in camera direction: look-at-vector
+
     float speed;
+    
+
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
-        this.ori = new Vector(0.0f, 0.0f, 1.0f);
+        this.ori = new Vector(1.0f, 0.0f, 0.0f);
 
-        this.camPitch = 0.0f;
+        this.camPitch = 90.0f;
         this.camHeading = 0.0f;
 
         this.turnSens = 0.5f;
         this.keyTurn = 0.5f;
 
-        this.speed = 0.5f;
-
+        this.speed = 0.01f;
+        
+        
     }
 
     public void forward() {
-        this.loc.x += this.ori.x * this.speed;
-        this.loc.y += this.ori.y * this.speed;
-        this.loc.z += this.ori.z * this.speed;
+        float x = this.loc.x + this.ori.x * this.speed * UHPT.getETime() / 1000000000;
+        float y = this.loc.y + this.ori.y * this.speed * UHPT.getETime() / 1000000000;
+        float z = this.loc.z + this.ori.z * this.speed * UHPT.getETime() / 1000000000;
+        this.loc.x += x;
+        this.loc.y += y;
+        this.loc.z += z;
+        
+        this.ori.x += x;
+        this.ori.y += y;
+        this.ori.z += z;
     }
 
     public void backward() {
-        this.loc.x -= this.ori.x * this.speed;
-        this.loc.y -= this.ori.y * this.speed;
-        this.loc.z -= this.ori.z * this.speed;
+        this.loc.x -= this.ori.x * this.speed * UHPT.getETime() / 1000000000;
+        this.loc.y -= this.ori.y * this.speed * UHPT.getETime() / 1000000000;
+        this.loc.z -= this.ori.z * this.speed * UHPT.getETime() / 1000000000;
     }
 
     public void strafeLeft() {
@@ -94,10 +107,6 @@ public class Camera {
         updateDirection();
     }
 
-    /**
-     * Turn the camera right (look).
-     *
-     */
     public void turnRight(int delta) {
         if (delta == -1) {
             this.camHeading -= this.keyTurn;
@@ -107,10 +116,6 @@ public class Camera {
         updateDirection();
     }
 
-    /**
-     *  Turn the camera up (look).
-     *
-     */
     public void turnUp(int delta) {
         // if delta is -1 we have a keystroke
         if (delta == -1) {
@@ -121,10 +126,6 @@ public class Camera {
         updateDirection();
     }
 
-    /**
-     *  Turn the camera down (look).
-     *
-     */
     public void turnDown(int delta) {
 
         // if delta is -1 we have a keystroke
@@ -146,9 +147,14 @@ public class Camera {
         z = (float) Math.cos(Math.toRadians(this.camPitch));
 
         this.ori = new Vector(x, y, z);
+        //giveInfo();
     }
 
     public void drawCam() {
+        GLU glu = new GLU();
+        glu.gluLookAt(this.loc.x, this.loc.y, this.loc.z,
+                this.ori.x, this.ori.y, this.ori.z,
+                  0.0f, 1.0f, 0.0f);
     }
 
     public void camLoc(GL gl) {

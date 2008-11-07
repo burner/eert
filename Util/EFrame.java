@@ -29,14 +29,17 @@ public class EFrame extends Frame {
     public boolean quit;
     public GLCanvas canvas;
     private Camera cam;
-    private final Animator animator;
+    public final Animator animator;
 
     public EFrame() {
         this.cam = new Camera();
+        this.setSize(1024, 640);
         this.canvas = new GLCanvas();
-        this.animator = new Animator(this.canvas);
+        this.canvas.addGLEventListener(new Engine(this.cam, this));
         this.add(this.canvas);
+        this.animator = new Animator(this.canvas);
         this.setTitle("EERT");
+
         this.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
@@ -52,13 +55,8 @@ public class EFrame extends Frame {
                 }).start();
             }
         });
-        this.setSize(1024, 640);
-
-
+        //this.requestFocus();
         this.setVisible(true);
-        this.animator.start();
-        this.canvas.requestFocus();
-
     }
 }
 

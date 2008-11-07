@@ -17,8 +17,6 @@
  */
 package Engine;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLAutoDrawable;
@@ -27,9 +25,7 @@ import javax.media.opengl.glu.GLU;
 import Types.*;
 import Util.Camera;
 import Util.EFrame;
-import java.awt.Dimension;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
+import Util.EInput;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
@@ -40,7 +36,7 @@ public class Engine implements GLEventListener {
     private int frames = 0;
     public Camera cam;
     private EFrame frame;
-    private boolean mouseRButtonDown;
+    private EInput input;
 
     public Engine(Camera cam, EFrame frame) {
         this.cam = cam;
@@ -52,13 +48,12 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        cam.camLoc(gl);
-        cam.camRot(gl);
-        cam.giveInfo();
-        
+        cam.drawCam();
+        //cam.camRot(gl);
+        //cam.giveInfo();
+
         this.obj.setRot(90.0f, 0.0f, 0.0f);
         this.obj.render(gl);
-
 
         frame();
     }
@@ -72,7 +67,7 @@ public class Engine implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glEnable(GL.GL_LIGHTING);
+        //gl.glEnable(GL.GL_LIGHTING);
         gl.glPushMatrix();
         gl.glEnable(GL.GL_LIGHT0);
         gl.glPopMatrix();
@@ -80,6 +75,10 @@ public class Engine implements GLEventListener {
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
         obj = new Obj("suzann2.obj", gl);
+        this.input = new EInput(this.cam);
+        glDrawable.addKeyListener(this.input);
+        glDrawable.addMouseListener(this.input);
+        glDrawable.addMouseMotionListener(this.input);
     }
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {

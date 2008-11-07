@@ -23,6 +23,7 @@ public class Eert {
 
     public static void main(String[] args) {
         frame = new EFrame();
-
+        Eert.frame.animator.start();
+        System.out.println("Before leaving main");
     }
 }
