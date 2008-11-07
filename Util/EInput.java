@@ -8,10 +8,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 
-/**
- * @author Stefan
- *
- */
 public final class EInput implements KeyListener, MouseListener, MouseMotionListener, Runnable {
 
 	private int mouseOldX;
@@ -28,10 +24,6 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
 
 	private Thread camAnimator;
 
-
-	/**
-	 *
-	 */
 	public EInput(Camera camera) {
 		this.keyForward = false;
 		this.keyBackward = false;

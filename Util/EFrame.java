@@ -54,7 +54,6 @@ public class EFrame extends Frame {
         });
         this.setSize(1024, 640);
 
-
         this.setVisible(true);
         this.animator.start();
         this.canvas.requestFocus();
