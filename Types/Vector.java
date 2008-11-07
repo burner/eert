@@ -37,6 +37,18 @@ public class Vector {
         float f = 1.0f / this.getLength();
         this.mult(f);
     }
+    
+    public void add(Vector vec) {
+        this.x += vec.x;
+        this.y += vec.y;
+        this.z += vec.z;
+    }
+    
+    public void sub(Vector vec) {
+        this.x -= vec.x;
+        this.y -= vec.y;
+        this.z -= vec.z;
+    }
 
     public void mult(float scalar) {
         this.x *= scalar;

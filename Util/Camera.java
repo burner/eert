@@ -29,18 +29,12 @@ public class Camera {
     boolean mouseRButtonDown;
     int prevMouseX;
     int prevMouseY;    // Camera angle in degree (0-360).
-
     float keyTurn;
     float turnSens;
     float camPitch = 0.0f; // up-down
-
     float camHeading = 90.0f; // left-right
-
     float camRoll = 0.0f;    // Vector in camera direction: look-at-vector
-
     float speed;
-    
-
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
@@ -53,8 +47,8 @@ public class Camera {
         this.keyTurn = 0.5f;
 
         this.speed = 0.01f;
-        
-        
+
+
     }
 
     public void forward() {
@@ -64,32 +58,48 @@ public class Camera {
         this.loc.x += x;
         this.loc.y += y;
         this.loc.z += z;
-        
+
         this.ori.x += x;
         this.ori.y += y;
         this.ori.z += z;
     }
 
     public void backward() {
-        this.loc.x -= this.ori.x * this.speed * UHPT.getETime() / 1000000000;
-        this.loc.y -= this.ori.y * this.speed * UHPT.getETime() / 1000000000;
-        this.loc.z -= this.ori.z * this.speed * UHPT.getETime() / 1000000000;
+        this.loc.x -= this.ori.x * this.speed * (UHPT.getETime() / 1000000000);
+        this.loc.y -= this.ori.y * this.speed * (UHPT.getETime() / 1000000000);
+        this.loc.z -= this.ori.z * this.speed * (UHPT.getETime() / 1000000000);
     }
 
     public void strafeLeft() {
-        float x = this.loc.x * this.ori.y - this.loc.y * this.ori.x;
-        float z = this.loc.z * this.ori.x - this.loc.x * this.ori.z;
+        Vector slide = new Vector(0.0f, 0.0f, 0.0f);
+        float x;
+        float z;
 
-        this.loc.x -= x;
-        this.loc.z -= z;
+        x = (float) Math.sin((90.0f + this.camPitch) * Math.PI / 180);
+        z = -(float) Math.cos((90.0f + this.camPitch) * Math.PI / 180);
+
+        slide.x = x;
+        slide.z = z;
+        slide.normalize();
+        slide.mult(this.speed);
+
+        this.loc.sub(slide);
     }
 
     public void strafeRight() {
-        float x = this.loc.x * this.ori.y - this.loc.y * this.ori.x;
-        float z = this.loc.z * this.ori.x - this.loc.x * this.ori.z;
+        Vector slide = new Vector(0.0f, 0.0f, 0.0f);
+        float x;
+        float z;
 
-        this.loc.x += x;
-        this.loc.z += z;
+        x = (float) Math.sin((270.0f + this.camPitch) * Math.PI / 180);
+        z = -(float) Math.cos((270.0f + this.camPitch) * Math.PI / 180);
+
+        slide.x = x;
+        slide.z = z;
+        slide.normalize();
+        slide.mult(this.speed);
+
+        this.loc.sub(slide);
     }
 
     public void giveInfo() {
@@ -99,42 +109,23 @@ public class Camera {
 
     public void turnLeft(int delta) {
         // Wenn delta -1 ist, dann wurde eine Taste gedrueckt und daher wird der keyTurn Parameter verwendet.
-        if (delta == -1) {
-            this.camHeading += this.keyTurn;
-        } else {
-            this.camHeading += (this.turnSens * (float) delta);
-        }
+        this.camPitch -= 0.5f * delta;
         updateDirection();
     }
 
     public void turnRight(int delta) {
-        if (delta == -1) {
-            this.camHeading -= this.keyTurn;
-        } else {
-            this.camHeading -= (this.turnSens * (float) delta);
-        }
+        this.camPitch += 0.5f * delta;
         updateDirection();
+
     }
 
     public void turnUp(int delta) {
-        // if delta is -1 we have a keystroke
-        if (delta == -1) {
-            this.camPitch += this.keyTurn;
-        } else {
-            this.camPitch += (this.turnSens * (float) delta);
-        }
+        this.camHeading -= 0.5f * delta;
         updateDirection();
     }
 
     public void turnDown(int delta) {
-
-        // if delta is -1 we have a keystroke
-        if (delta == -1) {
-            this.camHeading -= this.keyTurn;
-        } else {
-            this.camHeading -= (this.turnSens * (float) delta);
-        }
-
+        this.camHeading += 0.5f * delta;
         updateDirection();
     }
 
@@ -147,14 +138,20 @@ public class Camera {
         z = (float) Math.cos(Math.toRadians(this.camPitch));
 
         this.ori = new Vector(x, y, z);
-        //giveInfo();
+    //giveInfo();
+    }
+
+    public void translateAccordingToCameraPosition(GL gl) {
+        gl.glRotatef(this.camHeading, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(this.camPitch, 0.0f, 1.0f, 0.0f);
+        gl.glTranslatef(-loc.x, -loc.y, -loc.z);
     }
 
     public void drawCam() {
         GLU glu = new GLU();
         glu.gluLookAt(this.loc.x, this.loc.y, this.loc.z,
                 this.ori.x, this.ori.y, this.ori.z,
-                  0.0f, 1.0f, 0.0f);
+                0.0f, 1.0f, 0.0f);
     }
 
     public void camLoc(GL gl) {

@@ -65,7 +65,7 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
 
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyChar();
-        System.out.println("keyPressed");
+        //System.out.println("keyPressed");
         if (keyCode == 'w') {
             this.keyForward = true;
         }
