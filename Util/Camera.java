@@ -31,17 +31,18 @@ public class Camera {
     int prevMouseY;    // Camera angle in degree (0-360).
     float keyTurn;
     float turnSens;
-    float camPitch = 0.0f; // up-down
-    float camHeading = 90.0f; // left-right
-    float camRoll = 0.0f;    // Vector in camera direction: look-at-vector
+    float heading = 0.0f; // up-down
+    float pitch = 0.0f; // left-right
+    float roll = 0.0f;    // Vector in camera direction: look-at-vector
     float speed;
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
-        this.ori = new Vector(1.0f, 0.0f, 0.0f);
+        this.ori = new Vector(0.0f, 0.0f, 1.0f);
 
-        this.camPitch = 90.0f;
-        this.camHeading = 0.0f;
+        this.heading = 0.0f;
+        this.pitch = 0.0f;
+        this.roll = 0.0f;
 
         this.turnSens = 0.5f;
         this.keyTurn = 0.5f;
@@ -50,24 +51,30 @@ public class Camera {
 
 
     }
-
+    //* @param x pitch die Rotation um die X-Achse
+    //* @param y heading die Rotation um die Y-Achse
+    //* @param z roll die Rotation um die Z-Achse
     public void forward() {
-        float x = this.loc.x + this.ori.x * this.speed * UHPT.getETime() / 1000000000;
-        float y = this.loc.y + this.ori.y * this.speed * UHPT.getETime() / 1000000000;
-        float z = this.loc.z + this.ori.z * this.speed * UHPT.getETime() / 1000000000;
-        this.loc.x += x;
-        this.loc.y += y;
-        this.loc.z += z;
+        Vector slide = new Vector(0.0f, 0.0f, 0.0f);
+        float y;
+        float z;
 
-        this.ori.x += x;
-        this.ori.y += y;
-        this.ori.z += z;
+        y= (float) Math.cos((90.0f + this.pitch) * Math.PI / 180);
+        z = -(float) Math.cos((90.0f + this.heading) * Math.PI / 180);
+
+        slide.y = y;
+        slide.z = z;
+        slide.normalize();
+        slide.mult(this.speed);
+
+        this.loc.sub(slide);
+
     }
 
     public void backward() {
-        this.loc.x -= this.ori.x * this.speed * (UHPT.getETime() / 1000000000);
-        this.loc.y -= this.ori.y * this.speed * (UHPT.getETime() / 1000000000);
-        this.loc.z -= this.ori.z * this.speed * (UHPT.getETime() / 1000000000);
+        this.loc.x -= this.ori.x * this.speed;
+        this.loc.y += this.ori.y * this.speed;
+        this.loc.z += this.ori.z * this.speed;
     }
 
     public void strafeLeft() {
@@ -75,8 +82,8 @@ public class Camera {
         float x;
         float z;
 
-        x = (float) Math.sin((90.0f + this.camPitch) * Math.PI / 180);
-        z = -(float) Math.cos((90.0f + this.camPitch) * Math.PI / 180);
+        x = (float) Math.sin((90.0f + this.heading) * Math.PI / 180);
+        z = -(float) Math.cos((90.0f + this.heading) * Math.PI / 180);
 
         slide.x = x;
         slide.z = z;
@@ -91,8 +98,8 @@ public class Camera {
         float x;
         float z;
 
-        x = (float) Math.sin((270.0f + this.camPitch) * Math.PI / 180);
-        z = -(float) Math.cos((270.0f + this.camPitch) * Math.PI / 180);
+        x = (float) Math.sin((270.0f + this.heading) * Math.PI / 180);
+        z = -(float) Math.cos((270.0f + this.heading) * Math.PI / 180);
 
         slide.x = x;
         slide.z = z;
@@ -105,27 +112,28 @@ public class Camera {
     public void giveInfo() {
         System.out.println("Loc: x " + this.loc.x + " y " + this.loc.y + " z " + this.loc.z);
         System.out.println("Ori x " + this.ori.x + " y " + this.ori.y + " z " + this.ori.z);
+        System.out.println("heading " + this.heading + " pitch " + this.pitch);
     }
 
     public void turnLeft(int delta) {
         // Wenn delta -1 ist, dann wurde eine Taste gedrueckt und daher wird der keyTurn Parameter verwendet.
-        this.camPitch -= 0.5f * delta;
+        this.heading -= 0.5f * delta;
         updateDirection();
     }
 
     public void turnRight(int delta) {
-        this.camPitch += 0.5f * delta;
+        this.heading += 0.5f * delta;
         updateDirection();
 
     }
 
     public void turnUp(int delta) {
-        this.camHeading -= 0.5f * delta;
+        this.pitch -= 0.5f * delta;
         updateDirection();
     }
 
     public void turnDown(int delta) {
-        this.camHeading += 0.5f * delta;
+        this.pitch += 0.5f * delta;
         updateDirection();
     }
 
@@ -133,18 +141,20 @@ public class Camera {
         float x;
         float y;
         float z;
-        x = (float) Math.sin(Math.toRadians(this.camHeading));
-        y = (float) Math.sin(Math.toRadians(this.camRoll));
-        z = (float) Math.cos(Math.toRadians(this.camPitch));
+        x = (float) Math.sin(Math.toRadians(this.heading));
+        y = (float) Math.sin(Math.toRadians(this.pitch));
+        z = (float) Math.sin(Math.toRadians(this.roll));
 
         this.ori = new Vector(x, y, z);
     //giveInfo();
     }
 
     public void translateAccordingToCameraPosition(GL gl) {
-        gl.glRotatef(this.camHeading, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(this.camPitch, 0.0f, 1.0f, 0.0f);
+
+        gl.glRotatef(this.pitch, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(this.heading, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(-loc.x, -loc.y, -loc.z);
+
     }
 
     public void drawCam() {
@@ -159,7 +169,7 @@ public class Camera {
     }
 
     public void camRot(GL gl) {
-        gl.glRotatef(-this.camPitch, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(180.0f - this.camHeading, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(-this.heading, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(180.0f - this.pitch, 0.0f, 1.0f, 0.0f);
     }
 }

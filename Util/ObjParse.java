@@ -236,6 +236,6 @@ public class ObjParse {
             k8 = Integer.parseInt(buf[8].toString());
         }
 
-        this.tempFac.add(new Face(k0 -1, k1 -1, k2 -1, k3 -1, k4 -1, k5 -1, k6 -1, k7 -1, k8 -1));
+        this.tempFac.add(new Face(k0 -1, k1 -1 , k2 -1, k3 -1, k4 -1, k5 -1, k6 -1, k7 -1, k8 -1));
     }
 }

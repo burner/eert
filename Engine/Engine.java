@@ -52,7 +52,7 @@ public class Engine implements GLEventListener {
         //cam.camRot(gl);
         //cam.giveInfo();
 
-        this.obj.setRot(90.0f, 0.0f, 0.0f);
+        this.obj.setRot(0.0f, 0.0f, 0.0f);
         this.obj.render(gl);
 
         frame();
@@ -67,14 +67,16 @@ public class Engine implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
-        //gl.glEnable(GL.GL_LIGHTING);
+        gl.glEnable(GL.GL_LIGHTING);
         gl.glPushMatrix();
+        gl.glTranslatef(4.0f, 4.0f, 4.0f);
         gl.glEnable(GL.GL_LIGHT0);
+        gl.glTranslatef(-4.0f, -4.0f, -4.0f);
         gl.glPopMatrix();
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("suzann2.obj", gl);
+        obj = new Obj("bigTwo8.obj", gl);
         this.input = new EInput(this.cam);
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);

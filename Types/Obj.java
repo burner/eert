@@ -51,14 +51,26 @@ public class Obj {
 
         gl.glNewList(display_list_handle, GL.GL_COMPILE);
         gl.glBegin(GL.GL_TRIANGLES);
-        for (int i = 0; i < fac.length; i++) {
+        int a;
+        for (int i = 0; i < fac.length - 1; i++) {
             Random r = new Random();
             gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
-            gl.glNormal3f(nor[fac[i].v1].x, nor[fac[i].v1].y, nor[fac[i].v1].z);
+            a = fac[i].v1;
+            if (a < nor.length) {
+                gl.glNormal3f(nor[fac[i].v1].x, nor[fac[i].v1].y, nor[fac[i].v1].z);
+            }
             gl.glVertex3f(vec[fac[i].v1].x, vec[fac[i].v1].y, vec[fac[i].v1].z);
-            gl.glNormal3f(nor[fac[i].v2].x, nor[fac[i].v2].y, nor[fac[i].v2].z);
+            
+            a = fac[i].v2;
+            if (a < nor.length) {
+                gl.glNormal3f(nor[fac[i].v2].x, nor[fac[i].v2].y, nor[fac[i].v2].z);
+            }
             gl.glVertex3f(vec[fac[i].v2].x, vec[fac[i].v2].y, vec[fac[i].v2].z);
-            gl.glNormal3f(nor[fac[i].v3].x, nor[fac[i].v3].y, nor[fac[i].v3].z);
+            
+            a = fac[i].v3;
+            if (a < nor.length) {
+                gl.glNormal3f(nor[fac[i].v3].x, nor[fac[i].v3].y, nor[fac[i].v3].z);
+            }
             gl.glVertex3f(vec[fac[i].v3].x, vec[fac[i].v3].y, vec[fac[i].v3].z);
         }
         gl.glEnd();
@@ -117,7 +129,7 @@ public class Obj {
         gl.glRotatef(xR, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(yR, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(zR, 0.0f, 0.0f, 1.0f);
-        
+
         gl.glCallList(display_list_handle);
 
         gl.glPopMatrix();
