@@ -55,8 +55,7 @@ public class EFrame extends Frame {
                 }).start();
             }
         });
-        //this.requestFocus();
-        this.setVisible(true);
+       this.setVisible(true);
     }
 }
 

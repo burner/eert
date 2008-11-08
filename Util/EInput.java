@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 public final class EInput implements KeyListener, MouseListener, MouseMotionListener, Runnable {
 
+
     private int mouseOldX;
     private int mouseOldY;
     private boolean keyForward;
@@ -164,4 +165,5 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
 
     public void mouseMoved(MouseEvent arg0) {
     }
+
 }
