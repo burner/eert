@@ -32,6 +32,8 @@ public class Camera {
     float keyTurn;
     float turnSens;
     float heading = 0.0f; // up-down
+    float maxPitch = 90.0f;
+    float minPitch = -90.0f;
     float pitch = 0.0f; // left-right
     float roll = 0.0f;    // Vector in camera direction: look-at-vector
     float speed;
@@ -55,24 +57,35 @@ public class Camera {
     //* @param y heading die Rotation um die Y-Achse
     //* @param z roll die Rotation um die Z-Achse
     public void forward() {
-        Vector slide = new Vector(0.0f, 0.0f, 0.0f);
-        float y;
+        /*
+        Vector hori = new Vector(0.0f, 0.0f, 0.0f);
+        float x;
         float z;
 
-        y= (float) Math.cos((90.0f + this.pitch) * Math.PI / 180);
+        x = (float) Math.sin((90.0f + this.heading) * Math.PI / 180);
         z = -(float) Math.cos((90.0f + this.heading) * Math.PI / 180);
 
-        slide.y = y;
-        slide.z = z;
-        slide.normalize();
-        slide.mult(this.speed);
-
-        this.loc.sub(slide);
-
+        hori.x = x;
+        hori.z = z;
+        hori.normalize();
+            
+        //Vertical Movement
+        Vector ver = new Vector(x, 0.0f, z);
+        float y;
+        y = (float) Math.cos((180.0f + this.pitch) * Math.PI / 180);
+        ver.y = y;
+        Vector mov = hori.getCrossProd(ver);
+        mov.mult(this.speed);
+        System.out.println(mov.x + " " + mov.y + " " + mov.z);
+        this.loc.sub(mov);
+*/
+        this.loc.x -= this.ori.x * this.speed;
+        this.loc.y -= this.ori.y * this.speed;
+        this.loc.z -= this.ori.z * this.speed;
     }
 
     public void backward() {
-        this.loc.x -= this.ori.x * this.speed;
+        this.loc.x += this.ori.x * this.speed;
         this.loc.y += this.ori.y * this.speed;
         this.loc.z += this.ori.z * this.speed;
     }
@@ -117,40 +130,76 @@ public class Camera {
 
     public void turnLeft(int delta) {
         // Wenn delta -1 ist, dann wurde eine Taste gedrueckt und daher wird der keyTurn Parameter verwendet.
-        this.heading -= 0.5f * delta;
+        if (delta == -1) {
+            this.heading -= 0.5f * delta;
+        } else {
+            this.heading -= (this.turnSens * (float) delta);
+        }
         updateDirection();
     }
 
     public void turnRight(int delta) {
-        this.heading += 0.5f * delta;
+        if (delta == -1) {
+            this.heading += 0.5f * delta;
+        } else {
+            this.heading += (this.turnSens * (float) delta);
+        }
         updateDirection();
 
     }
 
     public void turnUp(int delta) {
-        this.pitch -= 0.5f * delta;
+        if (this.pitch < this.maxPitch) {
+            if (delta == -1) {
+                this.pitch -= this.keyTurn;
+            } else {
+                this.pitch -= (this.turnSens * (float) delta);
+            }
+        }
         updateDirection();
     }
 
     public void turnDown(int delta) {
-        this.pitch += 0.5f * delta;
-        updateDirection();
+        if (this.pitch > this.minPitch) {
+            if (delta == -1) {
+                this.pitch += this.keyTurn;
+            } else {
+                this.pitch += (this.turnSens * (float) delta);
+            }
+            updateDirection();
+        }
     }
 
     private void updateDirection() {
         float x;
-        float y;
+        float y = 0.0f;
         float z;
-        x = (float) Math.sin(Math.toRadians(this.heading));
+        
+        x = -(float) Math.sin(Math.toRadians(this.heading));
         y = (float) Math.sin(Math.toRadians(this.pitch));
-        z = (float) Math.sin(Math.toRadians(this.roll));
+        z = (float) Math.cos(Math.toRadians(this.heading));
+        /*
+        x = (float) (Math.cos(this.pitch) * Math.cos(this.heading));
+        y = (float) (Math.cos(this.pitch) * Math.sin(this.heading));
+        z = (float)Math.sin(this.pitch);
+        
+        /*
+        //Convert to Radian : 360° = 2PI
+        double xRot = Math.toRadians(-this.pitch);    //Math.toRadians is toRadians in Java 1.5 (static import)
+        double yRot = Math.toRadians(this.heading);
 
+        //Calculate the formula
+        x = (float) (Math.cos(yRot) + Math.sin(xRot) * Math.sin(yRot) -Math.cos(xRot) * Math.sin(yRot));
+        y = (float) (Math.cos(xRot) + Math.sin(xRot));
+        z = (float) (Math.sin(yRot) -Math.sin(xRot) * Math.cos(yRot) + Math.cos(xRot) * Math.cos(yRot));
+         */
         this.ori = new Vector(x, y, z);
-    //giveInfo();
+        
     }
 
     public void translateAccordingToCameraPosition(GL gl) {
 
+        //gl.glTranslatef(-loc.x, -loc.y, -loc.z);
         gl.glRotatef(this.pitch, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(this.heading, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(-loc.x, -loc.y, -loc.z);
