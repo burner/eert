@@ -18,6 +18,7 @@
 package Util;
 public final class UHPT {
     public static final long time = System.nanoTime();
+    public static long lastFrame = System.nanoTime();
         
     public static final long getETime() {
         return (long) (System.nanoTime() - UHPT.time);
@@ -25,6 +26,5 @@ public final class UHPT {
     
     public static final long starTime() {
         return UHPT.time;
-    }
-
+    }  
 }

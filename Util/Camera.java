@@ -49,48 +49,27 @@ public class Camera {
         this.turnSens = 0.5f;
         this.keyTurn = 0.5f;
 
-        this.speed = 0.01f;
-
-
+        this.speed = 0.025f;
     }
-    //* @param x pitch die Rotation um die X-Achse
-    //* @param y heading die Rotation um die Y-Achse
-    //* @param z roll die Rotation um die Z-Achse
+
     public void forward() {
-        /*
-        Vector hori = new Vector(0.0f, 0.0f, 0.0f);
-        float x;
-        float z;
+        float mov = ((System.nanoTime() - UHPT.lastFrame) / 10000000.0f);
+        this.loc.x -= this.ori.x * mov;
+        this.loc.y -= this.ori.y * mov;
+        this.loc.z -= this.ori.z * mov;
+        System.out.println(mov);
 
-        x = (float) Math.sin((90.0f + this.heading) * Math.PI / 180);
-        z = -(float) Math.cos((90.0f + this.heading) * Math.PI / 180);
-
-        hori.x = x;
-        hori.z = z;
-        hori.normalize();
-            
-        //Vertical Movement
-        Vector ver = new Vector(x, 0.0f, z);
-        float y;
-        y = (float) Math.cos((180.0f + this.pitch) * Math.PI / 180);
-        ver.y = y;
-        Vector mov = hori.getCrossProd(ver);
-        mov.mult(this.speed);
-        System.out.println(mov.x + " " + mov.y + " " + mov.z);
-        this.loc.sub(mov);
-*/
-        this.loc.x -= this.ori.x * this.speed;
-        this.loc.y -= this.ori.y * this.speed;
-        this.loc.z -= this.ori.z * this.speed;
     }
 
     public void backward() {
-        this.loc.x += this.ori.x * this.speed;
-        this.loc.y += this.ori.y * this.speed;
-        this.loc.z += this.ori.z * this.speed;
+        float mov = ((System.nanoTime() - UHPT.lastFrame) / 10000000.0f);
+        this.loc.x += this.ori.x * mov;
+        this.loc.y += this.ori.y * mov;
+        this.loc.z += this.ori.z * mov;
     }
 
     public void strafeLeft() {
+        float mov = ((System.nanoTime() - UHPT.lastFrame) / 10000000.0f);
         Vector slide = new Vector(0.0f, 0.0f, 0.0f);
         float x;
         float z;
@@ -101,12 +80,13 @@ public class Camera {
         slide.x = x;
         slide.z = z;
         slide.normalize();
-        slide.mult(this.speed);
+        slide.mult(mov);
 
         this.loc.sub(slide);
     }
 
     public void strafeRight() {
+        float mov = ((System.nanoTime() - UHPT.lastFrame) / 10000000.0f);
         Vector slide = new Vector(0.0f, 0.0f, 0.0f);
         float x;
         float z;
@@ -117,7 +97,7 @@ public class Camera {
         slide.x = x;
         slide.z = z;
         slide.normalize();
-        slide.mult(this.speed);
+        slide.mult(mov);
 
         this.loc.sub(slide);
     }
@@ -174,27 +154,12 @@ public class Camera {
         float x;
         float y = 0.0f;
         float z;
-        
+
         x = -(float) Math.sin(Math.toRadians(this.heading));
         y = (float) Math.sin(Math.toRadians(this.pitch));
         z = (float) Math.cos(Math.toRadians(this.heading));
-        /*
-        x = (float) (Math.cos(this.pitch) * Math.cos(this.heading));
-        y = (float) (Math.cos(this.pitch) * Math.sin(this.heading));
-        z = (float)Math.sin(this.pitch);
-        
-        /*
-        //Convert to Radian : 360° = 2PI
-        double xRot = Math.toRadians(-this.pitch);    //Math.toRadians is toRadians in Java 1.5 (static import)
-        double yRot = Math.toRadians(this.heading);
-
-        //Calculate the formula
-        x = (float) (Math.cos(yRot) + Math.sin(xRot) * Math.sin(yRot) -Math.cos(xRot) * Math.sin(yRot));
-        y = (float) (Math.cos(xRot) + Math.sin(xRot));
-        z = (float) (Math.sin(yRot) -Math.sin(xRot) * Math.cos(yRot) + Math.cos(xRot) * Math.cos(yRot));
-         */
         this.ori = new Vector(x, y, z);
-        
+
     }
 
     public void translateAccordingToCameraPosition(GL gl) {

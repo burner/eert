@@ -26,6 +26,7 @@ import Types.*;
 import Util.Camera;
 import Util.EFrame;
 import Util.EInput;
+import Util.UHPT;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
@@ -37,6 +38,7 @@ public class Engine implements GLEventListener {
     public Camera cam;
     private EFrame frame;
     private EInput input;
+    private long lastFrame;
 
     public Engine(Camera cam, EFrame frame) {
         this.cam = cam;
@@ -56,6 +58,7 @@ public class Engine implements GLEventListener {
         this.obj.render(gl);
 
         frame();
+        UHPT.lastFrame = System.nanoTime();
     }
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
@@ -76,7 +79,7 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("bigTwo8.obj", gl);
+        obj = new Obj("suzann2.obj", gl);
         this.input = new EInput(this.cam);
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
