@@ -22,11 +22,23 @@ public class Vector {
     public float x;
     public float y;
     public float z;
+    
+    public Vector() {
+        this.x = 0.0f;
+        this.y = 0.0f;
+        this.z = 0.0f;
+    }
 
     public Vector(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public Vector(Vector old) {
+        this.x = old.x;
+        this.y = old.y;
+        this.z = old.z;
     }
 
     public float getLength() {
@@ -48,6 +60,10 @@ public class Vector {
         this.x -= vec.x;
         this.y -= vec.y;
         this.z -= vec.z;
+    }
+    
+    public Vector subR(Vector vec) {
+        return new Vector(this.x - vec.x, this.y - vec.y, this.z - vec.z);        
     }
 
     public void mult(float scalar) {

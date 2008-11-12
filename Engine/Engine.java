@@ -79,7 +79,7 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("suzann2.obj", gl);
+        obj = new Obj("suzann2.obj", 0, gl);
         this.input = new EInput(this.cam);
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);

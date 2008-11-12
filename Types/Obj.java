@@ -23,7 +23,7 @@ import Util.*;
 import java.util.Random;
 
 public class Obj {
-
+    public int number;
     public Vector[] vec = null;
     public Normal[] nor = null;
     public TexCoor[] tex = null;
@@ -33,10 +33,11 @@ public class Obj {
     private float xR = 0.0f;                //Object rotation
     private float yR = 0.0f;
     private float zR = 0.0f;
-    private float bR = 0.0f;                //bounding Sphere radius
+    public float bR = 0.0f;                //bounding Sphere radius
     private int display_list_handle;
 
-    public Obj(String file, GL gl) {
+    public Obj(String file, int number, GL gl) {
+        this.number = number;
         ObjParse parse = new ObjParse(file);
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.vec = parse.getVec();
