@@ -18,7 +18,5 @@
 package Types;
 
 public class Light {
-    private float x;
-    private float y;
-    private float z;
+    public Vector pos;
 }

@@ -20,14 +20,16 @@ package Types;
 import javax.media.opengl.GL;
 
 import Util.*;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Obj {
+
     public int number;
-    public Vector[] vec = null;
-    public Normal[] nor = null;
-    public TexCoor[] tex = null;
-    public Face[] fac = null;
+    public LinkedList<Vector[]> vec = null;
+    public LinkedList<Normal[]> nor = null;
+    public LinkedList<TexCoor[]> tex = null;
+    public LinkedList<Face[]> fac = null;
     public String name;
     public Vector origin;                 //Object origin
     private float xR = 0.0f;                //Object rotation
@@ -35,54 +37,67 @@ public class Obj {
     private float zR = 0.0f;
     public float bR = 0.0f;                //bounding Sphere radius
     private int display_list_handle;
+    private Camera cam;
 
-    public Obj(String file, int number, GL gl) {
-        this.number = number;
-        ObjParse parse = new ObjParse(file);
+    public Obj(Camera cam, String[] file, int number, GL gl) {
+        this.cam = cam;
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
-        this.vec = parse.getVec();
-        this.nor = parse.getNor();
-        this.tex = parse.getTex();
-        this.fac = parse.getFace();
+        this.number = number;
+        for (int i = 0; i < file.length; i++) {
+            ObjParse parse = new ObjParse(file[i]);
+            this.vec.add(parse.getVec());
+            this.nor.add(parse.getNor());
+            this.tex.add(parse.getTex());
+            this.fac.add(parse.getFace());
+        }
         calcObjCenter();
         makeBoundingSphere();
 
-        //Put Object into glList
-        this.display_list_handle = gl.glGenLists(1);
-
-        gl.glNewList(display_list_handle, GL.GL_COMPILE);
-        gl.glBegin(GL.GL_TRIANGLES);
+        //Put Object into glLists
+        this.display_list_handle = gl.glGenLists(file.length);
+        Face[] tmpFac;
+        Normal[] tmpNor;
+        TexCoor[] tmpTex;
+        Vector[] tmpVec;
         int a;
-        for (int i = 0; i < fac.length - 1; i++) {
-            Random r = new Random();
-            gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
-            a = fac[i].v1;
-            if (a < nor.length) {
-                gl.glNormal3f(nor[fac[i].v1].x, nor[fac[i].v1].y, nor[fac[i].v1].z);
+        for (int j = 0; j < fac.size(); j++) {
+            tmpFac = (Face[]) this.fac.get(j);
+            tmpNor = (Normal[]) this.nor.get(j);
+            tmpTex = (TexCoor[]) this.tex.get(j);
+            tmpVec = (Vector[]) this.vec.get(j);
+            gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
+            gl.glBegin(GL.GL_TRIANGLES);
+            for (int i = 0; i < fac.get(j).length - 1; i++) {
+                Random r = new Random();
+                gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
+                a = this.fac.get(j)[i].v1;
+                if (a < this.nor.get(j).length) {
+                    gl.glNormal3f(tmpNor[tmpFac[i].vn1].x, tmpNor[tmpFac[i].vn1].y, tmpNor[tmpFac[i].vn1].z);
+                }
+                gl.glVertex3f(tmpVec[tmpFac[i].v1].x, tmpVec[tmpFac[i].v1].y, tmpVec[tmpFac[i].v1].z);
+
+                a = tmpFac[i].v2;
+                if (a < nor.get(j).length) {
+                    gl.glNormal3f(tmpNor[tmpFac[i].v2].x, tmpNor[tmpFac[i].v2].y, tmpNor[tmpFac[i].v2].z);
+                }
+                gl.glVertex3f(tmpVec[tmpFac[i].v2].x, tmpVec[tmpFac[i].v2].y, tmpVec[tmpFac[i].v2].z);
+
+                a = tmpFac[i].v3;
+                if (a < nor.get(j).length) {
+                    gl.glNormal3f(tmpNor[tmpFac[i].v3].x, tmpNor[tmpFac[i].v3].y, tmpNor[tmpFac[i].v3].z);
+                }
+                gl.glVertex3f(tmpVec[tmpFac[i].v3].x, tmpVec[tmpFac[i].v3].y, tmpVec[tmpFac[i].v3].z);
             }
-            gl.glVertex3f(vec[fac[i].v1].x, vec[fac[i].v1].y, vec[fac[i].v1].z);
-            
-            a = fac[i].v2;
-            if (a < nor.length) {
-                gl.glNormal3f(nor[fac[i].v2].x, nor[fac[i].v2].y, nor[fac[i].v2].z);
-            }
-            gl.glVertex3f(vec[fac[i].v2].x, vec[fac[i].v2].y, vec[fac[i].v2].z);
-            
-            a = fac[i].v3;
-            if (a < nor.length) {
-                gl.glNormal3f(nor[fac[i].v3].x, nor[fac[i].v3].y, nor[fac[i].v3].z);
-            }
-            gl.glVertex3f(vec[fac[i].v3].x, vec[fac[i].v3].y, vec[fac[i].v3].z);
+            gl.glEnd();
+            gl.glEndList();
         }
-        gl.glEnd();
-        gl.glEndList();
     }
 
     private void calcObjCenter() {
-        for (Vector vecIdx : this.vec) {
-            this.origin.x += (vecIdx.x / this.vec.length);
-            this.origin.y += (vecIdx.y / this.vec.length);
-            this.origin.z += (vecIdx.z / this.vec.length);
+        for (Vector vecIdx : this.vec.get(0)) {
+            this.origin.x += (vecIdx.x / this.vec.get(0).length);
+            this.origin.y += (vecIdx.y / this.vec.get(0).length);
+            this.origin.z += (vecIdx.z / this.vec.get(0).length);
         }
         this.origin.x = this.origin.x * -1;
         this.origin.y = this.origin.y * -1;
@@ -90,8 +105,9 @@ public class Obj {
     }
 
     private void makeBoundingSphere() {
-        for (int i = 0; i < this.vec.length; i++) {
-            float dis = (float) Math.sqrt(Math.pow(this.vec[i].x, 2) + Math.pow(this.vec[i].y, 2) + Math.pow(this.vec[i].z, 2));
+        for (int i = 0; i < this.vec.get(1).length; i++) {
+            Vector[] tmpVec = (Vector[]) this.vec.get(1);
+            float dis = (float) Math.sqrt(Math.pow(tmpVec[i].x, 2) + Math.pow(tmpVec[i].y, 2) + Math.pow(tmpVec[i].z, 2));
             if (dis > this.bR) {
                 this.bR = dis;
             }
@@ -123,16 +139,27 @@ public class Obj {
     }
 
     public void render(GL gl) {
-
+        float dis = (float) Math.abs(Math.sqrt(Math.pow(this.cam.loc.x - this.origin.x, 2) + Math.pow(this.cam.loc.y - this.origin.y, 2) + Math.pow(this.cam.loc.z - this.origin.z, 2)));
         gl.glPushMatrix();
         gl.glColor3f(0.65f, 0.32f, 0.89f);
         gl.glTranslatef(this.origin.x, this.origin.y, this.origin.z);
         gl.glRotatef(xR, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(yR, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(zR, 0.0f, 0.0f, 1.0f);
-
-        gl.glCallList(display_list_handle);
-
+        
+        if (dis < 10.0f) {
+            gl.glCallList(display_list_handle);
+        } else if(dis < 25.0f) {
+            gl.glCallList(display_list_handle+1);            
+        } else if(dis < 50.0f) {
+            gl.glCallList(display_list_handle+2);            
+        } else if(dis < 100.0f) {
+            gl.glCallList(display_list_handle+3);            
+        } else if(dis < 200.0f) {
+            gl.glCallList(display_list_handle+4);
+        } else if(dis < 400.0f) {
+            gl.glCallList(display_list_handle+5);
+        }
         gl.glPopMatrix();
     }
 }

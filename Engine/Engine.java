@@ -79,7 +79,7 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj("suzann2.obj", 0, gl);
+        obj = new Obj(this.cam, "suzann2.obj", 0, gl);
         this.input = new EInput(this.cam);
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
@@ -104,7 +104,7 @@ public class Engine implements GLEventListener {
         now = Calendar.getInstance();
         if (now.getTimeInMillis() >= (ms + 1000)) {
             ms = now.getTimeInMillis();
-            this.frame.setTitle(obj.fac.length + " faces at " + frames + " FPS");
+            this.frame.setTitle(frames + " FPS");
             frames = 1;
         } else {
             frames++;
