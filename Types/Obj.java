@@ -144,11 +144,13 @@ public class Obj {
     public void render(int number) {
         float dis = (float) Math.abs(Math.sqrt(Math.pow(this.cam.loc.x - this.origin.x, 2) + Math.pow(this.cam.loc.y - this.origin.y, 2) + Math.pow(this.cam.loc.z - this.origin.z, 2)));
         gl.glPushMatrix();
-        gl.glColor3f(0.65f, 0.32f, 0.89f);
-        gl.glTranslatef(this.origin.x, this.origin.y, this.origin.z);
-        gl.glRotatef(xR, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(yR, 0.0f, 1.0f, 0.0f);
-        gl.glRotatef(zR, 0.0f, 0.0f, 1.0f);
+        
+        //get ObjIns and adjust the matrix
+	ObjIns tmp = this.objIns.get(number);
+        gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
+        gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
         
         if (dis < 10.0f) {
             gl.glCallList(display_list_handle);
