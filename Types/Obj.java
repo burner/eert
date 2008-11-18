@@ -30,6 +30,7 @@ public class Obj {
     public LinkedList<Normal[]> nor = null;
     public LinkedList<TexCoor[]> tex = null;
     public LinkedList<Face[]> fac = null;
+    public LinkedList<ObjIns> objIns = null;
     public String name;
     public Vector origin;                 //Object origin
     private float xR = 0.0f;                //Object rotation
@@ -38,8 +39,10 @@ public class Obj {
     public float bR = 0.0f;                //bounding Sphere radius
     private int display_list_handle;
     private Camera cam;
+    private GL gl;
 
     public Obj(Camera cam, String[] file, int number, GL gl) {
+        this.gl = gl;
         this.cam = cam;
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.number = number;
@@ -138,7 +141,7 @@ public class Obj {
         this.zR = zR;
     }
 
-    public void render(GL gl) {
+    public void render(int number) {
         float dis = (float) Math.abs(Math.sqrt(Math.pow(this.cam.loc.x - this.origin.x, 2) + Math.pow(this.cam.loc.y - this.origin.y, 2) + Math.pow(this.cam.loc.z - this.origin.z, 2)));
         gl.glPushMatrix();
         gl.glColor3f(0.65f, 0.32f, 0.89f);

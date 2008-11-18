@@ -9,10 +9,10 @@ import Util.UHPT;
 
 public class ObjIns {
     private Obj parent;
-    private int number;
+    public int number;
     public Vector origin;
     public Vector rotation;
-    private float boundSph;
+    public float boundSph;
     
     public ObjIns(Obj parent, Vector origin, Vector rotation, int number) {
         this.parent = parent;

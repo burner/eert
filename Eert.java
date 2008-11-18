@@ -22,7 +22,8 @@ public class Eert {
     private static EFrame frame;
  
     public static void main(String[] args) {
-        frame = new EFrame();
+        String szene = args[0];
+        frame = new EFrame(szene);
         Eert.frame.animator.start();
         System.out.println("Before leaving main");
     }

@@ -1,6 +1,7 @@
 package Engine;
 
 import Types.Obj;
+import Types.ObjIns;
 import Types.Vector;
 import java.util.LinkedList;
 import javax.media.opengl.GL;
@@ -8,12 +9,12 @@ import javax.media.opengl.GL;
 public class EOcNode {
 
     public EOcNode[] childs;
-    public Obj[] objs;
+    public ObjIns[] objs;
     private boolean[] drawn;
     private float xSize,  ySize,  zSize;
     private Vector middle;
 
-    public EOcNode(Obj[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
+    public EOcNode(ObjIns[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
         this.middle = middle;
         this.drawn = drawn;
         this.xSize = xSize;
@@ -88,17 +89,17 @@ public class EOcNode {
 
     }
 
-    private Obj[] checkAllObjects(Obj[] objs) {
-        LinkedList<Obj> objects = new LinkedList<Obj>();
-        for (Obj obj : objs) {
+    private ObjIns[] checkAllObjects(ObjIns[] objs) {
+        LinkedList<ObjIns> objects = new LinkedList<ObjIns>();
+        for (ObjIns obj : objs) {
             if (checkForObj(obj)) {
                 objects.add(obj);
             }
         }
-        return (Obj[]) objects.toArray();
+        return (ObjIns[]) objects.toArray();
     }
 
-    boolean checkForObj(Obj obj) {
+    boolean checkForObj(ObjIns obj) {
         //Cheated a bit 
         //Just check a sphear around the box against the sphear around the Obj
         //the error-margin shouldn't be to big but the check is much cheaper
@@ -108,7 +109,7 @@ public class EOcNode {
         //Euclidean distance
         float dis = (float) Math.abs(Math.sqrt(Math.pow(this.middle.x - obj.origin.x, 2) + Math.pow(this.middle.y - obj.origin.y, 2) + Math.pow(this.middle.z - obj.origin.y, 2)));
 
-        if (dis - boxSph - obj.bR < 0.0f) {
+        if (dis - boxSph - obj.boundSph < 0.0f) {
             return true;
         } else {
             return false;

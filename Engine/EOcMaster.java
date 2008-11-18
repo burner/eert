@@ -1,12 +1,13 @@
 package Engine;
 
 import Types.Obj;
+import Types.ObjIns;
 import Types.Vector;
 import javax.media.opengl.GL;
 
 public class EOcMaster {
 
-    private Obj[] objs;
+    private ObjIns[] objs;
     public boolean[] drawn;
     private EOcNode root;
     private Vector middle;
@@ -14,7 +15,7 @@ public class EOcMaster {
     private float ySize = 0;
     private float zSize = 0;
 
-    public EOcMaster(Obj[] allObj) {
+    public EOcMaster(ObjIns[] allObj) {
         this.objs = allObj;
         makeFirstCubeInfo();
         this.root = new EOcNode(this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
@@ -22,7 +23,7 @@ public class EOcMaster {
 
     private void makeFirstCubeInfo() {
         this.middle = new Vector();
-        for(Obj obj : this.objs) {
+        for(ObjIns obj : this.objs) {
             this.middle.x += obj.origin.x / this.objs.length;
             this.middle.y += obj.origin.y / this.objs.length;
             this.middle.z += obj.origin.z / this.objs.length;

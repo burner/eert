@@ -31,11 +31,11 @@ public class EFrame extends Frame {
     private Camera cam;
     public final Animator animator;
 
-    public EFrame() {
+    public EFrame(String szene) {
         this.cam = new Camera();
         this.setSize(1024, 640);
         this.canvas = new GLCanvas();
-        this.canvas.addGLEventListener(new Engine(this.cam, this));
+        this.canvas.addGLEventListener(new Engine(this.cam, szene, this));
         this.add(this.canvas);
         this.animator = new Animator(this.canvas);
         this.setTitle("EERT");

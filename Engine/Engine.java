@@ -39,33 +39,20 @@ public class Engine implements GLEventListener {
     private EFrame frame;
     private EInput input;
     private long lastFrame;
+    private String szene;
+    private EOcMaster root;
+    private EObjectHandler objectHandler;
 
-    public Engine(Camera cam, EFrame frame) {
+    public Engine(Camera cam, String szene, EFrame frame) {
+        this.szene = szene;
         this.cam = cam;
         this.frame = frame;
     }
-
-    public void display(GLAutoDrawable glDrawable) {
-        GL gl = glDrawable.getGL();
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
-        cam.translateAccordingToCameraPosition(gl);
-        //cam.camRot(gl);
-        //cam.giveInfo();
-
-        this.obj.setRot(0.0f, 0.0f, 0.0f);
-        this.obj.render(gl);
-
-        frame();
-        UHPT.lastFrame = System.nanoTime();
-    }
-
-    public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
-    }
-
+    
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
+        this.objectHandler = new EObjectHandler(this.cam, this.szene, gl);
+        this.root = new EOcMaster(this.objectHandler.objIns);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
@@ -79,12 +66,30 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        obj = new Obj(this.cam, "suzann2.obj", 0, gl);
         this.input = new EInput(this.cam);
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
     }
+    
+    public void display(GLAutoDrawable glDrawable) {
+        GL gl = glDrawable.getGL();
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glLoadIdentity();
+        cam.translateAccordingToCameraPosition(gl);
+        //cam.camRot(gl);
+        //cam.giveInfo();
+
+
+        frame();
+        UHPT.lastFrame = System.nanoTime();
+    }
+
+    public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
+    }
+
+
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {
         final GL gl = glDrawable.getGL();
