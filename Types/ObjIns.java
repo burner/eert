@@ -8,7 +8,7 @@ package Types;
 import Util.UHPT;
 
 public class ObjIns {
-    private Obj parent;
+    public Obj parent;
     public int number;
     public Vector origin;
     public Vector rotation;

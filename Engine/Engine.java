@@ -52,7 +52,7 @@ public class Engine implements GLEventListener {
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl);
-        this.root = new EOcMaster(this.objectHandler.objIns);
+        this.root = new EOcMaster(this.objectHandler.objIns, gl, this.objectHandler.obj);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);

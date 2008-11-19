@@ -105,8 +105,7 @@ public class ObjParse {
         buffer[2] = new StringBuffer();
         byte fIdx = 0;
         for (int i = 2; i < curLine.length(); i++) {
-            if (curLine.charAt(i) ==?
-                ' ') {
+            if (curLine.charAt(i) == ' ') {
                 fIdx++;
             } else {
                 buffer[fIdx].append(curLine.charAt(i));

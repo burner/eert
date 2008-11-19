@@ -26,17 +26,21 @@ public class EOcMaster {
 
     public float[][] frustum = new float[6][4];
     private ObjIns[] objs;
+    private Obj[] realObjs;
     public boolean[] drawn;
     private EOcNode root;
     private Vector middle;
     private float xSize = 0;
     private float ySize = 0;
     private float zSize = 0;
+    private GL gl;
 
-    public EOcMaster(ObjIns[] allObj) {
+    public EOcMaster(ObjIns[] allObj, GL gl, Obj[] objs) {
+        this.realObjs = objs;
+        this.gl = gl;
         this.objs = allObj;
         makeFirstCubeInfo();
-        this.root = new EOcNode(this, this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
+        this.root = new EOcNode(this, this.realObjs, this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
     }
 
     private void makeFirstCubeInfo() {
@@ -72,10 +76,10 @@ public class EOcMaster {
         float t;
 
         /* Get the current PROJECTION matrix from OpenGL */
-        gl.glGetFloatv(GL.GL_PROJECTION_MATRIX, proj);
+        gl.glGetFloatv(GL.GL_PROJECTION_MATRIX, proj, 0);
 
         /* Get the current MODELVIEW matrix from OpenGL */
-        gl.glGetFloatv(GL.GL_MODELVIEW_MATRIX, modl);
+        gl.glGetFloatv(GL.GL_MODELVIEW_MATRIX, modl, 0);
 
         /* Combine the two matrices (multiply projection by modelview) */
         clip[ 0] = modl[ 0] * proj[ 0] + modl[ 1] * proj[ 4] + modl[ 2] * proj[ 8] + modl[ 3] * proj[12];
