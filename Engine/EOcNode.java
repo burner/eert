@@ -24,14 +24,15 @@ import java.util.LinkedList;
 import javax.media.opengl.GL;
 
 public class EOcNode {
-
+    private EOcMaster root;
     public EOcNode[] childs;
     public ObjIns[] objs;
     private boolean[] drawn;
     private float xSize,  ySize,  zSize;
     private Vector middle;
 
-    public EOcNode(ObjIns[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
+    public EOcNode(EOcMaster root, ObjIns[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
+        this.root = root;
         this.middle = middle;
         this.drawn = drawn;
         this.xSize = xSize;
@@ -46,49 +47,49 @@ public class EOcNode {
         byte idx = 0;
         if (objs.length > 1 && depth < 5) {
             this.childs = new EOcNode[8];
-            EOcNode ch1 = new EOcNode(objs, new Vector(middle.x - xSize / 2, middle.y + ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch1 = new EOcNode(this.root, objs, new Vector(middle.x - xSize / 2, middle.y + ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch1.objs != null) {
                 this.childs[idx] = ch1;
                 ++idx;
             }
 
-            EOcNode ch2 = new EOcNode(objs, new Vector(middle.x + xSize / 2, middle.y + ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch2 = new EOcNode(this.root, objs, new Vector(middle.x + xSize / 2, middle.y + ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch2.objs != null) {
                 this.childs[idx] = ch2;
                 ++idx;
             }
 
-            EOcNode ch3 = new EOcNode(objs, new Vector(middle.x - xSize / 2, middle.y - ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch3 = new EOcNode(this.root, objs, new Vector(middle.x - xSize / 2, middle.y - ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch1.objs != null) {
                 this.childs[idx] = ch3;
                 ++idx;
             }
 
-            EOcNode ch4 = new EOcNode(objs, new Vector(middle.x + xSize / 2, middle.y - ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch4 = new EOcNode(this.root, objs, new Vector(middle.x + xSize / 2, middle.y - ySize / 2, middle.z + zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch2.objs != null) {
                 this.childs[idx] = ch4;
                 ++idx;
             }
 
-            EOcNode ch5 = new EOcNode(objs, new Vector(middle.x - xSize / 2, middle.y + ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch5 = new EOcNode(this.root, objs, new Vector(middle.x - xSize / 2, middle.y + ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch1.objs != null) {
                 this.childs[idx] = ch5;
                 ++idx;
             }
 
-            EOcNode ch6 = new EOcNode(objs, new Vector(middle.x + xSize / 2, middle.y + ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch6 = new EOcNode(this.root, objs, new Vector(middle.x + xSize / 2, middle.y + ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch2.objs != null) {
                 this.childs[idx] = ch6;
                 ++idx;
             }
 
-            EOcNode ch7 = new EOcNode(objs, new Vector(middle.x - xSize / 2, middle.y - ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch7 = new EOcNode(this.root, objs, new Vector(middle.x - xSize / 2, middle.y - ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch1.objs != null) {
                 this.childs[idx] = ch7;
                 ++idx;
             }
 
-            EOcNode ch8 = new EOcNode(objs, new Vector(middle.x + xSize / 2, middle.y - ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch8 = new EOcNode(this.root, objs, new Vector(middle.x + xSize / 2, middle.y - ySize / 2, middle.z - zSize / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
             if (ch2.objs != null) {
                 this.childs[idx] = ch8;
             }

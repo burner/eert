@@ -77,6 +77,8 @@ public class EObjParse {
                     }
                 } else if (curLine.charAt(0) == 'p') {
                     addPathPoint();
+                } else {
+                    continue;
                 }
             }
             reader.close();
@@ -114,7 +116,7 @@ public class EObjParse {
 
         this.objects.add(new Obj(this.cam, objName, this.objCount, this.gl));
         this.objCount++;
-    }
+    }   
 
     private void addObjIns() {
         StringBuffer objNumber = new StringBuffer();
