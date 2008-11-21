@@ -1,0 +1,13 @@
+// o for Objectfile followed by the name of the LOD from highpoly to lowpoly
+// six files needed
+// bsp:
+//
+// o suzann5124.obj suzann3254.obj suzann1006.obj suzann587.obj suzann129.obj
+//
+// oi for Objectinstances followed by an Integer representing the corresponding
+// object. 1 is the first valid number
+// the next six float separated by spaces do represend the origin and the
+// rotation of the ObjectInstance
+// bsp:
+//
+// oi 1 0.5333112 2.44402 10.66323 0.2555332 45.0 80.523412

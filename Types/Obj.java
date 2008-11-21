@@ -42,6 +42,11 @@ public class Obj {
     private GL gl;
 
     public Obj(Camera cam, String[] file, int number, GL gl) {
+        this.vec = new LinkedList<Vector[]>();
+        this.nor = new LinkedList<Normal[]>();
+        this.tex = new LinkedList<TexCoor[]>();
+        this.fac = new LinkedList<Face[]>();
+        this.objIns = new LinkedList<ObjIns>();
         this.gl = gl;
         this.cam = cam;
         this.origin = new Vector(0.0f, 0.0f, 0.0f);

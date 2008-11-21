@@ -65,9 +65,12 @@ public class EObjParse {
             curLine = reader.readLine();
 
             while (curLine != null) {
-                curLine = reader.readLine();
+                
                 if (curLine == null) {
                     break;
+                }
+                if(curLine.charAt(0) == ' ') {
+                    continue;
                 }
                 if (curLine.charAt(0) == 'o') {
                     if (curLine.charAt(1) == ' ') {
@@ -80,6 +83,7 @@ public class EObjParse {
                 } else {
                     continue;
                 }
+                curLine = reader.readLine();
             }
             reader.close();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -99,7 +103,7 @@ public class EObjParse {
         buffer[4] = new StringBuffer();
         buffer[5] = new StringBuffer();
         byte fIdx = 0;
-        for (int i = 3; i < curLine.length(); i++) {
+        for (int i = 2; i < curLine.length(); i++) {
             if (curLine.charAt(i) == ' ') {
                 fIdx++;
             } else {

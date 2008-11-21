@@ -81,7 +81,7 @@ public class ObjParse {
                     if (curLine.charAt(1) == ' ') {
                         addVertex();
                     } else if (curLine.charAt(1) == 'n') {
-                        addVertexN();
+                        //addVertexN();
                     } else if (curLine.charAt(1) == 't') {
                         addVertexTex();
                     }
