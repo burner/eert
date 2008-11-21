@@ -18,8 +18,11 @@ public class EObjectHandler {
         
         //open the szene file and get all objects and objectinstances
         EObjParse eObjParse = new EObjParse(this.cam, szene, this.gl);
-        this.obj = (Obj[])eObjParse.objects.toArray();
-        this.objIns = (ObjIns[])eObjParse.objectIns.toArray();
+        this.obj = new Obj[eObjParse.objects.size()];
+        this.obj = eObjParse.objects.toArray(this.obj);
+        
+        this.objIns = new ObjIns[eObjParse.objectIns.size()];
+        this.objIns = eObjParse.objectIns.toArray(this.objIns);
     }
     
     

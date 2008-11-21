@@ -69,35 +69,57 @@ public class Obj {
         Vector[] tmpVec;
         int a;
         for (int j = 0; j < fac.size(); j++) {
+
             tmpFac = (Face[]) this.fac.get(j);
             tmpNor = (Normal[]) this.nor.get(j);
             tmpTex = (TexCoor[]) this.tex.get(j);
             tmpVec = (Vector[]) this.vec.get(j);
-            gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
-            gl.glBegin(GL.GL_TRIANGLES);
+
+            this.gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
+
+            this.gl.glBegin(GL.GL_TRIANGLES);
             for (int i = 0; i < fac.get(j).length - 1; i++) {
-                Random r = new Random();
-                gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
-                a = this.fac.get(j)[i].v1;
-                if (a < this.nor.get(j).length) {
-                    gl.glNormal3f(tmpNor[tmpFac[i].vn1].x, tmpNor[tmpFac[i].vn1].y, tmpNor[tmpFac[i].vn1].z);
-                }
-                gl.glVertex3f(tmpVec[tmpFac[i].v1].x, tmpVec[tmpFac[i].v1].y, tmpVec[tmpFac[i].v1].z);
 
+                //Random r = new Random();
+                //gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
+
+                a = tmpFac[i].vn1;
+                if (this.nor.get(j) != null) {
+                    if (a <= this.nor.get(j).length) {
+                        this.gl.glNormal3f(tmpNor[tmpFac[i].vn1].x, tmpNor[tmpFac[i].vn1].y, tmpNor[tmpFac[i].vn1].z);
+                    }
+                }
+                a = tmpFac[i].v1;
+                if (a <= this.vec.get(j).length) {
+                    this.gl.glVertex3f(tmpVec[tmpFac[i].v1].x, tmpVec[tmpFac[i].v1].y, tmpVec[tmpFac[i].v1].z);
+                }
+
+                a = tmpFac[i].vn2;
+
+                if (this.nor.get(j) != null) {
+                    if (a <= nor.get(j).length) {
+                        this.gl.glNormal3f(tmpNor[tmpFac[i].v2].x, tmpNor[tmpFac[i].v2].y, tmpNor[tmpFac[i].v2].z);
+                    }
+                }
                 a = tmpFac[i].v2;
-                if (a < nor.get(j).length) {
-                    gl.glNormal3f(tmpNor[tmpFac[i].v2].x, tmpNor[tmpFac[i].v2].y, tmpNor[tmpFac[i].v2].z);
+                if (a <= this.vec.get(j).length) {
+                    this.gl.glVertex3f(tmpVec[tmpFac[i].v2].x, tmpVec[tmpFac[i].v2].y, tmpVec[tmpFac[i].v2].z);
                 }
-                gl.glVertex3f(tmpVec[tmpFac[i].v2].x, tmpVec[tmpFac[i].v2].y, tmpVec[tmpFac[i].v2].z);
 
-                a = tmpFac[i].v3;
-                if (a < nor.get(j).length) {
-                    gl.glNormal3f(tmpNor[tmpFac[i].v3].x, tmpNor[tmpFac[i].v3].y, tmpNor[tmpFac[i].v3].z);
+                a = tmpFac[i].vn3;
+
+                if (this.nor.get(j) != null) {
+                    if (a <= nor.get(j).length) {
+                        this.gl.glNormal3f(tmpNor[tmpFac[i].v3].x, tmpNor[tmpFac[i].v3].y, tmpNor[tmpFac[i].v3].z);
+                    }
                 }
-                gl.glVertex3f(tmpVec[tmpFac[i].v3].x, tmpVec[tmpFac[i].v3].y, tmpVec[tmpFac[i].v3].z);
+                a = tmpFac[i].v3;
+                if (a <= this.vec.get(j).length) {
+                    this.gl.glVertex3f(tmpVec[tmpFac[i].v3].x, tmpVec[tmpFac[i].v3].y, tmpVec[tmpFac[i].v3].z);
+                }
             }
-            gl.glEnd();
-            gl.glEndList();
+            this.gl.glEnd();
+            this.gl.glEndList();
         }
     }
 
@@ -149,26 +171,26 @@ public class Obj {
     public void render(int number) {
         float dis = (float) Math.abs(Math.sqrt(Math.pow(this.cam.loc.x - this.origin.x, 2) + Math.pow(this.cam.loc.y - this.origin.y, 2) + Math.pow(this.cam.loc.z - this.origin.z, 2)));
         gl.glPushMatrix();
-        
+
         //get ObjIns and adjust the matrix
-	ObjIns tmp = this.objIns.get(number);
+        ObjIns tmp = this.objIns.get(number);
         gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
         gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
-        
+
         if (dis < 10.0f) {
             gl.glCallList(display_list_handle);
-        } else if(dis < 25.0f) {
-            gl.glCallList(display_list_handle+1);            
-        } else if(dis < 50.0f) {
-            gl.glCallList(display_list_handle+2);            
-        } else if(dis < 100.0f) {
-            gl.glCallList(display_list_handle+3);            
-        } else if(dis < 200.0f) {
-            gl.glCallList(display_list_handle+4);
-        } else if(dis < 400.0f) {
-            gl.glCallList(display_list_handle+5);
+        } else if (dis < 25.0f) {
+            gl.glCallList(display_list_handle + 1);
+        } else if (dis < 50.0f) {
+            gl.glCallList(display_list_handle + 2);
+        } else if (dis < 100.0f) {
+            gl.glCallList(display_list_handle + 3);
+        } else if (dis < 200.0f) {
+            gl.glCallList(display_list_handle + 4);
+        } else if (dis < 400.0f) {
+            gl.glCallList(display_list_handle + 5);
         }
         gl.glPopMatrix();
     }

@@ -134,8 +134,8 @@ public class EObjParse {
         int number = new Integer(objNumber.toString()).intValue();
         //if number != lastNumber objInsInterator = 0
         //this is done to give the ObjIns a right number 
-        if(this.lastObj != number) {
-            this.objInsIterator = 0;
+        if(this.lastObj == number) {
+            this.objInsIterator = lastObj;
         } else {
             this.objInsIterator++; 
         }
