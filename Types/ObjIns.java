@@ -53,8 +53,4 @@ public class ObjIns {
         this.rotation.y = yR;
         this.rotation.z = zR;
     }
-    
-    public void draw() {
-        this.parent.render(this.number);
-    }
 }

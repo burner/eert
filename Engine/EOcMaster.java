@@ -67,6 +67,7 @@ public class EOcMaster {
 
     public void drawOctree(GL gl) {
         extractFrustum();
+        this.root.draw(gl);
     }
 
     private void extractFrustum() {

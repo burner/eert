@@ -110,20 +110,32 @@ public class EOcNode {
     public void draw(GL gl) {
         if (this.childs == null) {
             //frustum check
-            for (int p = 0; p < 6; p++) {
-                if (this.root.frustum[p][0] * this.middle.x + this.root.frustum[p][1] * this.middle.y + this.root.frustum[p][2] * this.middle.z + this.root.frustum[p][3] <= -radius) {
+                float dis;
+                if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
                     return;
                 } else {
                     for (ObjIns obIns : this.objs) {
-                        obIns.parent.render(obIns.number);
+                        obIns.parent.render(obIns.number, dis);
                     }
                 }
-            }
         } else {
             for (EOcNode child : this.childs) {
                 child.draw(gl);
             }
         }
+    }
+
+    float SphereInFrustum(float x, float y, float z, float radius) {
+        int p;
+        float d = 0.0f;
+
+        for (p = 0; p < 6; p++) {
+            d = this.root.frustum[p][0] * x + this.root.frustum[p][1] * y + this.root.frustum[p][2] * z + this.root.frustum[p][3];
+            if (d <= -radius) {
+                return 0;
+            }
+        }
+        return d + radius;
     }
 
     private ObjIns[] checkAllObjects(ObjIns[] objs) {
