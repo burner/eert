@@ -33,11 +33,13 @@ public class EOcNode {
     private Vector middle;
     private float radius;
     private Obj[] realObjs;
+    private int depth;
 
     public EOcNode(EOcMaster root, Obj[] realObjs, ObjIns[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
         this.realObjs = realObjs;
         this.root = root;
         this.middle = middle;
+        this.depth = depth;
 
         this.drawn = drawn;
         this.xSize = xSize;
@@ -51,76 +53,76 @@ public class EOcNode {
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
 
         this.objs = checkAllObjects(objs);
-        byte idx = 0;
-        if (objs.length > 2 && depth < 5) {
+        LinkedList<EOcNode> tmpChilds = new LinkedList<EOcNode>();
+        if (objs.length > 1 && depth < 5) {
 
             //important needs to be created within this contidional execution
             //otherwise the child test in draw does not work
-            this.childs = new EOcNode[8];
-
-            EOcNode ch1 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch1 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
             if (ch1.objs != null) {
-                this.childs[idx] = ch1;
-                ++idx;
+                tmpChilds.add(ch1);
             }
 
-            EOcNode ch2 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
+            EOcNode ch2 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
             if (ch2.objs != null) {
-                this.childs[idx] = ch2;
-                ++idx;
+                tmpChilds.add(ch2);
             }
 
-            EOcNode ch3 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
-            if (ch1.objs != null) {
-                this.childs[idx] = ch3;
-                ++idx;
+            EOcNode ch3 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
+            if (ch3.objs != null) {
+                tmpChilds.add(ch3);
             }
 
-            EOcNode ch4 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
-            if (ch2.objs != null) {
-                this.childs[idx] = ch4;
-                ++idx;
+            EOcNode ch4 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
+            if (ch4.objs != null) {
+                tmpChilds.add(ch4);
             }
 
-            EOcNode ch5 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
-            if (ch1.objs != null) {
-                this.childs[idx] = ch5;
-                ++idx;
+            EOcNode ch5 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
+            if (ch5.objs != null) {
+                tmpChilds.add(ch1);
             }
 
-            EOcNode ch6 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
-            if (ch2.objs != null) {
-                this.childs[idx] = ch6;
-                ++idx;
+            EOcNode ch6 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
+            if (ch6.objs != null) {
+                tmpChilds.add(ch1);
             }
 
-            EOcNode ch7 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
-            if (ch1.objs != null) {
-                this.childs[idx] = ch7;
-                ++idx;
+            EOcNode ch7 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
+            if (ch7.objs != null) {
+                tmpChilds.add(ch1);
             }
 
-            EOcNode ch8 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth++);
-            if (ch2.objs != null) {
-                this.childs[idx] = ch8;
+            EOcNode ch8 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
+            if (ch8.objs != null) {
+                tmpChilds.add(ch1);
             }
         }
-        System.out.println("Middle x = " + this.middle.x + " Middle y = " + this.middle.y +" Middle z = " + this.middle.z);
-        System.out.println("Depth = " + depth + " x = " + this.xSize/2 + " y = " + this.ySize/2 + " z = " + this.zSize/2 );
+        if (tmpChilds.size() == 0) {
+            this.childs = null;
+        } else {
+            this.childs = new EOcNode[tmpChilds.size()];
+            this.childs = tmpChilds.toArray(this.childs);
+        }
+    }
+
+    private void eOcNodeInfo() {
+        System.out.println("Middle x = " + this.middle.x + " Middle y = " + this.middle.y + " Middle z = " + this.middle.z);
+        System.out.println("Depth = " + depth + " x = " + this.xSize / 2 + " y = " + this.ySize / 2 + " z = " + this.zSize / 2);
     }
 
     public void draw(GL gl) {
+        drawBox(gl);
         if (this.childs == null) {
             //frustum check
-                float dis;
-                if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
-                    return;
-                } else {
-                    for (ObjIns obIns : this.objs) {
-                        obIns.parent.render(obIns.number, dis);
-                    }
-                }                
-                drawBox(gl);
+            float dis;
+            if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
+                return;
+            } else {
+                for (ObjIns obIns : this.objs) {
+                    obIns.parent.render(obIns.number, dis);
+                }
+            }        
         } else {
             for (EOcNode child : this.childs) {
                 child.draw(gl);
@@ -162,47 +164,50 @@ public class EOcNode {
         //Euclidean distance
         float dis = (float) Math.abs(Math.sqrt(Math.pow(this.middle.x - obj.origin.x, 2) + Math.pow(this.middle.y - obj.origin.y, 2) + Math.pow(this.middle.z - obj.origin.y, 2)));
 
-        if (dis - boxSph - obj.boundSph < 0.0f) {
+        if (dis - this.radius - obj.boundSph < 0.0f) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     private void drawBox(GL gl) {
         gl.glPushMatrix();
         gl.glTranslatef(this.middle.x, this.middle.y, this.middle.z);
         gl.glColor3f(0.4f, 0.2f, 0.7f);
-                
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);        
+
+        //Back
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
         gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
         gl.glEnd();
-        
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+
+        //Front
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glEnd();
-        
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+
+        //Left
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
         gl.glEnd();
-        
-        
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+
+        //Right
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
-        gl.glEnd();        
-        
+        gl.glEnd();
+
         gl.glPopMatrix();
     }
 }

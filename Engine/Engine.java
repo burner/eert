@@ -80,6 +80,7 @@ public class Engine implements GLEventListener {
         cam.translateAccordingToCameraPosition(gl);
         //cam.camRot(gl);
         //cam.giveInfo();
+        //this.root.drawBox(gl);
         this.root.drawOctree(gl);
 
         frame();

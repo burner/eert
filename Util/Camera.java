@@ -57,7 +57,7 @@ public class Camera {
         this.loc.x -= this.ori.x * mov;
         this.loc.y -= this.ori.y * mov;
         this.loc.z -= this.ori.z * mov;
-        //System.out.println(mov);
+    //System.out.println(mov);
 
     }
 
@@ -152,6 +152,14 @@ public class Camera {
             this.pitch %= 360.0f;
             updateDirection();
         }
+    }
+
+    void moveDown() {
+        this.loc.y -= 2.0f * ((System.nanoTime() - UHPT.lastFrame) / 10000000.0f);
+    }
+
+    void moveUp() {
+        this.loc.y += 2.0f * ((System.nanoTime() - UHPT.lastFrame) / 10000000.0f);
     }
 
     private void updateDirection() {

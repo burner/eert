@@ -21,6 +21,8 @@ import java.io.*;
 import java.util.*;
 
 import Types.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GL;
 
 public class EObjParse {
@@ -57,7 +59,7 @@ public class EObjParse {
         DataInputStream data;
         BufferedReader reader;
         try {
-            System.out.println(new File(".").getAbsolutePath());
+            //System.out.println(new File(".").getAbsolutePath());
             input = new FileInputStream(this.file);
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
@@ -117,8 +119,11 @@ public class EObjParse {
         objName[3] = buffer[3].toString();
         objName[4] = buffer[4].toString();
         objName[5] = buffer[5].toString();
-
-        this.objects.add(new Obj(this.cam, objName, this.objCount, this.gl));
+        try {
+            this.objects.add(new Obj(this.cam, objName, this.objCount, this.gl));
+        } catch (IOException ex) {
+            Logger.getLogger(EObjParse.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.objCount++;
     }   
 

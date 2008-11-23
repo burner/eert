@@ -67,14 +67,14 @@ public class EOcMaster {
             if (zN > obj.origin.z - obj.boundSph) {
                 zN = obj.origin.z - obj.boundSph;
             }
-            if (xP < obj.origin.x - obj.boundSph) {
-                xP = obj.origin.x - obj.boundSph;
+            if (xP < obj.origin.x + obj.boundSph) {
+                xP = obj.origin.x + obj.boundSph;
             }
-            if (yP < obj.origin.y - obj.boundSph) {
-                yP = obj.origin.y - obj.boundSph;
+            if (yP < obj.origin.y + obj.boundSph) {
+                yP = obj.origin.y + obj.boundSph;
             }
-            if (zP < obj.origin.z - obj.boundSph) {
-                zP = obj.origin.z - obj.boundSph;
+            if (zP < obj.origin.z + obj.boundSph) {
+                zP = obj.origin.z + obj.boundSph;
             }
         }
 
@@ -106,8 +106,49 @@ public class EOcMaster {
     }
 
     public void drawOctree(GL gl) {
+        //drawBox(gl);
         extractFrustum();
         this.root.draw(gl);
+    }
+    
+        public void drawBox(GL gl) {
+        gl.glPushMatrix();
+        gl.glTranslatef(this.middle.x, this.middle.y, this.middle.z);
+        gl.glColor3f(0.4f, 0.2f, 0.7f);
+        
+        //Back
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glEnd();
+        
+        //Front
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
+        gl.glEnd();
+        
+        //Left
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glEnd();
+        
+        //Right
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glEnd();        
+        
+        gl.glPopMatrix();
     }
 
     private void extractFrustum() {

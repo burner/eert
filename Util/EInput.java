@@ -70,8 +70,10 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
                 this.camera.strafeRight();
             }
             if (this.keyUp) {
+                this.camera.moveUp();
             }
             if (this.keyDown) {
+                this.camera.moveDown();
             }
 
             try {
@@ -127,6 +129,7 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
         if (keyCode == 'c') {
             this.keyDown = false;
         }
+       
     }
 
     public void keyTyped(KeyEvent arg0) {

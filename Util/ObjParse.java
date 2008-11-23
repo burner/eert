@@ -66,7 +66,7 @@ public class ObjParse {
         DataInputStream data;
         BufferedReader reader;
         try {
-            System.out.println(new File(".").getAbsolutePath());
+            //System.out.println(new File(".").getAbsolutePath());
             input = new FileInputStream(this.file);
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
