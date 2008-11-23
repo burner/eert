@@ -17,9 +17,11 @@
  */
 package Types;
 
+import java.io.IOException;
 import javax.media.opengl.GL;
 
 import Util.*;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -41,7 +43,7 @@ public class Obj {
     private Camera cam;
     private GL gl;
 
-    public Obj(Camera cam, String[] file, int number, GL gl) {
+    public Obj(Camera cam, String[] file, int number, GL gl) throws IOException {
         this.vec = new LinkedList<Vector[]>();
         this.nor = new LinkedList<Normal[]>();
         this.tex = new LinkedList<TexCoor[]>();
@@ -80,8 +82,8 @@ public class Obj {
             this.gl.glBegin(GL.GL_TRIANGLES);
             for (int i = 0; i < fac.get(j).length - 1; i++) {
 
-                //Random r = new Random();
-                //gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
+                Random r = new Random();
+                gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
 
                 a = tmpFac[i].vn1;
                 if (this.nor.get(j) != null) {
@@ -179,17 +181,17 @@ public class Obj {
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
 
-        if (dis < 10.0f) {
+        if (dis < 7.0f) {
             gl.glCallList(display_list_handle);
-        } else if (dis < 25.0f) {
+        } else if (dis < 13.0f) {
             gl.glCallList(display_list_handle + 1);
-        } else if (dis < 50.0f) {
+        } else if (dis < 20.0f) {
             gl.glCallList(display_list_handle + 2);
-        } else if (dis < 100.0f) {
-            gl.glCallList(display_list_handle + 3);
-        } else if (dis < 200.0f) {
+        } else if (dis < 35.0f) {
+            gl.glCallList(display_list_handle + 3); 
+        } else if (dis < 55.0f) {
             gl.glCallList(display_list_handle + 4);
-        } else if (dis < 400.0f) {
+        } else {
             gl.glCallList(display_list_handle + 5);
         }
         gl.glPopMatrix();

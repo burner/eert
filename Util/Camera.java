@@ -57,7 +57,7 @@ public class Camera {
         this.loc.x -= this.ori.x * mov;
         this.loc.y -= this.ori.y * mov;
         this.loc.z -= this.ori.z * mov;
-        System.out.println(mov);
+        //System.out.println(mov);
 
     }
 
@@ -115,6 +115,7 @@ public class Camera {
         } else {
             this.heading -= (this.turnSens * (float) delta);
         }
+        this.heading %= 360.0f;
         updateDirection();
     }
 
@@ -124,6 +125,7 @@ public class Camera {
         } else {
             this.heading += (this.turnSens * (float) delta);
         }
+        this.heading %= 360.0f;
         updateDirection();
 
     }
@@ -136,6 +138,7 @@ public class Camera {
                 this.pitch -= (this.turnSens * (float) delta);
             }
         }
+        this.pitch %= 360.0f;
         updateDirection();
     }
 
@@ -146,6 +149,7 @@ public class Camera {
             } else {
                 this.pitch += (this.turnSens * (float) delta);
             }
+            this.pitch %= 360.0f;
             updateDirection();
         }
     }

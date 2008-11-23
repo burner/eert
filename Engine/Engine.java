@@ -57,7 +57,7 @@ public class Engine implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glEnable(GL.GL_LIGHTING);
+        //gl.glEnable(GL.GL_LIGHTING);
         gl.glPushMatrix();
         gl.glTranslatef(4.0f, 4.0f, 4.0f);
         gl.glEnable(GL.GL_LIGHT0);

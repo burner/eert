@@ -45,24 +45,64 @@ public class EOcMaster {
 
     private void makeFirstCubeInfo() {
         this.middle = new Vector();
+        float xP = 0.0f;
+        float yP = 0.0f;
+        float zP = 0.0f;
+        float xN = 0.0f;
+        float yN = 0.0f;
+        float zN = 0.0f;
         for (ObjIns obj : this.objs) {
+            //middle
             this.middle.x += obj.origin.x / this.objs.length;
             this.middle.y += obj.origin.y / this.objs.length;
             this.middle.z += obj.origin.z / this.objs.length;
-
-            if (Math.abs(obj.origin.x) > this.xSize) {
-                this.xSize = Math.abs(obj.origin.x);
+            
+            //expension
+            if (xN > obj.origin.x - obj.boundSph) {
+                xN = obj.origin.x - obj.boundSph;
             }
-            if (Math.abs(obj.origin.y) > this.ySize) {
-                this.ySize = Math.abs(obj.origin.y);
+            if (yN > obj.origin.y - obj.boundSph) {
+                yN = obj.origin.y - obj.boundSph;
             }
-            if (Math.abs(obj.origin.z) > this.zSize) {
-                this.zSize = Math.abs(obj.origin.z);
+            if (zN > obj.origin.z - obj.boundSph) {
+                zN = obj.origin.z - obj.boundSph;
+            }
+            if (xP < obj.origin.x - obj.boundSph) {
+                xP = obj.origin.x - obj.boundSph;
+            }
+            if (yP < obj.origin.y - obj.boundSph) {
+                yP = obj.origin.y - obj.boundSph;
+            }
+            if (zP < obj.origin.z - obj.boundSph) {
+                zP = obj.origin.z - obj.boundSph;
             }
         }
-        this.xSize *= 2.0f;
-        this.ySize *= 2.0f;
-        this.zSize *= 2.0f;
+
+        xP = Math.abs(xP);
+        yP = Math.abs(yP);
+        zP = Math.abs(zP);
+
+        xN = Math.abs(xN);
+        yN = Math.abs(yN);
+        zN = Math.abs(zN);
+
+        if (xP >= xN) {
+            this.xSize = xP * 2.0f;
+        } else {
+            this.xSize = xN * 2.0f;
+        }
+        
+        if (xP >= xN) {
+            this.ySize = yP * 2.0f;
+        } else {
+            this.ySize = yN * 2.0f;
+        }
+
+        if (zP >= zN) {
+            this.zSize = zP * 2.0f;
+        } else {
+            this.zSize = zN * 2.0f;
+        }
     }
 
     public void drawOctree(GL gl) {

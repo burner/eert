@@ -105,6 +105,8 @@ public class EOcNode {
                 this.childs[idx] = ch8;
             }
         }
+        System.out.println("Middle x = " + this.middle.x + " Middle y = " + this.middle.y +" Middle z = " + this.middle.z);
+        System.out.println("Depth = " + depth + " x = " + this.xSize/2 + " y = " + this.ySize/2 + " z = " + this.zSize/2 );
     }
 
     public void draw(GL gl) {
@@ -117,7 +119,8 @@ public class EOcNode {
                     for (ObjIns obIns : this.objs) {
                         obIns.parent.render(obIns.number, dis);
                     }
-                }
+                }                
+                drawBox(gl);
         } else {
             for (EOcNode child : this.childs) {
                 child.draw(gl);
@@ -125,7 +128,7 @@ public class EOcNode {
         }
     }
 
-    float SphereInFrustum(float x, float y, float z, float radius) {
+    private float SphereInFrustum(float x, float y, float z, float radius) {
         int p;
         float d = 0.0f;
 
@@ -149,7 +152,7 @@ public class EOcNode {
         return ret = objects.toArray(ret);
     }
 
-    boolean checkForObj(ObjIns obj) {
+    private boolean checkForObj(ObjIns obj) {
         //Cheated a bit 
         //Just check a sphear around the box against the sphear around the Obj
         //the error-margin shouldn't be to big, but the check is much cheaper
@@ -164,5 +167,42 @@ public class EOcNode {
         } else {
             return false;
         }
+    }
+    
+    private void drawBox(GL gl) {
+        gl.glPushMatrix();
+        gl.glTranslatef(this.middle.x, this.middle.y, this.middle.z);
+        gl.glColor3f(0.4f, 0.2f, 0.7f);
+                
+        gl.glBegin(GL.GL_TRIANGLE_STRIP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glEnd();
+        
+        gl.glBegin(GL.GL_TRIANGLE_STRIP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
+        gl.glEnd();
+        
+        gl.glBegin(GL.GL_TRIANGLE_STRIP);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glEnd();
+        
+        
+        gl.glBegin(GL.GL_TRIANGLE_STRIP);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glEnd();        
+        
+        gl.glPopMatrix();
     }
 }
