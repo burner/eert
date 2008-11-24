@@ -56,7 +56,7 @@ public class EOcMaster {
             this.middle.x += obj.origin.x / this.objs.length;
             this.middle.y += obj.origin.y / this.objs.length;
             this.middle.z += obj.origin.z / this.objs.length;
-            
+
             //expension
             if (xN > obj.origin.x - obj.boundSph) {
                 xN = obj.origin.x - obj.boundSph;
@@ -91,7 +91,7 @@ public class EOcMaster {
         } else {
             this.xSize = xN * 2.0f;
         }
-        
+
         if (xP >= xN) {
             this.ySize = yP * 2.0f;
         } else {
@@ -110,44 +110,44 @@ public class EOcMaster {
         extractFrustum();
         this.root.draw(gl);
     }
-    
-        public void drawBox(GL gl) {
+
+    public void drawBox(GL gl) {
         gl.glPushMatrix();
         gl.glTranslatef(this.middle.x, this.middle.y, this.middle.z);
         gl.glColor3f(0.4f, 0.2f, 0.7f);
-        
+
         //Back
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
         gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
         gl.glEnd();
-        
+
         //Front
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glEnd();
-        
+
         //Left
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
         gl.glEnd();
-        
+
         //Right
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);        
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);        
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);
         gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
-        gl.glEnd();        
-        
+        gl.glEnd();
+
         gl.glPopMatrix();
     }
 

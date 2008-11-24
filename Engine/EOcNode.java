@@ -51,59 +51,8 @@ public class EOcNode {
         float zSizeH = zSize / 2;
 
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
-
         this.objs = checkAllObjects(objs);
-        LinkedList<EOcNode> tmpChilds = new LinkedList<EOcNode>();
-        if (objs.length > 1 && depth < 5) {
 
-            //important needs to be created within this contidional execution
-            //otherwise the child test in draw does not work
-            EOcNode ch1 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch1.objs != null) {
-                tmpChilds.add(ch1);
-            }
-
-            EOcNode ch2 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch2.objs != null) {
-                tmpChilds.add(ch2);
-            }
-
-            EOcNode ch3 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch3.objs != null) {
-                tmpChilds.add(ch3);
-            }
-
-            EOcNode ch4 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch4.objs != null) {
-                tmpChilds.add(ch4);
-            }
-
-            EOcNode ch5 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch5.objs != null) {
-                tmpChilds.add(ch1);
-            }
-
-            EOcNode ch6 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch6.objs != null) {
-                tmpChilds.add(ch1);
-            }
-
-            EOcNode ch7 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch7.objs != null) {
-                tmpChilds.add(ch1);
-            }
-
-            EOcNode ch8 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth+1);
-            if (ch8.objs != null) {
-                tmpChilds.add(ch1);
-            }
-        }
-        if (tmpChilds.size() == 0) {
-            this.childs = null;
-        } else {
-            this.childs = new EOcNode[tmpChilds.size()];
-            this.childs = tmpChilds.toArray(this.childs);
-        }
     }
 
     private void eOcNodeInfo() {
@@ -122,7 +71,7 @@ public class EOcNode {
                 for (ObjIns obIns : this.objs) {
                     obIns.parent.render(obIns.objInsNumber, dis);
                 }
-            }        
+            }
         } else {
             for (EOcNode child : this.childs) {
                 child.draw(gl);
@@ -209,5 +158,57 @@ public class EOcNode {
         gl.glEnd();
 
         gl.glPopMatrix();
+    }
+
+    private EOcNode[] makeChilds(float xSizeH, float ySizeH, float zSizeH) {
+        LinkedList<EOcNode> tmpChilds = new LinkedList<EOcNode>();
+        //important needs to be created within this contidional execution
+        //otherwise the child test in draw does not work
+        EOcNode ch1 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch1.objs != null) {
+            tmpChilds.add(ch1);
+        }
+
+        EOcNode ch2 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch2.objs != null) {
+            tmpChilds.add(ch2);
+        }
+
+        EOcNode ch3 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch3.objs != null) {
+            tmpChilds.add(ch3);
+        }
+
+        EOcNode ch4 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch4.objs != null) {
+            tmpChilds.add(ch4);
+        }
+
+        EOcNode ch5 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch5.objs != null) {
+            tmpChilds.add(ch1);
+        }
+
+        EOcNode ch6 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y - ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch6.objs != null) {
+            tmpChilds.add(ch1);
+        }
+
+        EOcNode ch7 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z - zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch7.objs != null) {
+            tmpChilds.add(ch1);
+        }
+
+        EOcNode ch8 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x + xSize / 4, middle.y + ySize / 4, middle.z + zSize / 4), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        if (ch8.objs != null) {
+            tmpChilds.add(ch1);
+        }
+
+        if (tmpChilds.size() == 0) {
+            return null;
+        } else {
+            EOcNode[] retChilds = new EOcNode[tmpChilds.size()];
+            return retChilds = tmpChilds.toArray(retChilds);
+        }
     }
 }
