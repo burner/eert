@@ -36,6 +36,7 @@ public class EOcMaster {
     private GL gl;
 
     public EOcMaster(ObjIns[] allObj, GL gl, Obj[] objs) {
+        this.drawn = new boolean[allObj.length];
         this.realObjs = objs;
         this.gl = gl;
         this.objs = allObj;
@@ -106,6 +107,7 @@ public class EOcMaster {
     }
 
     public void drawOctree(GL gl) {
+        this.drawn = new boolean[this.objs.length];
         //drawBox(gl);
         extractFrustum();
         this.root.draw(gl);
