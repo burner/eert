@@ -32,7 +32,8 @@ public class EObjParse {
     private String curLine;
     private int objCount;
     private int lastObj;
-    private int objInsIterator;
+    private int obj;
+    private int objIns;
     public LinkedList<Obj> objects;
     public LinkedList<ObjIns> objectIns;
     private GL gl;
@@ -44,13 +45,14 @@ public class EObjParse {
         this.file = file;
         this.objects = new LinkedList<Types.Obj>();
         this.objectIns = new LinkedList<Types.ObjIns>();
+        this.objIns = 0;
         parse();
         addObjInsToObj();
     }
 
     private void addObjInsToObj() {
         for(ObjIns obIns : this.objectIns) {
-            this.objects.get(obIns.number).objIns.add(obIns);
+            this.objects.get(obIns.objNumber).objIns.add(obIns);
         }
     }
 
@@ -140,11 +142,12 @@ public class EObjParse {
         //if number != lastNumber objInsInterator = 0
         //this is done to give the ObjIns a right number 
         if(this.lastObj == number) {
-            this.objInsIterator = lastObj;
+            this.obj = lastObj;
         } else {
-            this.objInsIterator++; 
+            this.obj++; 
         }
         this.lastObj = number;
+        this.objIns += 1;
         
         
         StringBuffer[] buffer = new StringBuffer[6];
@@ -167,7 +170,7 @@ public class EObjParse {
         
         //this.objInsInterator
         
-        this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, this.objInsIterator));    
+        this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, this.objIns, this.obj));    
     }
 
     private void addPathPoint() {

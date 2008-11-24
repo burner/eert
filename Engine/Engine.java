@@ -48,7 +48,7 @@ public class Engine implements GLEventListener {
         this.cam = cam;
         this.frame = frame;
     }
-    
+
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl);
@@ -71,7 +71,7 @@ public class Engine implements GLEventListener {
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
     }
-    
+
     public void display(GLAutoDrawable glDrawable) {
         GL gl = glDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
@@ -89,8 +89,6 @@ public class Engine implements GLEventListener {
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
     }
-
-
 
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height) {
         final GL gl = glDrawable.getGL();

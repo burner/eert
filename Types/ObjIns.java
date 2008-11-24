@@ -9,18 +9,19 @@ import Util.UHPT;
 
 public class ObjIns {
     public Obj parent;
-    public int number;
+    public int objNumber;
     public Vector origin;
     public Vector rotation;
     public float boundSph;
+    public int objInsNumber;
     
-    public ObjIns(Obj parent, Vector origin, Vector rotation, int number) {
+    public ObjIns(Obj parent, Vector origin, Vector rotation, int objInsNumber, int number) {
         this.parent = parent;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
         place(origin);
-        this.number = number;
-        
+        this.objNumber = number;
+        this.objInsNumber = objInsNumber -1;        
     }
     
     //Place the instance at the right place according to the center of the ParentObj

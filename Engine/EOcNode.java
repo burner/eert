@@ -120,7 +120,7 @@ public class EOcNode {
                 return;
             } else {
                 for (ObjIns obIns : this.objs) {
-                    obIns.parent.render(obIns.number, dis);
+                    obIns.parent.render(obIns.objInsNumber, dis);
                 }
             }        
         } else {
