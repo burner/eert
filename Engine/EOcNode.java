@@ -36,8 +36,9 @@ public class EOcNode {
     private int depth;
 
     public EOcNode(EOcMaster root, Obj[] realObjs, ObjIns[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
-        this.realObjs = realObjs;
         this.root = root;
+        this.realObjs = realObjs;
+
         this.middle = middle;
         this.depth = depth;
 
@@ -52,6 +53,8 @@ public class EOcNode {
 
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
         this.objs = checkAllObjects(objs);
+        if(this.depth < 1)
+            this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
 
     }
 
