@@ -54,7 +54,7 @@ public class EOcNode {
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
         this.objs = checkAllObjects(objs);
 
-        if (this.depth < 4) {
+        if (this.depth < 5) {
             this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
         }
     }
@@ -121,7 +121,7 @@ public class EOcNode {
 
         float boxSph = (float) Math.sqrt(Math.pow((this.xSize / 2), 2) + Math.pow((this.ySize / 2), 2) + Math.pow((this.zSize / 2), 2));
         //Euclidean distance
-        float dis = (float) Math.abs(Math.sqrt(Math.pow(this.middle.x - obj.origin.x, 2) + Math.pow(this.middle.y - obj.origin.y, 2) + Math.pow(this.middle.z - obj.origin.y, 2)));
+        float dis = (float) Math.abs(Math.sqrt(Math.pow(this.middle.x - obj.origin.x, 2) + Math.pow(this.middle.y - obj.origin.y, 2) + Math.pow(this.middle.z - obj.origin.z, 2)));
 
         if (dis - this.radius - obj.boundSph < 0.0f) {
             return true;
