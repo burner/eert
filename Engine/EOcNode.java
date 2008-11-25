@@ -53,10 +53,10 @@ public class EOcNode {
 
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
         this.objs = checkAllObjects(objs);
-        
-        if(this.depth < 4)
-            this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
 
+        if (this.depth < 4) {
+            this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
+        }
     }
 
     private void eOcNodeInfo() {
@@ -64,18 +64,18 @@ public class EOcNode {
         System.out.println("Depth = " + depth + " x = " + this.xSize / 2 + " y = " + this.ySize / 2 + " z = " + this.zSize / 2);
     }
 
-    public void draw(GL gl) {        
+    public void draw(GL gl) {
         if (this.childs == null) {
-            
             float dis;
             if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
                 return;
             } else {
                 for (ObjIns obIns : this.objs) {
-                    if(!this.root.drawn[obIns.objInsNumber]) {
+                    if (!this.root.drawn[obIns.objInsNumber]) {
+                        //System.out.println("ObjIns = " + obIns.objInsNumber);
                         obIns.parent.render(obIns.objInsNumber, dis);
                         this.root.drawn[obIns.objInsNumber] = true;
-                    }else{
+                    } else {
                         continue;
                     }
                 }
@@ -193,7 +193,7 @@ public class EOcNode {
         if (ch4.objs.length > 0) {
             tmpChilds.add(ch4);
         }
-         EOcNode ch5 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSizeH / 2, middle.y + ySizeH / 2, middle.z - zSizeH / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
+        EOcNode ch5 = new EOcNode(this.root, this.realObjs, this.objs, new Vector(middle.x - xSizeH / 2, middle.y + ySizeH / 2, middle.z - zSizeH / 2), xSizeH, ySizeH, zSizeH, this.drawn, depth + 1);
         if (ch5.objs.length > 0) {
             tmpChilds.add(ch5);
         }

@@ -111,6 +111,7 @@ public class EOcMaster {
         //drawBox(gl);
         extractFrustum();
         this.root.draw(gl);
+        //System.out.println(this.drawn[0] +""+ this.drawn[1] +""+ this.drawn[2]);
     }
 
     public void drawBox(GL gl) {
