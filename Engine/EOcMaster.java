@@ -35,13 +35,12 @@ public class EOcMaster {
     private float zSize = 0;
     private GL gl;
 
-    public EOcMaster(ObjIns[] allObj, GL gl, Obj[] objs) {
+    public EOcMaster(ObjIns[] allObj, GL gl) {
         this.drawn = new boolean[allObj.length];
-        this.realObjs = objs;
         this.gl = gl;
         this.objs = allObj;
         makeFirstCubeInfo();
-        this.root = new EOcNode(this, this.realObjs, this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
+        this.root = new EOcNode(this, this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
     }
 
     private void makeFirstCubeInfo() {

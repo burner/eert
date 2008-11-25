@@ -181,15 +181,15 @@ public class Obj {
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
 
-        if (dis < 7.0f) {
+        if (dis < 10.0f) {
             gl.glCallList(display_list_handle);
-        } else if (dis < 13.0f) {
-            gl.glCallList(display_list_handle + 1);
         } else if (dis < 20.0f) {
+            gl.glCallList(display_list_handle + 1);
+        } else if (dis < 40.0f) {
             gl.glCallList(display_list_handle + 2);
-        } else if (dis < 35.0f) {
+        } else if (dis < 60.0f) {
             gl.glCallList(display_list_handle + 3); 
-        } else if (dis < 55.0f) {
+        } else if (dis < 120.0f) {
             gl.glCallList(display_list_handle + 4);
         } else {
             gl.glCallList(display_list_handle + 5);

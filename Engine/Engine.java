@@ -52,7 +52,9 @@ public class Engine implements GLEventListener {
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl);
-        this.root = new EOcMaster(this.objectHandler.objIns, gl, this.objectHandler.obj);
+        long ocTimeTest = System.currentTimeMillis();
+        this.root = new EOcMaster(this.objectHandler.objIns, gl);
+        System.out.println(System.currentTimeMillis() - ocTimeTest);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
@@ -77,6 +79,16 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
+        
+        
+         //Octree can be build within display FPS drop to 40
+        
+        long ocTimeTest = System.currentTimeMillis();
+        this.root = new EOcMaster(this.objectHandler.objIns, gl);
+        System.out.println(System.currentTimeMillis() - ocTimeTest);
+        
+        
+        
         cam.translateAccordingToCameraPosition(gl);
         //cam.camRot(gl);
         //cam.giveInfo();
