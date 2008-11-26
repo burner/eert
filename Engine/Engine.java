@@ -85,7 +85,7 @@ public class Engine implements GLEventListener {
         
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this.objectHandler.objIns, gl);
-        System.out.println(System.currentTimeMillis() - ocTimeTest);
+        //System.out.println(System.currentTimeMillis() - ocTimeTest);
         
         
         

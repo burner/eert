@@ -53,7 +53,7 @@ public class EOcNode {
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
         this.objs = checkAllObjects(objs);
 
-        if (this.depth < 5) {
+        if (this.depth < 4) {
             this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
         }
     }
