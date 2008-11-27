@@ -27,9 +27,10 @@ import java.util.LinkedList;
 public class EObjInObjCreator {
     private LinkedList<ObjIns> createdObjs;
     private Obj hullObj;
+    private String[] toWrite;
     public EObjInObjCreator(String hullObj, String outFile, int number) {
         ObjParse obParse = new ObjParse(hullObj);
-        String[] toWrite = new String[number+1];
+        toWrite = new String[number+1];
         for(int i = 0; i < number; i++) {
             
         }
@@ -50,5 +51,13 @@ public class EObjInObjCreator {
     private boolean checkObjInsObjIns(ObjIns toCheck) {
         return false;
     }
+    
+    private void write() {
+        int size = this.createdObjs.size();
+        for(int i = 1; i < size; i++) {
+            this.toWrite[i] = this.createdObjs.pop().toString();
+        }
+    }        
+           
 
 }

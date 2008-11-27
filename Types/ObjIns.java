@@ -12,6 +12,8 @@ public class ObjIns {
     public int objNumber;
     public Vector origin;
     public Vector rotation;
+    public Vector conMove;
+    public Vector conRot;
     public float boundSph;
     public int objInsNumber;
     
@@ -19,6 +21,8 @@ public class ObjIns {
         this.parent = parent;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
+        this.conMove = new Vector();
+        this.conRot = new Vector();
         place(origin);
         this.objNumber = number;
         this.objInsNumber = objInsNumber -1;        
@@ -31,16 +35,16 @@ public class ObjIns {
                                  this.parent.origin.z + origin.z);
     }
     
-    public void conMove(float x, float y, float z) {
-        this.origin.x += x * UHPT.getETime() / 1000000000;
-        this.origin.y += y * UHPT.getETime() / 1000000000;
-        this.origin.z += z * UHPT.getETime() / 1000000000;
+    public void conMove() {
+        this.origin.x += this.conMove.x * UHPT.getETime() / 1000000000;
+        this.origin.y += this.conMove.y * UHPT.getETime() / 1000000000;
+        this.origin.z += this.conMove.z * UHPT.getETime() / 1000000000;
     }
 
-    public void conRotate(float rX, float rY, float rZ) {
-        this.rotation.x += rX * UHPT.getETime() / 1000000000;
-        this.rotation.y += rY * UHPT.getETime() / 1000000000;
-        this.rotation.z += rZ * UHPT.getETime() / 1000000000;
+    public void conRotate() {
+        this.rotation.x += this.conRot.x * UHPT.getETime() / 1000000000 % 360;
+        this.rotation.y += this.conRot.y * UHPT.getETime() / 1000000000 % 360;
+        this.rotation.z += this.conRot.z * UHPT.getETime() / 1000000000 % 360;
     }
 
     public void setPos(float x, float y, float z) {
@@ -54,4 +58,15 @@ public class ObjIns {
         this.rotation.y = yR;
         this.rotation.z = zR;
     }
+    
+    public void setConRot(Vector newRot) {
+        this.conRot = newRot;
+    }
+    
+    @Override
+    public String toString() {
+        return new String("oi " + this.objInsNumber + " "
+                          + this.origin.x + " " + this.origin.y + " " + this.origin.z + " "
+                          + this.rotation.x + " " + this.rotation.y + " " + this.rotation.z);
+    } 
 }
