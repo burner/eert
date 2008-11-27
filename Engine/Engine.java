@@ -23,10 +23,10 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
 import Types.*;
-import Util.Camera;
-import Util.EFrame;
-import Util.EInput;
-import Util.UHPT;
+import Util.Logic.Camera;
+import Util.Logic.EFrame;
+import Util.Logic.EInput;
+import Util.Logic.UHPT;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {

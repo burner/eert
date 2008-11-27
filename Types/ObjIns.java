@@ -5,7 +5,7 @@
 
 package Types;
 
-import Util.UHPT;
+import Util.Logic.UHPT;
 
 public class ObjIns {
     public Obj parent;

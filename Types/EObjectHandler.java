@@ -1,8 +1,8 @@
 
 package Types;
 
-import Util.Camera;
-import Util.EObjParse;
+import Util.Logic.Camera;
+import Util.Prelude.EObjParse;
 import javax.media.opengl.GL;
 
 public class EObjectHandler {

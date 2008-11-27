@@ -16,6 +16,7 @@
 *this program; if not, see <http://www.gnu.org/licenses/>.
 */
  
+import Util.Logic.EFrame;
 import Util.*;
  
 public class Eert {

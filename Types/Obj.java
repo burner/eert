@@ -17,6 +17,9 @@
  */
 package Types;
 
+import Util.Logic.Camera;
+import Util.Logic.UHPT;
+import Util.Prelude.ObjParse;
 import java.io.IOException;
 import javax.media.opengl.GL;
 
