@@ -17,14 +17,18 @@
  */
 package Engine;
 
+
+import Types.EObjectHandler;
+import Types.Obj;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
-import Types.*;
+
 import Util.Logic.Camera;
 import Util.Logic.EFrame;
+import Util.Logic.EInfo;
 import Util.Logic.EInput;
 import Util.Logic.UHPT;
 import java.util.Calendar;
@@ -42,6 +46,8 @@ public class Engine implements GLEventListener {
     private String szene;
     private EOcMaster root;
     private EObjectHandler objectHandler;
+    private EInfo eInfo;
+    public boolean drawInfo;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
@@ -52,9 +58,7 @@ public class Engine implements GLEventListener {
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl);
-        long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this.objectHandler.objIns, gl);
-        System.out.println(System.currentTimeMillis() - ocTimeTest);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
@@ -68,7 +72,7 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-        this.input = new EInput(this.cam);
+        this.input = new EInput(this.cam, this);
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
@@ -80,12 +84,13 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
         
-        
+        if(this.drawInfo)
+            this.eInfo.drawInfo(glDrawable);
          //Octree can be build within display FPS drop to 40
         
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this.objectHandler.objIns, gl);
-        //System.out.println(System.currentTimeMillis() - ocTimeTest);
+        this.eInfo.octimeBuild = new Long(System.currentTimeMillis() - ocTimeTest).toString();
         
         
         
@@ -121,6 +126,7 @@ public class Engine implements GLEventListener {
         if (now.getTimeInMillis() >= (ms + 1000)) {
             ms = now.getTimeInMillis();
             this.frame.setTitle(frames + " FPS");
+            this.eInfo.fps = new String(frames + "");
             frames = 1;
         } else {
             frames++;

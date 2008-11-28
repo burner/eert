@@ -17,10 +17,13 @@
  */
 package Util.Prelude;
 
+import Types.Face;
+import Types.Normal;
+import Types.TexCoor;
 import java.io.*;
 import java.util.*;
 
-import Types.*;
+
 
 public class ObjParse {
 

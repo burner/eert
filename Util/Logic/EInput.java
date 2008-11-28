@@ -17,6 +17,7 @@
  */
 package Util.Logic;
 
+import Engine.Engine;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -24,7 +25,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public final class EInput implements KeyListener, MouseListener, MouseMotionListener, Runnable {
-
 
     private int mouseOldX;
     private int mouseOldY;
@@ -36,8 +36,10 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
     private boolean keyDown;
     private Camera camera;
     private Thread camAnimator;
+    private Engine engine;
 
-    public EInput(Camera camera) {
+    public EInput(Camera camera, Engine engine) {
+        this.engine = engine;
         this.keyForward = false;
         this.keyBackward = false;
         this.keySlideLeft = false;
@@ -86,6 +88,13 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyChar();
         //System.out.println("keyPressed");
+        if (keyCode == 'i') {
+            if (this.engine.drawInfo) {
+                this.engine.drawInfo = false;
+            } else {
+                this.engine.drawInfo = true;
+            }
+        }
         if (keyCode == 'w') {
             this.keyForward = true;
         }
@@ -108,9 +117,7 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
 
     public void keyReleased(KeyEvent e) {
         char keyCode = e.getKeyChar();
-        if(keyCode == 'i') {
-            this.camera.giveInfo();
-        }
+
         if (keyCode == 'w') {
             this.keyForward = false;
         }
@@ -129,7 +136,7 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
         if (keyCode == 'c') {
             this.keyDown = false;
         }
-       
+
     }
 
     public void keyTyped(KeyEvent arg0) {
@@ -185,5 +192,4 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
 
     public void mouseMoved(MouseEvent arg0) {
     }
-
 }
