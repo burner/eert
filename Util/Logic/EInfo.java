@@ -30,10 +30,11 @@ public class EInfo {
     public String ocNodes;
 
     public void drawInfo(GLAutoDrawable glDrawable) {
-        TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
+        TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
         renderer.beginRendering(glDrawable.getWidth(), glDrawable.getHeight());
         renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
-        renderer.draw(new String("FPS = " + this.fps + "\n" + "OctreeBuildTime = " + this.octimeBuild + "\n" + this.ocNodes), 20, 20);
+        renderer.draw(new String("FPS = " + this.fps), 20, glDrawable.getHeight() - 20);
+        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild + "\n" + this.ocNodes), 20, glDrawable.getHeight() - 34);
         renderer.endRendering();
     }
 }

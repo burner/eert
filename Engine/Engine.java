@@ -76,6 +76,7 @@ public class Engine implements GLEventListener {
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
+        this.eInfo = new EInfo();
     }
 
     public void display(GLAutoDrawable glDrawable) {
