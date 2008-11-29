@@ -17,7 +17,6 @@
  */
 package Engine;
 
-
 import Types.EObjectHandler;
 import Types.Obj;
 import javax.media.opengl.GL;
@@ -38,15 +37,16 @@ public class Engine implements GLEventListener {
     private Obj obj;
     private Calendar now = null;
     private long ms = 0;
-    private int frames = 0;
+    public int frames = 0;
     public Camera cam;
-    private EFrame frame;
+    public EFrame frame;
     private EInput input;
     private long lastFrame;
     private String szene;
-    private EOcMaster root;
+    public EOcMaster root;
     private EObjectHandler objectHandler;
     private EInfo eInfo;
+    public int fps;
     public boolean drawInfo;
 
     public Engine(Camera cam, String szene, EFrame frame) {
@@ -76,7 +76,7 @@ public class Engine implements GLEventListener {
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
-        this.eInfo = new EInfo();
+        this.eInfo = new EInfo(this);
     }
 
     public void display(GLAutoDrawable glDrawable) {
@@ -84,17 +84,16 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        
-        if(this.drawInfo)
-            this.eInfo.drawInfo(glDrawable);
-         //Octree can be build within display FPS drop to 40
-        
+
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this.objectHandler.objIns, gl);
-        this.eInfo.octimeBuild = new Long(System.currentTimeMillis() - ocTimeTest).toString();
         
-        
-        
+        //if true draw Info on screen
+        if (this.drawInfo) {
+            this.eInfo.drawInfo(glDrawable);
+            this.eInfo.octimeBuild = new Long(System.currentTimeMillis() - ocTimeTest).toString();
+        }
+
         cam.translateAccordingToCameraPosition(gl);
         //cam.camRot(gl);
         //cam.giveInfo();
@@ -127,7 +126,7 @@ public class Engine implements GLEventListener {
         if (now.getTimeInMillis() >= (ms + 1000)) {
             ms = now.getTimeInMillis();
             this.frame.setTitle(frames + " FPS");
-            this.eInfo.fps = new String(frames + "");
+            this.fps = frames;
             frames = 1;
         } else {
             frames++;

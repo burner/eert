@@ -23,7 +23,8 @@ import Types.Vector;
 import javax.media.opengl.GL;
 
 public class EOcMaster {
-
+    
+    public int numNodes;
     public float[][] frustum = new float[6][4];
     private ObjIns[] objs;
     private Obj[] realObjs;
@@ -39,6 +40,7 @@ public class EOcMaster {
         this.drawn = new boolean[allObj.length];
         this.gl = gl;
         this.objs = allObj;
+        this.numNodes = 0;
         makeFirstCubeInfo();
         this.root = new EOcNode(this, this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
     }

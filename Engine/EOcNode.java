@@ -36,8 +36,6 @@ public class EOcNode {
 
     public EOcNode(EOcMaster root, ObjIns[] objs, Vector middle, float xSize, float ySize, float zSize, boolean[] drawn, int depth) {
         this.root = root;
-
-
         this.middle = middle;
         this.depth = depth;
 
@@ -52,10 +50,13 @@ public class EOcNode {
 
         this.radius = (float) Math.abs(Math.sqrt(Math.pow(xSizeH, 2) + Math.pow(ySizeH, 2) + Math.pow(zSizeH, 2)));
         this.objs = checkAllObjects(objs);
-
-        if (this.depth < 5) {
+        
+        
+        //Octree Depth
+        if (this.depth < 4) {
             this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
         }
+        
     }
 
     private void eOcNodeInfo() {
@@ -216,6 +217,7 @@ public class EOcNode {
             return null;
         } else {
             EOcNode[] retChilds = new EOcNode[tmpChilds.size()];
+            this.root.numNodes += retChilds.length;
             return retChilds = tmpChilds.toArray(retChilds);
         }
     }

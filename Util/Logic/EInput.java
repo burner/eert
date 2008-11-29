@@ -18,6 +18,9 @@
 package Util.Logic;
 
 import Engine.Engine;
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -95,6 +98,9 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
                 this.engine.drawInfo = true;
             }
         }
+        if (keyCode == 'p') {
+            System.exit(0);
+        }
         if (keyCode == 'w') {
             this.keyForward = true;
         }
@@ -112,6 +118,9 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
         }
         if (keyCode == 'c') {
             this.keyDown = true;
+        }
+        if (keyCode == 'u') {
+            setFullScreenMode();
         }
     }
 
@@ -191,5 +200,22 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
     }
 
     public void mouseMoved(MouseEvent arg0) {
+    }
+
+    void setFullScreenMode() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gs = ge.getDefaultScreenDevice();
+        if (engine.frame.isUndecorated()) {
+            this.engine.frame.dispose();
+            this.engine.frame.setUndecorated(false);
+            this.engine.frame.setSize(1024, 640);
+            this.engine.frame.setVisible(true);
+        } else {
+            this.engine.frame.dispose();
+            this.engine.frame.setUndecorated(true);
+            gs.setFullScreenWindow(this.engine.frame);
+            this.engine.frame.toFront();
+        }
+
     }
 }

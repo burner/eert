@@ -39,7 +39,7 @@ public class EFrame extends Frame {
         this.add(this.canvas);
         this.animator = new Animator(this.canvas);
         this.setTitle("EERT");
-
+        //this.setUndecorated(true);
         this.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {

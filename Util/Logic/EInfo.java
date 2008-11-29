@@ -19,22 +19,27 @@
  
 package Util.Logic;
 
+import Engine.Engine;
 import com.sun.opengl.util.j2d.TextRenderer;
 import java.awt.Font;
-import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 
 public class EInfo {
     public String fps;
     public String octimeBuild;
     public String ocNodes;
+    private Engine engine;
+    public EInfo(Engine engine) {
+        this.engine = engine;
+    }
 
     public void drawInfo(GLAutoDrawable glDrawable) {
         TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
         renderer.beginRendering(glDrawable.getWidth(), glDrawable.getHeight());
         renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
-        renderer.draw(new String("FPS = " + this.fps), 20, glDrawable.getHeight() - 20);
-        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild + "\n" + this.ocNodes), 20, glDrawable.getHeight() - 34);
+        renderer.draw(new String("FPS = " + this.engine.fps), 20, glDrawable.getHeight() - 20);
+        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 34);
+        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 48);
         renderer.endRendering();
     }
 }
