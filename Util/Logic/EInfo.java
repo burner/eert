@@ -29,6 +29,7 @@ public class EInfo {
     public String octimeBuild;
     public String ocNodes;
     private Engine engine;
+    private String facesDrawn;
     public EInfo(Engine engine) {
         this.engine = engine;
     }
@@ -38,8 +39,10 @@ public class EInfo {
         renderer.beginRendering(glDrawable.getWidth(), glDrawable.getHeight());
         renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
         renderer.draw(new String("FPS = " + this.engine.fps), 20, glDrawable.getHeight() - 20);
-        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 34);
-        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 48);
+        renderer.draw(new String("Faces Rendered = " + this.engine.root.facRender), 20, glDrawable.getHeight() - 32);
+        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 44);
+        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 56);
+        renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 68);        
         renderer.endRendering();
     }
 }

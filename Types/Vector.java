@@ -78,4 +78,9 @@ public class Vector {
                 this.z * vector.x - this.x * vector.z,
                 this.x * vector.y - this.y * vector.x);
     }
+    
+    @Override
+    public String toString() {
+        return new String(this.x + " " + this.y + " " + this.z);
+    }
 }

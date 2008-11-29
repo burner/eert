@@ -23,7 +23,7 @@ import Types.Vector;
 import javax.media.opengl.GL;
 
 public class EOcMaster {
-    
+
     public int numNodes;
     public float[][] frustum = new float[6][4];
     private ObjIns[] objs;
@@ -35,9 +35,11 @@ public class EOcMaster {
     private float ySize = 0;
     private float zSize = 0;
     private GL gl;
+    public int facRender;
 
-    public EOcMaster(ObjIns[] allObj, GL gl) {
+    public EOcMaster(ObjIns[] allObj, Obj[] realObj, GL gl) {
         this.drawn = new boolean[allObj.length];
+        this.realObjs = realObj;
         this.gl = gl;
         this.objs = allObj;
         this.numNodes = 0;
@@ -108,11 +110,23 @@ public class EOcMaster {
     }
 
     public void drawOctree(GL gl) {
+        //Reset Counter
+        for (Obj rObj : this.realObjs) {
+            rObj.facesRendered = 0;
+        }
         this.drawn = new boolean[this.objs.length];
+        this.facRender = 0;
+        
+        //actually draw
         //drawBox(gl);
         extractFrustum();
+        this.facRender = 0;
         this.root.draw(gl);
-        //System.out.println(this.drawn[0] +""+ this.drawn[1] +""+ this.drawn[2]);
+        
+        //make Info
+        for (Obj rObj : this.realObjs) {
+            this.facRender += rObj.facesRendered;
+        }
     }
 
     public void drawBox(GL gl) {

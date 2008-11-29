@@ -45,8 +45,11 @@ public class Obj {
     private int display_list_handle;
     private Camera cam;
     private GL gl;
+    public int[] facNum;
+    public int facesRendered;
 
     public Obj(Camera cam, String[] file, int number, GL gl) throws IOException {
+        this.facNum = new int[6];
         this.vec = new LinkedList<Vector[]>();
         this.nor = new LinkedList<Normal[]>();
         this.tex = new LinkedList<TexCoor[]>();
@@ -122,6 +125,7 @@ public class Obj {
                 if (a <= this.vec.get(j).length) {
                     this.gl.glVertex3f(tmpVec[tmpFac[i].v3].x, tmpVec[tmpFac[i].v3].y, tmpVec[tmpFac[i].v3].z);
                 }
+                this.facNum[j] = tmpFac.length;
             }
             this.gl.glEnd();
             this.gl.glEndList();
@@ -186,16 +190,22 @@ public class Obj {
 
         if (dis < 10.0f) {
             gl.glCallList(display_list_handle);
+            this.facesRendered += this.facNum[0];
         } else if (dis < 20.0f) {
             gl.glCallList(display_list_handle + 1);
+            this.facesRendered += this.facNum[1];
         } else if (dis < 40.0f) {
             gl.glCallList(display_list_handle + 2);
+            this.facesRendered += this.facNum[2];
         } else if (dis < 60.0f) {
             gl.glCallList(display_list_handle + 3); 
+            this.facesRendered += this.facNum[3];
         } else if (dis < 120.0f) {
             gl.glCallList(display_list_handle + 4);
+            this.facesRendered += this.facNum[4];
         } else {
             gl.glCallList(display_list_handle + 5);
+            this.facesRendered += this.facNum[5];
         }
         gl.glPopMatrix();
     }
