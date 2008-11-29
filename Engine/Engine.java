@@ -48,6 +48,7 @@ public class Engine implements GLEventListener {
     private EInfo eInfo;
     public int fps;
     public boolean drawInfo;
+    private EMusicPlayer music;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
@@ -77,6 +78,10 @@ public class Engine implements GLEventListener {
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
         this.eInfo = new EInfo(this);
+        
+        //Music doesn't work right now
+        //this.music = new EMusicPlayer("04-portishead-the_rip.mp3");
+        //this.music.play();
     }
 
     public void display(GLAutoDrawable glDrawable) {
