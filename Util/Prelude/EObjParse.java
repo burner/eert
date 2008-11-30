@@ -17,6 +17,8 @@
  */
 package Util.Prelude;
 
+import Types.Geometrie.Obj;
+import Types.Geometrie.ObjIns;
 import Util.Logic.Camera;
 import Util.*;
 import java.io.*;
@@ -45,8 +47,8 @@ public class EObjParse {
         this.cam = cam;
         this.gl = gl;
         this.file = file;
-        this.objects = new LinkedList<Types.Obj>();
-        this.objectIns = new LinkedList<Types.ObjIns>();
+        this.objects = new LinkedList<Types.Geometrie.Obj>();
+        this.objectIns = new LinkedList<Types.Geometrie.ObjIns>();
         this.objIns = 0;
         parse();
         addObjInsToObj();
@@ -167,8 +169,8 @@ public class EObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        Types.Vector pos = new Types.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue());
-        Types.Vector rot = new Types.Vector(new Float(buffer[3].toString()).floatValue(), new Float(buffer[4].toString()).floatValue(), new Float(buffer[5].toString()).floatValue());
+        Types.Geometrie.Vector pos = new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue());
+        Types.Geometrie.Vector rot = new Types.Geometrie.Vector(new Float(buffer[3].toString()).floatValue(), new Float(buffer[4].toString()).floatValue(), new Float(buffer[5].toString()).floatValue());
         
         //this.objInsInterator
         

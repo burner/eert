@@ -18,7 +18,7 @@
 package Util.Logic;
 
 import Util.Logic.UHPT;
-import Types.Vector;
+import Types.Geometrie.Vector;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.*;
 

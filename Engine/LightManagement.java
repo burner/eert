@@ -1,12 +1,14 @@
 
 package Engine;
 
+import Types.Light.ELight;
+import Types.Geometrie.Vector;
 import Types.*;
 import javax.media.opengl.GL;
 
 public class LightManagement {
     private boolean[] active;
-    private Light[] lights;
+    private ELight[] lights;
     private GL gl;
     
     public LightManagement(GL gl) {
@@ -36,11 +38,11 @@ public class LightManagement {
     }
             
     
-    private Light[] fillLight() {
-        Light[] tmpLight = new Light[8];
+    private ELight[] fillLight() {
+        ELight[] tmpLight = new ELight[8];
         
-        for(Light tmp : tmpLight) {
-            tmp = new Light();
+        for(ELight tmp : tmpLight) {
+            tmp = new ELight();
         }
         return tmpLight;
     }

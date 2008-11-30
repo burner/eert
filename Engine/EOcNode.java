@@ -17,9 +17,9 @@
  */
 package Engine;
 
-import Types.Obj;
-import Types.ObjIns;
-import Types.Vector;
+import Types.Geometrie.Obj;
+import Types.Geometrie.ObjIns;
+import Types.Geometrie.Vector;
 import java.util.LinkedList;
 import javax.media.opengl.GL;
 

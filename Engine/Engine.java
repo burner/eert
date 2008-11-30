@@ -17,8 +17,8 @@
  */
 package Engine;
 
-import Types.EObjectHandler;
-import Types.Obj;
+import Util.Logic.EObjectHandler;
+import Types.Geometrie.Obj;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLAutoDrawable;
@@ -30,6 +30,7 @@ import Util.Logic.EFrame;
 import Util.Logic.EInfo;
 import Util.Logic.EInput;
 import Util.Logic.UHPT;
+import Util.Prelude.ETextureMaster;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
@@ -48,7 +49,7 @@ public class Engine implements GLEventListener {
     private EInfo eInfo;
     public int fps;
     public boolean drawInfo;
-    private EMusicPlayer music;
+    private EMusicPlayerMP3 music;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
@@ -67,7 +68,6 @@ public class Engine implements GLEventListener {
         //gl.glEnable(GL.GL_LIGHTING);
         gl.glPushMatrix();
         gl.glTranslatef(4.0f, 4.0f, 4.0f);
-        gl.glEnable(GL.GL_LIGHT0);
         gl.glTranslatef(-4.0f, -4.0f, -4.0f);
         gl.glPopMatrix();
         gl.glEnable(GL.GL_CULL_FACE);
@@ -78,10 +78,15 @@ public class Engine implements GLEventListener {
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
         this.eInfo = new EInfo(this);
+        ETextureMaster m = new ETextureMaster();
         
         //Music doesn't work right now
-        //this.music = new EMusicPlayer("04-portishead-the_rip.mp3");
-        //this.music.play();
+        /*
+        this.music = new EMusicPlayerWave("04-portishead-the_rip.wav");
+        this.music.start();
+         */
+        this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
+       
     }
 
     public void display(GLAutoDrawable glDrawable) {

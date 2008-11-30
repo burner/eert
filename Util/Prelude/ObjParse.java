@@ -17,9 +17,9 @@
  */
 package Util.Prelude;
 
-import Types.Face;
-import Types.Normal;
-import Types.TexCoor;
+import Types.Geometrie.Face;
+import Types.Geometrie.Normal;
+import Types.Geometrie.TexCoor;
 import java.io.*;
 import java.util.*;
 
@@ -30,38 +30,38 @@ public class ObjParse {
     private int vecIdx = 0;
     private String file;
     private String curLine;
-    private LinkedList<Types.Vector> tempVec;
+    private LinkedList<Types.Geometrie.Vector> tempVec;
     private LinkedList<Normal> tempNor;
     private LinkedList<TexCoor> tempTex;
     private LinkedList<Face> tempFac;
 
     public ObjParse(String file) {
         this.file = file;
-        this.tempVec = new LinkedList<Types.Vector>();
+        this.tempVec = new LinkedList<Types.Geometrie.Vector>();
         this.tempNor = new LinkedList<Normal>();
         this.tempTex = new LinkedList<TexCoor>();
         this.tempFac = new LinkedList<Face>();
         parse();
     }
 
-    public Types.Vector[] getVec() {
+    public Types.Geometrie.Vector[] getVec() {
         if(this.tempVec.size() == 0) return null;
-        return this.tempVec.toArray(new Types.Vector[0]);
+        return this.tempVec.toArray(new Types.Geometrie.Vector[0]);
     }
 
-    public Types.Normal[] getNor() {
+    public Types.Geometrie.Normal[] getNor() {
         if(this.tempNor.size() == 0) return null;
-        return this.tempNor.toArray(new Types.Normal[0]);
+        return this.tempNor.toArray(new Types.Geometrie.Normal[0]);
     }
 
-    public Types.TexCoor[] getTex() {
+    public Types.Geometrie.TexCoor[] getTex() {
         if(this.tempTex.size() == 0) return null;
-        return this.tempTex.toArray(new Types.TexCoor[0]);
+        return this.tempTex.toArray(new Types.Geometrie.TexCoor[0]);
     }
 
-    public Types.Face[] getFace() {
+    public Types.Geometrie.Face[] getFace() {
         if(this.tempFac.size() == 0) return null;
-        return this.tempFac.toArray(new Types.Face[0]);
+        return this.tempFac.toArray(new Types.Geometrie.Face[0]);
     }
 
     private void parse() {
@@ -114,7 +114,7 @@ public class ObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        this.tempVec.add(new Types.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
+        this.tempVec.add(new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
     }
 
     private void addVertexN() {
