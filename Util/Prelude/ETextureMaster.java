@@ -17,15 +17,19 @@
  */
 package Util.Prelude;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import javax.imageio.ImageIO;
 
 public class ETextureMaster {
 
     ETexture[] textures;
+    private BufferedImage bufferedImage;
 
     public ETextureMaster() {
         parse();
@@ -34,26 +38,13 @@ public class ETextureMaster {
     void parse() {
         File dir = new File("./Textures/");
         String[] children = dir.list();
+        this.textures = new ETexture[children.length];
         for (String foo : children) {
             System.out.println(foo);
         }
-        FileInputStream input;
-        DataInputStream data;
-        BufferedReader reader;
-    /*
-    try {
-    //System.out.println(new File(".").getAbsolutePath());
-    input = new FileInputStream(this.file);
-    data = new DataInputStream(input);
-    reader = new BufferedReader(new InputStreamReader(data));
-    
-    curLine = reader.readLine();
-    } catch (ArrayIndexOutOfBoundsException e) {
-    System.out.println("File " + this.file + " does not exist!");
-    } catch (IOException e) {
-    System.out.println("Unknown Error");
-    e.printStackTrace();
-    }
-     */
+        for (int i = 0; i < children.length; i++) {
+            this.textures[i] = new ETexture(new StringBuffer().append("./Textures/").append(children[i]).toString());
+        }
     }
 }
+
