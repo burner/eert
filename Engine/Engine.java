@@ -34,22 +34,20 @@ import Util.Prelude.ETextureMaster;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
-
-    private Obj obj;
-    private Calendar now = null;
-    private long ms = 0;
+    public ETextureMaster texMaster;
     public int frames = 0;
     public Camera cam;
     public EFrame frame;
-    private EInput input;
-    private long lastFrame;
-    private String szene;
-    public EOcMaster root;
-    private EObjectHandler objectHandler;
-    private EInfo eInfo;
     public int fps;
     public boolean drawInfo;
+    public EOcMaster root;
+    private EInput input;
+    private String szene;
+    private EObjectHandler objectHandler;
+    private EInfo eInfo;
     private EMusicPlayerMP3 music;
+    private Calendar now = null;
+    private long ms = 0;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
@@ -59,7 +57,8 @@ public class Engine implements GLEventListener {
 
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
-        this.objectHandler = new EObjectHandler(this.cam, this.szene, gl);
+        this.texMaster = new ETextureMaster(gl);
+        this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
         this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -77,8 +76,7 @@ public class Engine implements GLEventListener {
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
-        this.eInfo = new EInfo(this);
-        ETextureMaster m = new ETextureMaster();
+        this.eInfo = new EInfo(this);        
         
         //Music doesn't work right now
         /*

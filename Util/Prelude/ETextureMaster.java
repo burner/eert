@@ -18,32 +18,34 @@
 package Util.Prelude;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import javax.imageio.ImageIO;
+import java.util.HashMap;
+import javax.media.opengl.GL;
 
 public class ETextureMaster {
 
-    ETexture[] textures;
+    public ETexture[] textures;
     private BufferedImage bufferedImage;
+    private GL gl;
 
-    public ETextureMaster() {
+    public ETextureMaster(GL gl) {
+        this.gl = gl;
         parse();
     }
 
     void parse() {
         File dir = new File("./Textures/");
-        String[] children = dir.list();
-        this.textures = new ETexture[children.length];
-        for (String foo : children) {
+        String[] texNames = dir.list();
+        this.textures = new ETexture[texNames.length];
+        for (String foo : texNames) {
             System.out.println(foo);
         }
-        for (int i = 0; i < children.length; i++) {
-            this.textures[i] = new ETexture(new StringBuffer().append("./Textures/").append(children[i]).toString());
+        int[] texId = new int[1];
+        for (int i = 0; i < texNames.length; i++) {
+            this.textures[i] = new ETexture(new StringBuffer().append("./Textures/").append(texNames[i]).toString());
+            gl.glGenTextures(1, texId, 0);
+            this.textures[i].texId = texId[0];
+            gl.glBindTexture(GL.GL_TEXTURE_2D, texId[0]);
         }
     }
 }

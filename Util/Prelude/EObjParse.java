@@ -17,6 +17,7 @@
  */
 package Util.Prelude;
 
+import Engine.Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Util.Logic.Camera;
@@ -42,8 +43,10 @@ public class EObjParse {
     public LinkedList<ObjIns> objectIns;
     private GL gl;
     private Camera cam;
+    private Engine engine;
 
-    public EObjParse(Camera cam, String file, GL gl) {
+    public EObjParse(Camera cam, String file, GL gl, Engine engine) {
+        this.engine = engine;
         this.cam = cam;
         this.gl = gl;
         this.file = file;
@@ -126,7 +129,7 @@ public class EObjParse {
         objName[4] = buffer[4].toString();
         objName[5] = buffer[5].toString();
         try {
-            this.objects.add(new Obj(this.cam, objName, this.objCount, this.gl));
+            this.objects.add(new Obj(this.cam, objName, this.objCount, this.gl, this.engine));
         } catch (IOException ex) {
             Logger.getLogger(EObjParse.class.getName()).log(Level.SEVERE, null, ex);
         }

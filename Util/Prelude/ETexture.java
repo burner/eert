@@ -36,6 +36,7 @@ public class ETexture {
     public ByteBuffer buffer;
     private FileInputStream fileInputStream;
     private BufferedImage bufferedImage;
+    public int texId;
 
     public ETexture(String filename) {
         loadImage(filename);

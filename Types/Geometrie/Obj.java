@@ -17,6 +17,7 @@
  */
 package Types.Geometrie;
 
+import Engine.Engine;
 import Util.Logic.Camera;
 import Util.Logic.UHPT;
 import Util.Prelude.ObjParse;
@@ -47,8 +48,10 @@ public class Obj {
     private GL gl;
     public int[] facNum;
     public int facesRendered;
+    private Engine engine;
 
-    public Obj(Camera cam, String[] file, int number, GL gl) throws IOException {
+    public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
+        this.engine = engine;
         this.facNum = new int[6];
         this.vec = new LinkedList<Vector[]>();
         this.nor = new LinkedList<Normal[]>();
@@ -76,6 +79,13 @@ public class Obj {
         TexCoor[] tmpTex;
         Vector[] tmpVec;
         int a;
+        
+        //TEX Test
+        gl.glEnable(GL.GL_TEXTURE_2D);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.engine.texMaster.textures[0].texId);
+        gl.glTexCoord2f(0f, 0f);
+        
+        
         for (int j = 0; j < fac.size(); j++) {
 
             tmpFac = (Face[]) this.fac.get(j);
@@ -86,6 +96,7 @@ public class Obj {
             this.gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
 
             this.gl.glBegin(GL.GL_TRIANGLES);
+            gl.glTexCoord2f(1.0f, 1.0f);
             for (int i = 0; i < fac.get(j).length - 1; i++) {
 
                 Random r = new Random();
@@ -198,7 +209,7 @@ public class Obj {
             gl.glCallList(display_list_handle + 2);
             this.facesRendered += this.facNum[2];
         } else if (dis < 60.0f) {
-            gl.glCallList(display_list_handle + 3); 
+            gl.glCallList(display_list_handle + 3);
             this.facesRendered += this.facNum[3];
         } else if (dis < 120.0f) {
             gl.glCallList(display_list_handle + 4);

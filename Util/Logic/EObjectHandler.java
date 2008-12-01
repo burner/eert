@@ -1,6 +1,7 @@
 
 package Util.Logic;
 
+import Engine.Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.*;
@@ -14,13 +15,15 @@ public class EObjectHandler {
     private Camera cam;
     private GL gl;
     private String szene;
-    public EObjectHandler(Camera cam, String szene, GL gl) {
+    private Engine engine;
+    public EObjectHandler(Camera cam, String szene, GL gl, Engine engine) {
+        this.engine = engine;
         this.cam = cam;
         this.gl = gl;
         this.szene = szene;
         
         //open the szene file and get all objects and objectinstances
-        EObjParse eObjParse = new EObjParse(this.cam, szene, this.gl);
+        EObjParse eObjParse = new EObjParse(this.cam, szene, this.gl, this.engine);
         this.obj = new Obj[eObjParse.objects.size()];
         this.obj = eObjParse.objects.toArray(this.obj);
         
