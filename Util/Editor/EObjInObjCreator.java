@@ -57,7 +57,31 @@ public class EObjInObjCreator {
         for(int i = 1; i < size; i++) {
             this.toWrite[i] = this.createdObjs.pop().toString();
         }
-    }        
+    }
+    
+    private boolean spherePlaneIntersec(Vector middle, float radius, Vector plane) {
+        /*
+        nx = (argument11-argument5)*(argument9-argument6)-(argument8-argument5)*(argument12-argument6);
+ny = (argument12-argument6)*(argument7-argument4)-(argument9-argument4)*(argument12-argument4);
+nz = (argument10-argument4)*(argument8-argument5)-(argument7-argument4)*(argument11-argument5);
+scalar = sqrt(sqr(nx)+sqr(ny)+sqr(nz));
+nx /= scalar;
+ny /= scalar;
+nz /= scalar;
+tempx = argument0;
+tempy = argument1;
+tempz = argument2;
+k = -(nx*argument4+ny*argument5+nz*argument6);
+distance = nx*argument0+ny*argument1+nz*argument2+k;
+if (distance < argument3 && distance > 0)
+{
+tempx += nx*(argument3-distance);
+tempy += ny*(argument3-distance);
+tempz += nz*(argument3-distance);
+}
+        */
+        return false;
+    }
            
 
 }

@@ -57,7 +57,7 @@ public class Engine implements GLEventListener {
 
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
-        this.texMaster = new ETextureMaster(gl);
+        //this.texMaster = new ETextureMaster(gl);
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
         this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl);
         gl.glShadeModel(GL.GL_SMOOTH);
@@ -92,7 +92,7 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-
+        gl.glEnable(GL.GL_TEXTURE_2D);
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl);
         long ocTimeTestA = System.currentTimeMillis();

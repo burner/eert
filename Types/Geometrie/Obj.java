@@ -21,10 +21,12 @@ import Engine.Engine;
 import Util.Logic.Camera;
 import Util.Logic.UHPT;
 import Util.Prelude.ObjParse;
+import com.sun.opengl.util.texture.Texture;
 import java.io.IOException;
 import javax.media.opengl.GL;
 
 import Util.*;
+import com.sun.opengl.util.texture.TextureIO;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Random;
@@ -49,6 +51,7 @@ public class Obj {
     public int[] facNum;
     public int facesRendered;
     private Engine engine;
+    private Texture regularTexture;
 
     public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
         this.engine = engine;
@@ -81,10 +84,19 @@ public class Obj {
         int a;
         
         //TEX Test
-        gl.glEnable(GL.GL_TEXTURE_2D);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, this.engine.texMaster.textures[0].texId);
-        gl.glTexCoord2f(0f, 0f);
-        
+        int[] textureId = new int[1];
+
+gl.glGenTextures(1, textureId, 0);
+gl.glBindTexture(GL.GL_TEXTURE_2D, textureId[0]);
+      
+File file2 = new File("Textures/melon_diffuse.jpeg");
+try{
+    regularTexture = TextureIO.newTexture(file2, true);
+    regularTexture.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+    regularTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+}catch(IOException e){
+    e.printStackTrace();
+} 
         
         for (int j = 0; j < fac.size(); j++) {
 
@@ -100,8 +112,8 @@ public class Obj {
             for (int i = 0; i < fac.get(j).length - 1; i++) {
 
                 Random r = new Random();
-                gl.glColor3f(r.nextFloat(), r.nextFloat(), r.nextFloat());
-
+                gl.glColor3f(1.0f, 1.0f, 1.0f);
+                this.gl.glTexCoord2f(0.0f, 0.0f); 
                 a = tmpFac[i].vn1;
                 if (this.nor.get(j) != null) {
                     if (a <= this.nor.get(j).length) {

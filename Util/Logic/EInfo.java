@@ -22,6 +22,7 @@ package Util.Logic;
 import Engine.Engine;
 import com.sun.opengl.util.j2d.TextRenderer;
 import java.awt.Font;
+import java.util.Date;
 import javax.media.opengl.GLAutoDrawable;
 
 public class EInfo {
@@ -38,11 +39,12 @@ public class EInfo {
         TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
         renderer.beginRendering(glDrawable.getWidth(), glDrawable.getHeight());
         renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
-        renderer.draw(new String("FPS = " + this.engine.fps), 20, glDrawable.getHeight() - 20);
-        renderer.draw(new String("Faces Rendered = " + this.engine.root.facRender), 20, glDrawable.getHeight() - 32);
-        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 44);
-        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 56);
-        renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 68);        
+        renderer.draw(new String("Unix time = " + new Long(new Date().getTime() / 1000L).toString()), 20, glDrawable.getHeight() - 20);
+        renderer.draw(new String("FPS = " + this.engine.fps), 20, glDrawable.getHeight() - 32);
+        renderer.draw(new String("Faces Rendered = " + this.engine.root.facRender), 20, glDrawable.getHeight() - 44);
+        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 56);
+        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 68);
+        renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 80);
         renderer.endRendering();
     }
 }
