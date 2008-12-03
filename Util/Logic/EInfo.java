@@ -39,7 +39,7 @@ public class EInfo {
         TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
         renderer.beginRendering(glDrawable.getWidth(), glDrawable.getHeight());
         renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
-        renderer.draw(new String("Unix time = " + new Long(new Date().getTime() / 1000L).toString()), 20, glDrawable.getHeight() - 20);
+        renderer.draw(new String("ETA = " + new Long(1234567890 - (new Date().getTime() / 1000L)).toString()), 20, glDrawable.getHeight() - 20);
         renderer.draw(new String("FPS = " + this.engine.fps), 20, glDrawable.getHeight() - 32);
         renderer.draw(new String("Faces Rendered = " + this.engine.root.facRender), 20, glDrawable.getHeight() - 44);
         renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 56);
