@@ -82,22 +82,22 @@ public class Obj {
         TexCoor[] tmpTex;
         Vector[] tmpVec;
         int a;
-        
+
         //TEX Test
         int[] textureId = new int[1];
 
-gl.glGenTextures(1, textureId, 0);
-gl.glBindTexture(GL.GL_TEXTURE_2D, textureId[0]);
-      
-File file2 = new File("Textures/melon_diffuse.jpeg");
-try{
-    regularTexture = TextureIO.newTexture(file2, true);
-    regularTexture.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-    regularTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-}catch(IOException e){
-    e.printStackTrace();
-} 
-        
+        gl.glGenTextures(1, textureId, 0);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureId[0]);
+
+        File file2 = new File("Textures/melon_diffuse.jpeg");
+        try {
+            regularTexture = TextureIO.newTexture(file2, true);
+            regularTexture.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+            regularTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         for (int j = 0; j < fac.size(); j++) {
 
             tmpFac = (Face[]) this.fac.get(j);
@@ -111,37 +111,52 @@ try{
             gl.glTexCoord2f(1.0f, 1.0f);
             for (int i = 0; i < fac.get(j).length - 1; i++) {
 
-                Random r = new Random();
                 gl.glColor3f(1.0f, 1.0f, 1.0f);
-                this.gl.glTexCoord2f(0.0f, 0.0f); 
-                a = tmpFac[i].vn1;
+                //Vector one                
                 if (this.nor.get(j) != null) {
+                    a = tmpFac[i].vn1;
                     if (a <= this.nor.get(j).length) {
                         this.gl.glNormal3f(tmpNor[tmpFac[i].vn1].x, tmpNor[tmpFac[i].vn1].y, tmpNor[tmpFac[i].vn1].z);
+                    }
+                }
+                if (this.tex.get(j) != null) {
+                    a = tmpFac[i].vt1;
+                    if (a <= this.tex.get(j).length) {
+                        this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt1].x, tmpTex[tmpFac[i].vt1].y);
                     }
                 }
                 a = tmpFac[i].v1;
                 if (a <= this.vec.get(j).length) {
                     this.gl.glVertex3f(tmpVec[tmpFac[i].v1].x, tmpVec[tmpFac[i].v1].y, tmpVec[tmpFac[i].v1].z);
                 }
-
-                a = tmpFac[i].vn2;
-
+                //Vector two
                 if (this.nor.get(j) != null) {
+                    a = tmpFac[i].vn2;
                     if (a <= nor.get(j).length) {
-                        this.gl.glNormal3f(tmpNor[tmpFac[i].v2].x, tmpNor[tmpFac[i].v2].y, tmpNor[tmpFac[i].v2].z);
+                        this.gl.glNormal3f(tmpNor[tmpFac[i].vn2].x, tmpNor[tmpFac[i].vn2].y, tmpNor[tmpFac[i].vn2].z);
+                    }
+                }
+                if (this.tex.get(j) != null) {
+                    a = tmpFac[i].vt2;
+                    if (a <= this.tex.get(j).length) {
+                        this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt2].x, tmpTex[tmpFac[i].vt2].y);
                     }
                 }
                 a = tmpFac[i].v2;
                 if (a <= this.vec.get(j).length) {
                     this.gl.glVertex3f(tmpVec[tmpFac[i].v2].x, tmpVec[tmpFac[i].v2].y, tmpVec[tmpFac[i].v2].z);
                 }
-
-                a = tmpFac[i].vn3;
-
+                //Vector three
                 if (this.nor.get(j) != null) {
+                    a = tmpFac[i].vn3;
                     if (a <= nor.get(j).length) {
-                        this.gl.glNormal3f(tmpNor[tmpFac[i].v3].x, tmpNor[tmpFac[i].v3].y, tmpNor[tmpFac[i].v3].z);
+                        this.gl.glNormal3f(tmpNor[tmpFac[i].vn3].x, tmpNor[tmpFac[i].vn3].y, tmpNor[tmpFac[i].vn3].z);
+                    }
+                }
+                if (this.tex.get(j) != null) {
+                    a = tmpFac[i].vt1;
+                    if (a <= this.tex.get(j).length) {
+                        this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt1].x, tmpTex[tmpFac[i].vt1].y);
                     }
                 }
                 a = tmpFac[i].v3;
