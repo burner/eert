@@ -34,6 +34,7 @@ import Util.Prelude.ETextureMaster;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
+
     public ETextureMaster texMaster;
     public int frames = 0;
     public Camera cam;
@@ -53,6 +54,8 @@ public class Engine implements GLEventListener {
         this.szene = szene;
         this.cam = cam;
         this.frame = frame;
+        this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
+        this.music.play();
     }
 
     public void init(GLAutoDrawable glDrawable) {
@@ -76,15 +79,7 @@ public class Engine implements GLEventListener {
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
-        this.eInfo = new EInfo(this);        
-        
-        //Music doesn't work right now
-        /*
-        this.music = new EMusicPlayerWave("04-portishead-the_rip.wav");
-        this.music.start();
-         */
-        this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
-       
+        this.eInfo = new EInfo(this);
     }
 
     public void display(GLAutoDrawable glDrawable) {
@@ -96,7 +91,7 @@ public class Engine implements GLEventListener {
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl);
         long ocTimeTestA = System.currentTimeMillis();
-        
+
         cam.translateAccordingToCameraPosition(gl);
         //cam.camRot(gl);
         //cam.giveInfo();
@@ -107,7 +102,7 @@ public class Engine implements GLEventListener {
         frame();
         if (this.drawInfo) {
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
-            this.eInfo.drawInfo(glDrawable);            
+            this.eInfo.drawInfo(glDrawable);
         }
         UHPT.lastFrame = System.nanoTime();
     }

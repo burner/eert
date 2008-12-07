@@ -22,7 +22,7 @@ public class Vector {
     public float x;
     public float y;
     public float z;
-    
+
     public Vector() {
         this.x = 0.0f;
         this.y = 0.0f;
@@ -34,7 +34,7 @@ public class Vector {
         this.y = y;
         this.z = z;
     }
-    
+
     public Vector(Vector old) {
         this.x = old.x;
         this.y = old.y;
@@ -49,21 +49,27 @@ public class Vector {
         float f = 1.0f / this.getLength();
         this.mult(f);
     }
-    
+
     public void add(Vector vec) {
         this.x += vec.x;
         this.y += vec.y;
         this.z += vec.z;
     }
-    
+
+    public Vector addR(Vector vec) {
+        this.x += vec.x;
+        this.y += vec.y;
+        this.z += vec.z;
+        return this;
+    }
     public void sub(Vector vec) {
         this.x -= vec.x;
         this.y -= vec.y;
         this.z -= vec.z;
     }
-    
+
     public Vector subR(Vector vec) {
-        return new Vector(this.x - vec.x, this.y - vec.y, this.z - vec.z);        
+        return new Vector(this.x - vec.x, this.y - vec.y, this.z - vec.z);
     }
 
     public void mult(float scalar) {
@@ -71,6 +77,7 @@ public class Vector {
         this.y *= scalar;
         this.z *= scalar;
     }
+        
 
     public Vector getCrossProd(Vector vector) {
         return new Vector(
@@ -78,7 +85,14 @@ public class Vector {
                 this.z * vector.x - this.x * vector.z,
                 this.x * vector.y - this.y * vector.x);
     }
-    
+
+    public Vector getCrossProdR(Vector vector1, Vector vector2) {
+        return new Vector(
+                vector1.y * vector2.z - vector1.z * vector2.y,
+                vector1.z * vector2.x - vector1.x * vector2.z,
+                vector1.x * vector2.y - vector1.y * vector2.x);
+    }
+
     @Override
     public String toString() {
         return new String(this.x + " " + this.y + " " + this.z);
