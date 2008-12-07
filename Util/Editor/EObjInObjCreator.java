@@ -189,38 +189,69 @@ public class EObjInObjCreator {
     }
 
     private boolean checkSphereTri(ObjIns toCheck, int vec1, int vec2, int vec3) {
+        Vector place = this.vertex[vec1];
         //This should make a correct normal standing on the three vector's 
         //faces outward
-        Vector tmp = new Vector().getCrossProdR(this.vertex[vec1], this.vertex[vec2]);
-        tmp.getCrossProd(this.vertex[vec3]);
-        tmp.normalize();
-        
-        //get max vector in plane direction
-        //from ObjIns origin
-        tmp.mult(toCheck.boundSph);
-        Vector maxVec = new Vector(toCheck.origin.addR(tmp));
+        Vector normal = new Vector().getCrossProdR(this.vertex[vec1], this.vertex[vec2]);
+        normal.getCrossProd(this.vertex[vec3]);
+        normal.normalize();
 
-        /*
-        nx = (argument11-argument5)*(argument9-argument6)-(argument8-argument5)*(argument12-argument6);
-        ny = (argument12-argument6)*(argument7-argument4)-(argument9-argument4)*(argument12-argument4);
-        nz = (argument10-argument4)*(argument8-argument5)-(argument7-argument4)*(argument11-argument5);
-        scalar = sqrt(sqr(nx)+sqr(ny)+sqr(nz));
-        nx /= scalar;
-        ny /= scalar;
-        nz /= scalar;
-        tempx = argument0;
-        tempy = argument1;
-        tempz = argument2;
-        k = -(nx*argument4+ny*argument5+nz*argument6);
-        distance = nx*argument0+ny*argument1+nz*argument2+k;
-        if (distance < argument3 && distance > 0)
-        {
-        tempx += nx*(argument3-distance);
-        tempy += ny*(argument3-distance);
-        tempz += nz*(argument3-distance);
+        //get max vector to plane direction
+        //from ObjIns origin
+        normal.mult(toCheck.boundSph);
+        Vector maxVec = new Vector(toCheck.origin.addR(normal));
+
+        //is should give us the distance to the plane
+        float div = (float) Math.sqrt(Math.pow(normal.x, 2) + Math.pow(normal.y, 2) + Math.pow(normal.z, 2));
+        Vector pointPlace = new Vector(this.origin.x - place.x,
+                this.origin.y - place.y,
+                this.origin.z - place.z);
+        float dis = pointPlace.x * normal.x + pointPlace.y * normal.y + pointPlace.z * normal.z;
+        dis /= div;
+
+        //now check if dis - boundingSphere of objToCheck is greater than zero
+        if (dis - toCheck.boundSph < 0.0f || dis < 0.0f) {
+            return false;
         }
-         */
-        return false;
+
+        //point divided by normal must be positv
+        if (dis < 0.0f) {
+            return false;
+        }
+
+        Vector point1 = this.vertex[vec1];
+        Vector point2 = this.vertex[vec2];
+        Vector point3 = this.vertex[vec3];
+
+        //check if point is outside triangle
+
+        Vector middle = new Vector((point1.x + point2.x + point3.x) / 3,
+                (point1.y + point2.y + point3.y) / 3,
+                (point1.z + point2.z + point3.z) / 3);
+
+        float triangleRadius = 0.0f;
+        float tmp;
+        for (int i = 0; i < 3; i++) {
+            tmp = (float) Math.sqrt(Math.pow(point1.x - middle.x, 2) +
+                    Math.pow(point1.y - middle.y, 2) +
+                    Math.pow(point1.z - middle.z, 2));
+            if (tmp > triangleRadius) {
+                triangleRadius = tmp;
+            }
+        }
+
+        //middle of triangle to middle of objIns
+        //if negativ return false;
+        float disMiddle = (float) Math.sqrt(Math.pow(toCheck.origin.x - middle.x, 2) +
+                Math.pow(toCheck.origin.y - middle.y, 2) +
+                Math.pow(toCheck.origin.z - middle.z, 2));
+
+        if(disMiddle - triangleRadius < 0.0f) {
+            return false;
+        }
+
+        //All checks passed
+        return true;
     }
 
     private void write() {
