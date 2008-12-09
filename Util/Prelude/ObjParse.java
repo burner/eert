@@ -23,8 +23,6 @@ import Types.Geometrie.TexCoor;
 import java.io.*;
 import java.util.*;
 
-
-
 public class ObjParse {
 
     private int vecIdx = 0;
@@ -45,22 +43,30 @@ public class ObjParse {
     }
 
     public Types.Geometrie.Vector[] getVec() {
-        if(this.tempVec.size() == 0) return null;
+        if (this.tempVec.size() == 0) {
+            return null;
+        }
         return this.tempVec.toArray(new Types.Geometrie.Vector[0]);
     }
 
     public Types.Geometrie.Normal[] getNor() {
-        if(this.tempNor.size() == 0) return null;
+        if (this.tempNor.size() == 0) {
+            return null;
+        }
         return this.tempNor.toArray(new Types.Geometrie.Normal[0]);
     }
 
     public Types.Geometrie.TexCoor[] getTex() {
-        if(this.tempTex.size() == 0) return null;
+        if (this.tempTex.size() == 0) {
+            return null;
+        }
         return this.tempTex.toArray(new Types.Geometrie.TexCoor[0]);
     }
 
     public Types.Geometrie.Face[] getFace() {
-        if(this.tempFac.size() == 0) return null;
+        if (this.tempFac.size() == 0) {
+            return null;
+        }
         return this.tempFac.toArray(new Types.Geometrie.Face[0]);
     }
 
@@ -78,8 +84,9 @@ public class ObjParse {
 
             while (curLine != null) {
                 curLine = reader.readLine();
-                if(curLine == null)
+                if (curLine == null) {
                     break;
+                }
                 if (curLine.charAt(0) == 'v') {
                     if (curLine.charAt(1) == ' ') {
                         addVertex();
@@ -114,7 +121,9 @@ public class ObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        this.tempVec.add(new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
+        this.tempVec.add(new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(),
+                new Float(buffer[1].toString()).floatValue(),
+                new Float(buffer[2].toString()).floatValue()));
     }
 
     private void addVertexN() {
@@ -130,8 +139,10 @@ public class ObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        this.tempNor.add(new Normal(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
-        this.vecIdx++;
+        this.tempNor.add(new Normal(new Float(buffer[0].toString()).floatValue(),
+                new Float(buffer[1].toString()).floatValue(),
+                new Float(buffer[2].toString()).floatValue()));
+
     }
 
     private void addVertexTex() {
@@ -140,14 +151,15 @@ public class ObjParse {
         buffer[1] = new StringBuffer();
         buffer[2] = new StringBuffer();
         byte fIdx = 0;
-        for (int i = 3; i < curLine.length(); i++) {
+        for (int i = 3; i < curLine.length() && fIdx < 3; i++) {
             if (curLine.charAt(i) == ' ') {
                 fIdx++;
             } else {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        this.tempTex.add(new TexCoor(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue()));
+        this.tempTex.add(new TexCoor(new Float(buffer[0].toString()).floatValue(),
+                new Float(buffer[1].toString()).floatValue()));
     }
 
     private void addFace() {
@@ -175,70 +187,26 @@ public class ObjParse {
                 buf[fIdx].append(curLine.charAt(i));
             }
         }
-        int k0;
-        int k1;
-        int k2;
-        int k3;
-        int k4;
-        int k5;
-        int k6;
-        int k7;
-        int k8;
+        int k0 = Integer.parseInt(buf[0].toString());
+        int k1 = Integer.parseInt(buf[1].toString());
+        int k2 = Integer.parseInt(buf[2].toString());
+        int k3 = Integer.parseInt(buf[3].toString());
+        int k4 = Integer.parseInt(buf[4].toString());
+        int k5 = Integer.parseInt(buf[5].toString());
+        int k6 = Integer.parseInt(buf[6].toString());
+        int k7 = Integer.parseInt(buf[7].toString());
+        int k8 = Integer.parseInt(buf[8].toString());
 
-        if (buf[0].toString().contentEquals("")) {
-            k0 = -99;
-        } else {
-            k0 = Integer.parseInt(buf[0].toString());
-        }
+        k0 -= 1;
+        k1 -= 1;
+        k2 -= 1;
+        k3 -= 1;
+        k4 -= 1;
+        k5 -= 1;
+        k6 -= 1;
+        k7 -= 1;
+        k8 -= 1;
 
-        if (buf[1].toString().contentEquals("")) {
-            k1 = -99;
-        } else {
-            k1 = Integer.parseInt(buf[1].toString());
-        }
-        
-        if (buf[2].toString().contentEquals("")) {
-            k2 = -99;
-        } else {
-            k2 = Integer.parseInt(buf[2].toString());
-        }
-
-        if (buf[3].toString().contentEquals("")) {
-            k3 = -99;
-        } else {
-            k3 = Integer.parseInt(buf[3].toString());
-        }
-        
-        if (buf[4].toString().contentEquals("")) {
-            k4 = -99;
-        } else {
-            k4 = Integer.parseInt(buf[4].toString());
-        }
-
-        if (buf[5].toString().contentEquals("")) {
-            k5 = -99;
-        } else {
-            k5 = Integer.parseInt(buf[5].toString());
-        }
-        
-        if (buf[6].toString().contentEquals("")) {
-            k6 = -99;
-        } else {
-            k6 = Integer.parseInt(buf[6].toString());
-        }
-
-        if (buf[7].toString().contentEquals("")) {
-            k7 = -99;
-        } else {
-            k7 = Integer.parseInt(buf[7].toString());
-        }
-                
-        if (buf[8].toString().contentEquals("")) {
-            k8 = -99;
-        } else {
-            k8 = Integer.parseInt(buf[8].toString());
-        }
-
-        this.tempFac.add(new Face(k0 -1, k1 -1 , k2 -1, k3 -1, k4 -1, k5 -1, k6 -1, k7 -1, k8 -1));
+        this.tempFac.add(new Face(k0, k1, k2, k3, k4, k5, k6, k7, k8));
     }
 }

@@ -20,10 +20,8 @@ package Types.Geometrie;
 public class TexCoor {
 	public float x;
 	public float y;
-	public float z;
-	public TexCoor(float x, float y, float z) {
+	public TexCoor(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.z = z;
 	}
 }

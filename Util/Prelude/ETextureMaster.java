@@ -48,7 +48,7 @@ public class ETextureMaster {
         for (String tmp : texNames) {
             File file2 = new File("./Textures/" + tmp);
             try {
-                regularTexture = TextureIO.newTexture(file2, true);
+                regularTexture = TextureIO.newTexture(file2, false);
                 regularTexture.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
                 regularTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
             } catch (IOException e) {
