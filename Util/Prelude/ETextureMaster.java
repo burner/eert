@@ -17,35 +17,45 @@
  */
 package Util.Prelude;
 
+import com.sun.opengl.util.texture.Texture;
+import com.sun.opengl.util.texture.TextureIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import javax.media.opengl.GL;
 
 public class ETextureMaster {
 
-    public ETexture[] textures;
+    public HashMap<String, Texture> textures;
     private BufferedImage bufferedImage;
     private GL gl;
+    private Texture regularTexture;
 
-    public ETextureMaster(GL gl) {
+    public ETextureMaster(GL gl) throws IOException {
         this.gl = gl;
         parse();
     }
 
-    void parse() {
+    void parse() throws IOException {
         File dir = new File("./Textures/");
         String[] texNames = dir.list();
-        this.textures = new ETexture[texNames.length];
+        this.textures = new HashMap<String, Texture>();
         for (String foo : texNames) {
             System.out.println(foo);
         }
         int[] texId = new int[1];
-        for (int i = 0; i < texNames.length; i++) {
-            this.textures[i] = new ETexture(new StringBuffer().append("./Textures/").append(texNames[i]).toString());
-            gl.glGenTextures(1, texId, 0);
-            this.textures[i].texId = texId[0];
-            gl.glBindTexture(GL.GL_TEXTURE_2D, texId[0]);
+        for (String tmp : texNames) {
+            File file2 = new File("./Textures/" + tmp);
+            try {
+                regularTexture = TextureIO.newTexture(file2, true);
+                regularTexture.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+                regularTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+            } catch (IOException e) {
+                System.out.println("Error while Texture gen");
+                e.printStackTrace();
+            }
+            this.textures.put(tmp, regularTexture);
         }
     }
 }

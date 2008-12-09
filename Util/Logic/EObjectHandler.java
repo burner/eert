@@ -16,12 +16,13 @@ public class EObjectHandler {
     private GL gl;
     private String szene;
     private Engine engine;
+    public String[] textures;
     public EObjectHandler(Camera cam, String szene, GL gl, Engine engine) {
         this.engine = engine;
         this.cam = cam;
         this.gl = gl;
         this.szene = szene;
-        
+        this.textures = new String[6];
         //open the szene file and get all objects and objectinstances
         EObjParse eObjParse = new EObjParse(this.cam, szene, this.gl, this.engine);
         this.obj = new Obj[eObjParse.objects.size()];

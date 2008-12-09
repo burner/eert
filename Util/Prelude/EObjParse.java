@@ -44,6 +44,7 @@ public class EObjParse {
     private GL gl;
     private Camera cam;
     private Engine engine;
+    public String[] textures;
 
     public EObjParse(Camera cam, String file, GL gl, Engine engine) {
         this.engine = engine;
@@ -53,6 +54,8 @@ public class EObjParse {
         this.objects = new LinkedList<Types.Geometrie.Obj>();
         this.objectIns = new LinkedList<Types.Geometrie.ObjIns>();
         this.objIns = 0;
+        this.textures = new String[6];
+        
         parse();
         addObjInsToObj();
     }
@@ -63,20 +66,20 @@ public class EObjParse {
         }
     }
 
+
     private void parse() {
         FileInputStream input;
         DataInputStream data;
         BufferedReader reader;
         try {
-            //System.out.println(new File(".").getAbsolutePath());
-            input = new FileInputStream(this.file);
+            System.out.println(new File(".").getAbsolutePath());
+            input = new FileInputStream("./SuzannTest2.eob");
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 
             curLine = reader.readLine();
 
             while (curLine != null) {
-                
                 if (curLine == null) {
                     break;
                 }
@@ -88,6 +91,8 @@ public class EObjParse {
                         addObj();
                     } else if (curLine.charAt(1) == 'i') {
                         addObjIns();
+                    } else if (curLine.charAt(1) == 't') {
+                        addObjTex();
                     }
                 } else if (curLine.charAt(0) == 'p') {
                     addPathPoint();
@@ -99,6 +104,7 @@ public class EObjParse {
             reader.close();
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("File " + this.file + " does not exist!");
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("Unknown Error");
             e.printStackTrace();
@@ -157,13 +163,14 @@ public class EObjParse {
         this.objIns += 1;
         
         
-        StringBuffer[] buffer = new StringBuffer[6];
+        StringBuffer[] buffer = new StringBuffer[7];
         buffer[0] = new StringBuffer();
         buffer[1] = new StringBuffer();
         buffer[2] = new StringBuffer();
         buffer[3] = new StringBuffer();
         buffer[4] = new StringBuffer();
         buffer[5] = new StringBuffer();
+        buffer[6] = new StringBuffer();
         byte fIdx = 0;
         for (; i < curLine.length(); i++) {
             if (curLine.charAt(i) == ' ') {
@@ -178,6 +185,45 @@ public class EObjParse {
         //this.objInsInterator
         
         this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, this.objIns, this.obj));    
+    }
+
+    private void addObjTex() {
+        StringBuffer[] buffer = new StringBuffer[7];
+        buffer[0] = new StringBuffer();
+        buffer[1] = new StringBuffer();
+        buffer[2] = new StringBuffer();
+        buffer[3] = new StringBuffer();
+        buffer[4] = new StringBuffer();
+        buffer[5] = new StringBuffer();
+        buffer[6] = new StringBuffer();
+        byte fIdx = 0;
+        for (int i = 3; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
+                fIdx++;
+            } else {
+                buffer[fIdx].append(curLine.charAt(i));
+            }
+        }
+        String[] objName = new String[6];
+        objName[0] = buffer[0].toString();
+        objName[1] = buffer[1].toString();
+        objName[2] = buffer[2].toString();
+        objName[3] = buffer[3].toString();
+        objName[4] = buffer[4].toString();
+        objName[5] = buffer[5].toString();
+        this.textures[0] = objName[0];
+        this.textures[1] = objName[1];
+        this.textures[2] = objName[2];
+        this.textures[3] = objName[3];
+        this.textures[4] = objName[4];
+        this.textures[5] = objName[5];
+        this.engine.textures = new String[6];
+        this.engine.textures[0] = this.textures[0];
+        this.engine.textures[1] = this.textures[1];
+        this.engine.textures[2] = this.textures[2];
+        this.engine.textures[3] = this.textures[3];
+        this.engine.textures[4] = this.textures[4];
+        this.engine.textures[5] = this.textures[5];
     }
 
     private void addPathPoint() {

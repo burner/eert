@@ -52,8 +52,10 @@ public class Obj {
     public int facesRendered;
     private Engine engine;
     private Texture regularTexture;
+    public String[] textures;
 
     public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
+        this.textures = new String[6];
         this.engine = engine;
         this.facNum = new int[6];
         this.vec = new LinkedList<Vector[]>();
@@ -82,24 +84,11 @@ public class Obj {
         TexCoor[] tmpTex;
         Vector[] tmpVec;
         int a;
+        this.textures = this.engine.textures;
 
-        //TEX Test
-        int[] textureId = new int[1];
-
-        gl.glGenTextures(1, textureId, 0);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textureId[0]);
-
-        File file2 = new File("Textures/melon_diffuse.jpeg");
-        try {
-            regularTexture = TextureIO.newTexture(file2, true);
-            regularTexture.setTexParameteri(GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            regularTexture.setTexParameteri(GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (int j = 0; j < fac.size(); j++) {
-
+        for (int j = 0; j < this.fac.size(); j++) {
+            Texture tmp = this.engine.texMaster.textures.get(this.textures[j]);
+            tmp.bind();
             tmpFac = (Face[]) this.fac.get(j);
             tmpNor = (Normal[]) this.nor.get(j);
             tmpTex = (TexCoor[]) this.tex.get(j);
@@ -108,20 +97,21 @@ public class Obj {
             this.gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
 
             this.gl.glBegin(GL.GL_TRIANGLES);
-            gl.glTexCoord2f(1.0f, 1.0f);
-            for (int i = 0; i < fac.get(j).length - 1; i++) {
+            for (int i = 0; i < this.fac.get(j).length - 1; i++) {
 
                 gl.glColor3f(1.0f, 1.0f, 1.0f);
                 //Vector one                
                 if (this.nor.get(j) != null) {
                     a = tmpFac[i].vn1;
                     if (a <= this.nor.get(j).length) {
+                        //System.out.println("Normal " + tmpNor[tmpFac[i].vn1].x + " " + tmpNor[tmpFac[i].vn1].y + " " + tmpNor[tmpFac[i].vn1].z);
                         this.gl.glNormal3f(tmpNor[tmpFac[i].vn1].x, tmpNor[tmpFac[i].vn1].y, tmpNor[tmpFac[i].vn1].z);
                     }
                 }
                 if (this.tex.get(j) != null) {
                     a = tmpFac[i].vt1;
                     if (a <= this.tex.get(j).length) {
+                        //System.out.println("Texture " + tmpTex[tmpFac[i].vt1].x + " " + tmpTex[tmpFac[i].vt1].y + " " + tmpTex[tmpFac[i].vt1].z);
                         this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt1].x, tmpTex[tmpFac[i].vt1].y);
                     }
                 }
@@ -133,12 +123,14 @@ public class Obj {
                 if (this.nor.get(j) != null) {
                     a = tmpFac[i].vn2;
                     if (a <= nor.get(j).length) {
+                        //System.out.println("Normal " + tmpNor[tmpFac[i].vn2].x + " " + tmpNor[tmpFac[i].vn2].y + " " + tmpNor[tmpFac[i].vn2].z);
                         this.gl.glNormal3f(tmpNor[tmpFac[i].vn2].x, tmpNor[tmpFac[i].vn2].y, tmpNor[tmpFac[i].vn2].z);
                     }
                 }
                 if (this.tex.get(j) != null) {
                     a = tmpFac[i].vt2;
                     if (a <= this.tex.get(j).length) {
+                       // System.out.println("Texture " + tmpTex[tmpFac[i].vt2].x + " " + tmpTex[tmpFac[i].vt2].y + " " + tmpTex[tmpFac[i].vt2].z);
                         this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt2].x, tmpTex[tmpFac[i].vt2].y);
                     }
                 }
@@ -150,12 +142,14 @@ public class Obj {
                 if (this.nor.get(j) != null) {
                     a = tmpFac[i].vn3;
                     if (a <= nor.get(j).length) {
+                       // System.out.println("Normal " + tmpNor[tmpFac[i].vn3].x + " " + tmpNor[tmpFac[i].vn3].y + " " + tmpNor[tmpFac[i].vn3].z);
                         this.gl.glNormal3f(tmpNor[tmpFac[i].vn3].x, tmpNor[tmpFac[i].vn3].y, tmpNor[tmpFac[i].vn3].z);
                     }
                 }
                 if (this.tex.get(j) != null) {
                     a = tmpFac[i].vt1;
                     if (a <= this.tex.get(j).length) {
+                       // System.out.println("Texture " + tmpTex[tmpFac[i].vt3].x + " " + tmpTex[tmpFac[i].vt3].y + " " + tmpTex[tmpFac[i].vt3].z);
                         this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt1].x, tmpTex[tmpFac[i].vt1].y);
                     }
                 }

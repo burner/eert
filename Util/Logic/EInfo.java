@@ -45,6 +45,7 @@ public class EInfo {
         renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 56);
         renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 68);
         renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 80);
+        renderer.draw(new String("ObjIns = " + this.engine.objectHandler.objIns.length), 20, glDrawable.getHeight() - 92);
         renderer.endRendering();
     }
 }
