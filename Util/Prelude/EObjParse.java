@@ -73,7 +73,7 @@ public class EObjParse {
         BufferedReader reader;
         try {
             System.out.println(new File(".").getAbsolutePath());
-            input = new FileInputStream("./SuzannTest2.eob");
+            input = new FileInputStream("./SuzannTest3.eob");
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 

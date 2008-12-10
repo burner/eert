@@ -18,7 +18,6 @@
 package Util.Prelude;
 
 import Types.Geometrie.Face;
-import Types.Geometrie.Normal;
 import Types.Geometrie.TexCoor;
 import java.io.*;
 import java.util.*;
@@ -29,31 +28,32 @@ public class ObjParse {
     private String file;
     private String curLine;
     private LinkedList<Types.Geometrie.Vector> tempVec;
-    private LinkedList<Normal> tempNor;
+    private LinkedList<Types.Geometrie.Vector> tempNor;
     private LinkedList<TexCoor> tempTex;
     private LinkedList<Face> tempFac;
 
     public ObjParse(String file) {
         this.file = file;
+        System.out.println(file);
         this.tempVec = new LinkedList<Types.Geometrie.Vector>();
-        this.tempNor = new LinkedList<Normal>();
+        this.tempNor = new LinkedList<Types.Geometrie.Vector>();
         this.tempTex = new LinkedList<TexCoor>();
         this.tempFac = new LinkedList<Face>();
         parse();
     }
 
-    public Types.Geometrie.Vector[] getVec() {
+    public Types.Geometrie.Vector[] getVector() {
         if (this.tempVec.size() == 0) {
             return null;
         }
         return this.tempVec.toArray(new Types.Geometrie.Vector[0]);
     }
 
-    public Types.Geometrie.Normal[] getNor() {
+    public Types.Geometrie.Vector[] getNormal() {
         if (this.tempNor.size() == 0) {
             return null;
         }
-        return this.tempNor.toArray(new Types.Geometrie.Normal[0]);
+        return this.tempNor.toArray(new Types.Geometrie.Vector[0]);
     }
 
     public Types.Geometrie.TexCoor[] getTex() {
@@ -80,9 +80,11 @@ public class ObjParse {
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 
-            curLine = reader.readLine();
-
+            //curLine = reader.readLine();
+            int lineNumber = 0;
             while (curLine != null) {
+                lineNumber++;
+                System.out.println(lineNumber);
                 curLine = reader.readLine();
                 if (curLine == null) {
                     break;
@@ -97,6 +99,8 @@ public class ObjParse {
                     }
                 } else if (curLine.charAt(0) == 'f') {
                     addFace();
+                } else {
+                    continue;
                 }
             }
             reader.close();
@@ -139,9 +143,9 @@ public class ObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        this.tempNor.add(new Normal(new Float(buffer[0].toString()).floatValue(),
-                new Float(buffer[1].toString()).floatValue(),
-                new Float(buffer[2].toString()).floatValue()));
+        this.tempNor.add(new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(),
+                                    new Float(buffer[1].toString()).floatValue(),
+                                    new Float(buffer[2].toString()).floatValue()));
 
     }
 
@@ -207,6 +211,8 @@ public class ObjParse {
         k7 -= 1;
         k8 -= 1;
 
-        this.tempFac.add(new Face(k0, k1, k2, k3, k4, k5, k6, k7, k8));
+        this.tempFac.add(new Face(this.tempVec.get(k0), this.tempVec.get(k3), this.tempVec.get(k6),
+                                  this.tempNor.get(k2), this.tempNor.get(k5), this.tempNor.get(k8),
+                                  this.tempTex.get(k1), this.tempTex.get(k4)));
     }
 }

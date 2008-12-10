@@ -36,7 +36,7 @@ public class EObjInObjCreator {
     private float boundingMin;
     private int forObj;
     private Obj objParent;
-
+/*
     public EObjInObjCreator(String hullObj, String outFile, int number, int forObj) {
         ObjParse obParse = new ObjParse(hullObj);
         this.forObj = forObj;
@@ -168,7 +168,7 @@ public class EObjInObjCreator {
 
     private boolean checkObjInsObj(ObjIns toCheck) {
         for (Face face : this.faces) {
-            if (!checkSphereTri(toCheck, face.v1, face.v2, face.v3)) {
+            /*if (!checkSphereTri(toCheck, face)) {
                 return false;
             }
         }
@@ -188,7 +188,7 @@ public class EObjInObjCreator {
         return true;
     }
 
-    private boolean checkSphereTri(ObjIns toCheck, int vec1, int vec2, int vec3) {
+    private boolean checkSphereTri(ObjIns toCheck, Face face) {
         Vector place = this.vertex[vec1];
         //This should make a correct normal standing on the three vector's 
         //faces outward
@@ -259,5 +259,7 @@ public class EObjInObjCreator {
         for (int i = 1; i < size; i++) {
             this.toWrite[i] = this.createdObjs.poll().toString();
         }
-    }
+
+    }*/
+
 }

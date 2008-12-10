@@ -26,16 +26,20 @@ import java.io.IOException;
 import javax.media.opengl.GL;
 
 import Util.*;
+import Util.Prelude.JObjParse;
+import com.sun.opengl.util.texture.TextureCoords;
 import com.sun.opengl.util.texture.TextureIO;
+import java.awt.Image;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Random;
+import javax.media.opengl.glu.GLU;
 
 public class Obj {
 
     public int number;
     public LinkedList<Vector[]> vec = null;
-    public LinkedList<Normal[]> nor = null;
+    public LinkedList<Vector[]> nor = null;
     public LinkedList<TexCoor[]> tex = null;
     public LinkedList<Face[]> fac = null;
     public LinkedList<ObjIns> objIns = null;
@@ -53,13 +57,16 @@ public class Obj {
     private Engine engine;
     private Texture regularTexture;
     public String[] textures;
+    private EImage image[];
+    private int textureId;
 
     public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
+        this.image = new EImage[6];
         this.textures = new String[6];
         this.engine = engine;
         this.facNum = new int[6];
         this.vec = new LinkedList<Vector[]>();
-        this.nor = new LinkedList<Normal[]>();
+        this.nor = new LinkedList<Vector[]>();
         this.tex = new LinkedList<TexCoor[]>();
         this.fac = new LinkedList<Face[]>();
         this.objIns = new LinkedList<ObjIns>();
@@ -67,15 +74,16 @@ public class Obj {
         this.cam = cam;
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.number = number;
+        GLU glu = new GLU();
         for (int i = 0; i < file.length; i++) {
-            ObjParse parse = new ObjParse(file[i]);
-            this.vec.add(parse.getVec());
-            this.nor.add(parse.getNor());
+            JObjParse parse = new JObjParse(file[i]);
+            this.vec.add(parse.getVector());
+            this.nor.add(parse.getNormal());
             this.tex.add(parse.getTex());
             this.fac.add(parse.getFace());
         }
-        calcObjCenter();
-        makeBoundingSphere();
+        //calcObjCenter();
+        //makeBoundingSphere();
 
         //Put Object into glLists
         this.display_list_handle = gl.glGenLists(file.length);
@@ -86,78 +94,80 @@ public class Obj {
         int a;
         this.textures = this.engine.textures;
 
-        for (int j = 0; j < this.fac.size(); j++) {
-            Texture tmp = this.engine.texMaster.textures.get(this.textures[j]);
-            tmp.bind();
-            tmpFac = (Face[]) this.fac.get(j);
-            tmpNor = (Normal[]) this.nor.get(j);
-            tmpTex = (TexCoor[]) this.tex.get(j);
-            tmpVec = (Vector[]) this.vec.get(j);
 
+        this.image[0] = new EImage(this.textures[5]);
+        this.image[1] = new EImage(this.textures[4]);
+        this.image[2] = new EImage(this.textures[3]);
+        this.image[3] = new EImage(this.textures[2]);
+        this.image[4] = new EImage(this.textures[1]);
+        this.image[5] = new EImage(this.textures[0]);
+
+        final int[] tmp = new int[6];
+        gl.glGenTextures(6, tmp, 0);
+        
+
+        for (int j = 0; j < this.fac.size(); j++) {
+            System.out.println(this.textures[j] + " " + j + " " + this.fac.get(j).length);
+            /*gl.glEnable(GL.GL_TEXTURE_2D);
+            Texture tmp = this.engine.texMaster.textures.get(this.textures[5 - j]);
+            TextureCoords coords = tmp.getImageTexCoords();
+            System.out.println("top - left = " + coords.top() + " " + coords.left());
+            System.out.println("bootom - right = " + coords.bottom() + " " + coords.right());
+            System.out.println(tmp.getMustFlipVertically());
+            
+            //          tmp.bind();
+             */
+            this.textureId = tmp[j];
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId);
+            //gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, image.getWidth(), image.getHeight(), 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, image.getBuffer());
+            glu.gluBuild2DMipmaps(GL.GL_TEXTURE_2D, GL.GL_RGBA, this.image[j].getWidth(), image[j].getHeight(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, image[j].getBuffer());
+            //glu.gluBuild2DMipmapLevels(GL.GL_TEXTURE_2D, GL.GL_RGBA, image.getWidth(), image.getHeight(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, 0, 0, 10, image.getBuffer());
+            gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_BASE_LEVEL, 0);
+            gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_LEVEL, 10);
             this.gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
 
             this.gl.glBegin(GL.GL_TRIANGLES);
+            gl.glColor3f(1.0f, 1.0f, 1.0f);
             for (int i = 0; i < this.fac.get(j).length - 1; i++) {
+                Face tmpFace = this.fac.get(j)[i];
 
-                gl.glColor3f(1.0f, 1.0f, 1.0f);
-                //Vector one                
-                if (this.nor.get(j) != null) {
-                    a = tmpFac[i].vn1;
-                    if (a <= this.nor.get(j).length) {
-                        //System.out.println("Normal " + tmpNor[tmpFac[i].vn1].x + " " + tmpNor[tmpFac[i].vn1].y + " " + tmpNor[tmpFac[i].vn1].z);
-                        this.gl.glNormal3f(tmpNor[tmpFac[i].vn1].x, tmpNor[tmpFac[i].vn1].y, tmpNor[tmpFac[i].vn1].z);
-                    }
+                if (tmpFace.vn1 != null) {
+                    gl.glNormal3f(tmpFace.vn1.x, tmpFace.vn1.y, tmpFace.vn1.z);
+                } else {
+                    System.out.println("vn1");
                 }
-                if (this.tex.get(j) != null) {
-                    a = tmpFac[i].vt1;
-                    if (a <= this.tex.get(j).length) {
-                        //System.out.println("Texture " + tmpTex[tmpFac[i].vt1].x + " " + tmpTex[tmpFac[i].vt1].y + " " + tmpTex[tmpFac[i].vt1].z);
-                        this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt1].x, tmpTex[tmpFac[i].vt1].y);
-                    }
+                if (tmpFace.vt1 != null) {
+                    gl.glTexCoord2f(tmpFace.vt1.s, tmpFace.vt1.t);
+                } else {
+                    System.out.println("vt1");
                 }
-                a = tmpFac[i].v1;
-                if (a <= this.vec.get(j).length) {
-                    this.gl.glVertex3f(tmpVec[tmpFac[i].v1].x, tmpVec[tmpFac[i].v1].y, tmpVec[tmpFac[i].v1].z);
+                gl.glVertex3f(tmpFace.v1.x, tmpFace.v1.y, tmpFace.v1.z);
+
+
+                if (tmpFace.vn2 != null) {
+                    gl.glNormal3f(tmpFace.vn2.x, tmpFace.vn2.y, tmpFace.vn2.z);
+                } else {
+                    System.out.println("vn2");
                 }
-                //Vector two
-                if (this.nor.get(j) != null) {
-                    a = tmpFac[i].vn2;
-                    if (a <= nor.get(j).length) {
-                        //System.out.println("Normal " + tmpNor[tmpFac[i].vn2].x + " " + tmpNor[tmpFac[i].vn2].y + " " + tmpNor[tmpFac[i].vn2].z);
-                        this.gl.glNormal3f(tmpNor[tmpFac[i].vn2].x, tmpNor[tmpFac[i].vn2].y, tmpNor[tmpFac[i].vn2].z);
-                    }
+                if (tmpFace.vt2 != null) {
+                    gl.glTexCoord2f(tmpFace.vt2.s, tmpFace.vt2.t);
+                } else {
+                    System.out.println("vt2");
                 }
-                if (this.tex.get(j) != null) {
-                    a = tmpFac[i].vt2;
-                    if (a <= this.tex.get(j).length) {
-                       // System.out.println("Texture " + tmpTex[tmpFac[i].vt2].x + " " + tmpTex[tmpFac[i].vt2].y + " " + tmpTex[tmpFac[i].vt2].z);
-                        this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt2].x, tmpTex[tmpFac[i].vt2].y);
-                    }
+                gl.glVertex3f(tmpFace.v2.x, tmpFace.v2.y, tmpFace.v2.z);
+
+
+                if (tmpFace.vt3 != null) {
+                    gl.glTexCoord2f(tmpFace.vt3.s, tmpFace.vt3.t);
+                } else {
+                    System.out.println("vn3");
                 }
-                a = tmpFac[i].v2;
-                if (a <= this.vec.get(j).length) {
-                    this.gl.glVertex3f(tmpVec[tmpFac[i].v2].x, tmpVec[tmpFac[i].v2].y, tmpVec[tmpFac[i].v2].z);
+                if (tmpFace.vn3 != null) {
+                    gl.glNormal3f(tmpFace.vn3.x, tmpFace.vn3.y, tmpFace.vn3.z);
+                } else {
+                    System.out.println("vt3");
                 }
-                //Vector three
-                if (this.nor.get(j) != null) {
-                    a = tmpFac[i].vn3;
-                    if (a <= nor.get(j).length) {
-                       // System.out.println("Normal " + tmpNor[tmpFac[i].vn3].x + " " + tmpNor[tmpFac[i].vn3].y + " " + tmpNor[tmpFac[i].vn3].z);
-                        this.gl.glNormal3f(tmpNor[tmpFac[i].vn3].x, tmpNor[tmpFac[i].vn3].y, tmpNor[tmpFac[i].vn3].z);
-                    }
-                }
-                if (this.tex.get(j) != null) {
-                    a = tmpFac[i].vt1;
-                    if (a <= this.tex.get(j).length) {
-                       // System.out.println("Texture " + tmpTex[tmpFac[i].vt3].x + " " + tmpTex[tmpFac[i].vt3].y + " " + tmpTex[tmpFac[i].vt3].z);
-                        this.gl.glTexCoord2f(tmpTex[tmpFac[i].vt1].x, tmpTex[tmpFac[i].vt1].y);
-                    }
-                }
-                a = tmpFac[i].v3;
-                if (a <= this.vec.get(j).length) {
-                    this.gl.glVertex3f(tmpVec[tmpFac[i].v3].x, tmpVec[tmpFac[i].v3].y, tmpVec[tmpFac[i].v3].z);
-                }
-                this.facNum[j] = tmpFac.length;
+                gl.glVertex3f(tmpFace.v3.x, tmpFace.v3.y, tmpFace.v3.z);
             }
             this.gl.glEnd();
             this.gl.glEndList();
@@ -220,7 +230,7 @@ public class Obj {
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
 
-        if (dis < 10.0f) {
+        if (true) {
             gl.glCallList(display_list_handle);
             this.facesRendered += this.facNum[0];
         } else if (dis < 20.0f) {
