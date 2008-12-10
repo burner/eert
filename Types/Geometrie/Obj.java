@@ -125,8 +125,9 @@ public class Obj {
             gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_BASE_LEVEL, 0);
             gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_LEVEL, 10);
             this.gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
-
+		this.gl.glEnable(GL.GL_TEXTURE_2D):
             this.gl.glBegin(GL.GL_TRIANGLES);
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId);
             gl.glColor3f(1.0f, 1.0f, 1.0f);
             for (int i = 0; i < this.fac.get(j).length - 1; i++) {
                 Face tmpFace = this.fac.get(j)[i];
@@ -170,6 +171,7 @@ public class Obj {
                 gl.glVertex3f(tmpFace.v3.x, tmpFace.v3.y, tmpFace.v3.z);
             }
             this.gl.glEnd();
+	    this.gl.glDisable(GL.GL_TEXTURE2D);
             this.gl.glEndList();
         }
     }
