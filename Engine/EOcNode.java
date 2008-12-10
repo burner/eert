@@ -72,6 +72,7 @@ public class EOcNode {
             } else {
                 for (ObjIns obIns : this.objs) {
                     if (!this.root.drawn[obIns.objInsNumber]) {
+                        dis = (float) Math.sqrt(Math.pow(this.root.cam.loc.x - obIns.origin.x, 2) + Math.pow(this.root.cam.loc.y - obIns.origin.y, 2) + Math.pow(this.root.cam.loc.z - obIns.origin.z, 2));
                         //System.out.println("ObjIns = " + obIns.objInsNumber);
                         obIns.parent.render(obIns.objInsNumber, dis);
                         this.root.drawn[obIns.objInsNumber] = true;

@@ -70,7 +70,7 @@ public class Engine implements GLEventListener {
             Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
-        this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl);
+        this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
@@ -97,7 +97,7 @@ public class Engine implements GLEventListener {
         gl.glLoadIdentity();
         gl.glEnable(GL.GL_TEXTURE_2D);
         long ocTimeTest = System.currentTimeMillis();
-        this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl);
+        this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         long ocTimeTestA = System.currentTimeMillis();
 
         cam.translateAccordingToCameraPosition(gl);

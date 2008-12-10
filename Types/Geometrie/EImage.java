@@ -16,6 +16,8 @@ import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.media.opengl.GL;
+import javax.media.opengl.glu.GLU;
 
 /**
  *
@@ -71,6 +73,16 @@ public class EImage {
         mirroredBuffer.rewind();
 
 
+    }
+
+    public void makeRGBTexture(GL gl, GLU glu, int target, boolean mipmapped) {
+        if (mipmapped) {
+            glu.gluBuild2DMipmaps(target, GL.GL_RGB8, this.getWidth(),
+                    this.getHeight(), GL.GL_RGB, GL.GL_UNSIGNED_BYTE, this.getBuffer());
+        } else {
+            gl.glTexImage2D(target, 0, GL.GL_RGB, this.getWidth(),
+                    this.getHeight(), 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, this.getBuffer());
+        }
     }
 
     /**

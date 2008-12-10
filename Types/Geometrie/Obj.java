@@ -104,7 +104,7 @@ public class Obj {
 
         final int[] tmp = new int[6];
         gl.glGenTextures(6, tmp, 0);
-        
+
 
         for (int j = 0; j < this.fac.size(); j++) {
             System.out.println(this.textures[j] + " " + j + " " + this.fac.get(j).length);
@@ -124,9 +124,11 @@ public class Obj {
             //glu.gluBuild2DMipmapLevels(GL.GL_TEXTURE_2D, GL.GL_RGBA, image.getWidth(), image.getHeight(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, 0, 0, 10, image.getBuffer());
             gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_BASE_LEVEL, 0);
             gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_LEVEL, 10);
+
             this.gl.glNewList(display_list_handle + j, GL.GL_COMPILE);
-		this.gl.glEnable(GL.GL_TEXTURE_2D):
+            this.gl.glEnable(GL.GL_TEXTURE_2D);
             this.gl.glBegin(GL.GL_TRIANGLES);
+            System.out.println(this.textureId);
             gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId);
             gl.glColor3f(1.0f, 1.0f, 1.0f);
             for (int i = 0; i < this.fac.get(j).length - 1; i++) {
@@ -171,8 +173,9 @@ public class Obj {
                 gl.glVertex3f(tmpFace.v3.x, tmpFace.v3.y, tmpFace.v3.z);
             }
             this.gl.glEnd();
-	    this.gl.glDisable(GL.GL_TEXTURE2D);
+            this.gl.glDisable(GL.GL_TEXTURE_2D);
             this.gl.glEndList();
+            this.textureId = tmp[0];
         }
     }
 
@@ -232,22 +235,28 @@ public class Obj {
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
 
-        if (true) {
+        if (dis < 10.0f) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId + 0);
             gl.glCallList(display_list_handle);
             this.facesRendered += this.facNum[0];
         } else if (dis < 20.0f) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId + 1);
             gl.glCallList(display_list_handle + 1);
             this.facesRendered += this.facNum[1];
         } else if (dis < 40.0f) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId + 2);
             gl.glCallList(display_list_handle + 2);
             this.facesRendered += this.facNum[2];
         } else if (dis < 60.0f) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId + 3);
             gl.glCallList(display_list_handle + 3);
             this.facesRendered += this.facNum[3];
         } else if (dis < 120.0f) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId + 4);
             gl.glCallList(display_list_handle + 4);
             this.facesRendered += this.facNum[4];
         } else {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId + 5);
             gl.glCallList(display_list_handle + 5);
             this.facesRendered += this.facNum[5];
         }
