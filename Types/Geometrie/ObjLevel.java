@@ -94,5 +94,6 @@ public class ObjLevel {
         this.tex.bind();
         gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
         this.gl.glCallList(this.listID);
+        this.tex.disable();
     }
 }
