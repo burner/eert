@@ -109,7 +109,7 @@ public class Obj {
 
             int textureId = genTexture(gl);
             int listHandle = genList(gl);
-
+            this.gl.glEnable(GL.GL_TEXTURE_2D);
             this.textureHandles[j] = textureId;
             this.listHandles[j] = listHandle;
 
@@ -127,10 +127,9 @@ public class Obj {
             float acolor[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
             this.gl.glNewList(listHandle, GL.GL_COMPILE);
-            gl.glBindTexture(GL.GL_TEXTURE_2D, textureId);
             this.gl.glEnable(GL.GL_TEXTURE_2D);
-
-
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[j]);
+            
             gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, nullcolor, 1);
             gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, dcolor, 0);
             gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, acolor, 0);
