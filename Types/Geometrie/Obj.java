@@ -117,10 +117,7 @@ public class Obj {
 
 
             gl.glBindTexture(GL.GL_TEXTURE_2D, textureId);
-
-            glu.gluBuild2DMipmaps(GL.GL_TEXTURE_2D, GL.GL_RGBA, image[j].getWidth(), image[j].getHeight(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, image[j].getBuffer());
-            gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_BASE_LEVEL, 0);
-            gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_LEVEL, 10);
+		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0 , GL.GL_RGBA, this.image[j].getWidth(), this.image[j].getHeight(), 0, GL.GL_RGB, GL.GL_UNSINGED_BYTE, this.image[j].getBuffer());
 
             float nullcolor[] = {0f, 0f, 0f};
             float dcolor[] = {0.6f, 0.6f, 0.6f, 1.0f};
@@ -191,9 +188,7 @@ public class Obj {
     }
 
     private int genList(GL gl) {
-        final int[] tmp = new int[1];
-        gl.glGenTextures(1, tmp, 0);
-        return tmp[0];
+        return gl.glGenList(1);
     }
 
     private void calcObjCenter() {
