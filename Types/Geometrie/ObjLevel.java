@@ -26,35 +26,22 @@ public class ObjLevel {
 
     public Face[] faces;
     private String texName;
-    private int listID;
-    private int textureId;
     private Engine engine;
     private GL gl;
-    EImage image;
+    private Texture tex;
 
     public ObjLevel(GL gl, Engine engine, Face[] faces, String texName) throws FileNotFoundException {
         this.engine = engine;
         this.gl = gl;
         this.faces = faces;
         this.texName = texName;
-        GLU glu = new GLU();
 
-        final int[] tmp = new int[1];
-        gl.glGenTextures(1, tmp, 0);
-        this.textureId = tmp[0];
+        this.tex = TextureIO.netTexture(this.texName, false);
 
-        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId);
-        this.image = new EImage(texName);
-        glu.gluBuild2DMipmaps(GL.GL_TEXTURE_2D, GL.GL_RGBA, image.getWidth(), image.getHeight(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, image.getBuffer());
-        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_BASE_LEVEL, 0);
-        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAX_LEVEL, 0);
-
-        
         this.listID = gl.glGenLists(1);
         gl.glColor3f(1.0f, 1.0f, 1.0f);
         gl.glNewList(this.listID, GL.GL_COMPILE);
         gl.glEnable(GL.GL_TEXTURE_2D);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureId);
 
         for (int i = 0; i < this.faces.length - 1; i++) {
             Face tmpFace = this.faces[i];
@@ -103,7 +90,9 @@ public class ObjLevel {
     }
 
     void draw() {
-        System.out.println("drawn");
+        this.tex.enable();
+        this.tex.bind();
+        gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
         this.gl.glCallList(this.listID);
     }
 }
