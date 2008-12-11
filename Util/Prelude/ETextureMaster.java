@@ -22,7 +22,9 @@ import com.sun.opengl.util.texture.TextureIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import javax.imageio.ImageIO;
 import javax.media.opengl.GL;
 
 public class ETextureMaster {
@@ -57,6 +59,10 @@ public class ETextureMaster {
             }
             this.textures.put(tmp, regularTexture);
         }
+    }
+
+    private static BufferedImage readImage(String resourceName) throws IOException {
+        return ImageIO.read(new File("./Textures/" + resourceName));
     }
 }
 

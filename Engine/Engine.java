@@ -64,11 +64,11 @@ public class Engine implements GLEventListener {
 
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
-        try {
-            this.texMaster = new ETextureMaster(gl);
+        /*try {
+           this.texMaster = new ETextureMaster(gl);
         } catch (IOException ex) {
             Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
         this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         gl.glShadeModel(GL.GL_SMOOTH);

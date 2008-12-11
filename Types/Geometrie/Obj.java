@@ -57,12 +57,19 @@ public class Obj {
     private Engine engine;
     private Texture regularTexture;
     public String[] textures;
-    private EImage image[];
+    private ETexture image[];
     private int[] listHandles;
     private int[] textureHandles;
+    private ObjLevel objL1;
+    ETexture texImage0;
+    ETexture texImage1;
+    ETexture texImage2;
+    ETexture texImage3;
+    ETexture texImage4;
+    ETexture texImage5;
 
     public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
-        this.image = new EImage[6];
+        this.image = new ETexture[6];
         this.textures = new String[6];
         this.engine = engine;
         this.facNum = new int[6];
@@ -93,46 +100,104 @@ public class Obj {
         TexCoor[] tmpTex;
         Vector[] tmpVec;
         int a;
+
+        this.listHandles = new int[6];
+        this.listHandles[0] = gl.glGenLists(1);
+        this.listHandles[1] = gl.glGenLists(1);
+        this.listHandles[2] = gl.glGenLists(1);
+        this.listHandles[3] = gl.glGenLists(1);
+        this.listHandles[4] = gl.glGenLists(1);
+        this.listHandles[5] = gl.glGenLists(1);
+
         this.textures = this.engine.textures;
 
         this.textureHandles = new int[6];
-        this.listHandles = new int[6];
+        gl.glGenTextures(6, this.textureHandles, 0);
 
-        this.image[0] = new EImage(this.textures[5]);
-        this.image[1] = new EImage(this.textures[4]);
-        this.image[2] = new EImage(this.textures[3]);
-        this.image[3] = new EImage(this.textures[2]);
-        this.image[4] = new EImage(this.textures[1]);
-        this.image[5] = new EImage(this.textures[0]);
+        this.texImage0 = new ETexture(this.textures[0]);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[0]);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage0.getWidth(), this.texImage0.getHeight(),
+                0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage0.getBuffer());
+
+
+        this.texImage1 = new ETexture(this.textures[1]);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[1]);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage1.getWidth(), this.texImage1.getHeight(),
+                0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage1.getBuffer());
+
+        this.texImage2 = new ETexture(this.textures[2]);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[2]);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage2.getWidth(), this.texImage2.getHeight(),
+                0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage2.getBuffer());
+
+
+        this.texImage3 = new ETexture(this.textures[3]);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[3]);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage3.getWidth(), this.texImage3.getHeight(),
+                0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage3.getBuffer());
+
+        
+        this.texImage4 = new ETexture(this.textures[4]);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[4]);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage4.getWidth(), this.texImage4.getHeight(),
+                0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage4.getBuffer());
+
+
+        this.texImage5 = new ETexture(this.textures[5]);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[5]);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER,
+                GL.GL_NEAREST);
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage5.getWidth(), this.texImage5.getHeight(),
+                0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage5.getBuffer());
+
+gl.glEnable(GL.GL_TEXTURE_2D);
 
         for (int j = 0; j < this.fac.size(); j++) {
+           
 
-            int textureId = genTexture(gl);
-            int listHandle = genList(gl);
-            this.gl.glEnable(GL.GL_TEXTURE_2D);
-            this.textureHandles[j] = textureId;
-            this.listHandles[j] = listHandle;
-
-            System.out.println("Texturehandle " + this.textureHandles[j] + " Listhandle " + this.listHandles[j]);
-
-
-            gl.glBindTexture(GL.GL_TEXTURE_2D, textureId);
-		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0 , GL.GL_RGBA, this.image[j].getWidth(), this.image[j].getHeight(), 0, GL.GL_RGB, GL.GL_UNSINGED_BYTE, this.image[j].getBuffer());
-
-            float nullcolor[] = {0f, 0f, 0f};
-            float dcolor[] = {0.6f, 0.6f, 0.6f, 1.0f};
-            float acolor[] = {0.5f, 0.5f, 0.5f, 1.0f};
-
-            this.gl.glNewList(listHandle, GL.GL_COMPILE);
-            this.gl.glEnable(GL.GL_TEXTURE_2D);
-            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[j]);
-            
-            gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, nullcolor, 1);
-            gl.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, dcolor, 0);
-            gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, acolor, 0);
-
-            gl.glColor3f(1.0f, 1.0f, 1.0f);
+            gl.glNewList(this.listHandles[j], GL.GL_COMPILE);
             this.gl.glBegin(GL.GL_TRIANGLES);
+            //gl.glColor3f(1.0f, 1.0f, 1.0f);
             for (int i = 0; i < this.fac.get(j).length - 1; i++) {
                 Face tmpFace = this.fac.get(j)[i];
 
@@ -175,20 +240,19 @@ public class Obj {
                 gl.glVertex3f(tmpFace.v3.x, tmpFace.v3.y, tmpFace.v3.z);
             }
             this.gl.glEnd();
-            this.gl.glDisable(GL.GL_TEXTURE_2D);
             this.gl.glEndList();
 
         }
     }
 
     private int genTexture(GL gl) {
-        final int[] tmp = new int[1];
+        int[] tmp = new int[1];
         gl.glGenTextures(1, tmp, 0);
         return tmp[0];
     }
 
     private int genList(GL gl) {
-        return gl.glGenList(1);
+        return gl.glGenLists(1);
     }
 
     private void calcObjCenter() {
@@ -248,29 +312,31 @@ public class Obj {
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
 
         if (dis < 10.0f) {
-
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[0]);
             gl.glCallList(this.listHandles[0]);
             this.facesRendered += this.facNum[0];
         } else if (dis < 20.0f) {
-
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[1]);
             gl.glCallList(this.listHandles[1]);
             this.facesRendered += this.facNum[1];
         } else if (dis < 40.0f) {
-
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[2]);
             gl.glCallList(this.listHandles[2]);
             this.facesRendered += this.facNum[2];
         } else if (dis < 60.0f) {
-
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[3]);
             gl.glCallList(this.listHandles[3]);
             this.facesRendered += this.facNum[3];
         } else if (dis < 120.0f) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[4]);
             gl.glCallList(this.listHandles[4]);
             this.facesRendered += this.facNum[4];
         } else {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[5]);
             gl.glCallList(this.listHandles[5]);
             this.facesRendered += this.facNum[5];
         }
         gl.glPopMatrix();
     }
 }
-		
+

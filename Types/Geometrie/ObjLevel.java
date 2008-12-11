@@ -18,7 +18,11 @@
 package Types.Geometrie;
 
 import Engine.Engine;
+import com.sun.opengl.util.texture.Texture;
+import com.sun.opengl.util.texture.TextureIO;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
@@ -29,19 +33,21 @@ public class ObjLevel {
     private Engine engine;
     private GL gl;
     private Texture tex;
+    private int listID;
 
-    public ObjLevel(GL gl, Engine engine, Face[] faces, String texName) throws FileNotFoundException {
+    public ObjLevel(GL gl, Engine engine, Face[] faces, String texName) throws FileNotFoundException, IOException {
         this.engine = engine;
         this.gl = gl;
         this.faces = faces;
         this.texName = texName;
 
-        this.tex = TextureIO.netTexture(this.texName, false);
+        this.tex = TextureIO.newTexture(new File("./Textures/" + this.texName), false);
 
         this.listID = gl.glGenLists(1);
 
         gl.glNewList(this.listID, GL.GL_COMPILE);
-        gl.glEnable(GL.GL_TEXTURE_2D);
+        this.tex.bind();
+        gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
         gl.glColor3f(1.0f, 1.0f, 1.0f);
         for (int i = 0; i < this.faces.length - 1; i++) {
             Face tmpFace = this.faces[i];
@@ -85,15 +91,14 @@ public class ObjLevel {
             gl.glVertex3f(tmpFace.v3.x, tmpFace.v3.y, tmpFace.v3.z);
         }
         this.gl.glEnd();
-        this.gl.glDisable(GL.GL_TEXTURE_2D);
         this.gl.glEndList();
     }
 
     void draw() {
-        this.tex.enable();
-        this.tex.bind();
-        gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
+        //this.tex.enable();
+        
+        
         this.gl.glCallList(this.listID);
-        this.tex.disable();
+        //this.tex.disable();
     }
 }

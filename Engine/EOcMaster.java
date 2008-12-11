@@ -113,6 +113,7 @@ public class EOcMaster {
     }
 
     public void drawOctree(GL gl) {
+        gl.glEnable(GL.GL_TEXTURE);
         //Reset Counter
         for (Obj rObj : this.realObjs) {
             rObj.facesRendered = 0;
@@ -130,6 +131,7 @@ public class EOcMaster {
         for (Obj rObj : this.realObjs) {
             this.facRender += rObj.facesRendered;
         }
+        gl.glDisable(GL.GL_TEXTURE);
     }
 
     public void drawBox(GL gl) {
