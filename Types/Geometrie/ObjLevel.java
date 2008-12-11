@@ -39,10 +39,10 @@ public class ObjLevel {
         this.tex = TextureIO.netTexture(this.texName, false);
 
         this.listID = gl.glGenLists(1);
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
         gl.glNewList(this.listID, GL.GL_COMPILE);
         gl.glEnable(GL.GL_TEXTURE_2D);
-
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
         for (int i = 0; i < this.faces.length - 1; i++) {
             Face tmpFace = this.faces[i];
 
