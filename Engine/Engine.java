@@ -18,10 +18,6 @@
 package Engine;
 
 import Util.Logic.EObjectHandler;
-import Types.Geometrie.Obj;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLAutoDrawable;
@@ -33,12 +29,10 @@ import Util.Logic.EFrame;
 import Util.Logic.EInfo;
 import Util.Logic.EInput;
 import Util.Logic.UHPT;
-import Util.Prelude.ETextureMaster;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
 
-    public ETextureMaster texMaster;
     public int frames = 0;
     public Camera cam;
     public EFrame frame;
@@ -64,11 +58,6 @@ public class Engine implements GLEventListener {
 
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
-        /*try {
-           this.texMaster = new ETextureMaster(gl);
-        } catch (IOException ex) {
-            Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
         this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         gl.glShadeModel(GL.GL_SMOOTH);

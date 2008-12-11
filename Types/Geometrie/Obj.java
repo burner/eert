@@ -20,19 +20,12 @@ package Types.Geometrie;
 import Engine.Engine;
 import Util.Logic.Camera;
 import Util.Logic.UHPT;
-import Util.Prelude.ObjParse;
-import com.sun.opengl.util.texture.Texture;
 import java.io.IOException;
 import javax.media.opengl.GL;
 
 import Util.*;
 import Util.Prelude.JObjParse;
-import com.sun.opengl.util.texture.TextureCoords;
-import com.sun.opengl.util.texture.TextureIO;
-import java.awt.Image;
-import java.io.File;
 import java.util.LinkedList;
-import java.util.Random;
 import javax.media.opengl.glu.GLU;
 
 public class Obj {
@@ -49,18 +42,15 @@ public class Obj {
     private float yR = 0.0f;
     private float zR = 0.0f;
     public float bR = 0.0f;                //bounding Sphere radius
-    private int display_list_handle;
     private Camera cam;
     private GL gl;
     public int[] facNum;
     public int facesRendered;
     private Engine engine;
-    private Texture regularTexture;
     public String[] textures;
     private ETexture image[];
     private int[] listHandles;
     private int[] textureHandles;
-    private ObjLevel objL1;
     ETexture texImage0;
     ETexture texImage1;
     ETexture texImage2;
@@ -90,16 +80,13 @@ public class Obj {
             this.tex.add(parse.getTex());
             this.fac.add(parse.getFace());
         }
-        //calcObjCenter();
-        //makeBoundingSphere();
 
-        //Put Object into glLists
-
-        Face[] tmpFac;
-        Normal[] tmpNor;
-        TexCoor[] tmpTex;
-        Vector[] tmpVec;
-        int a;
+        this.facNum[0] = this.fac.get(0).length;
+        this.facNum[1] = this.fac.get(1).length;
+        this.facNum[2] = this.fac.get(2).length;
+        this.facNum[3] = this.fac.get(3).length;
+        this.facNum[4] = this.fac.get(4).length;
+        this.facNum[5] = this.fac.get(5).length;
 
         this.listHandles = new int[6];
         this.listHandles[0] = gl.glGenLists(1);
@@ -242,37 +229,6 @@ gl.glEnable(GL.GL_TEXTURE_2D);
             this.gl.glEnd();
             this.gl.glEndList();
 
-        }
-    }
-
-    private int genTexture(GL gl) {
-        int[] tmp = new int[1];
-        gl.glGenTextures(1, tmp, 0);
-        return tmp[0];
-    }
-
-    private int genList(GL gl) {
-        return gl.glGenLists(1);
-    }
-
-    private void calcObjCenter() {
-        for (Vector vecIdx : this.vec.get(0)) {
-            this.origin.x += (vecIdx.x / this.vec.get(0).length);
-            this.origin.y += (vecIdx.y / this.vec.get(0).length);
-            this.origin.z += (vecIdx.z / this.vec.get(0).length);
-        }
-        this.origin.x = this.origin.x * -1;
-        this.origin.y = this.origin.y * -1;
-        this.origin.z = this.origin.z * -1;
-    }
-
-    private void makeBoundingSphere() {
-        for (int i = 0; i < this.vec.get(1).length; i++) {
-            Vector[] tmpVec = (Vector[]) this.vec.get(1);
-            float dis = (float) Math.sqrt(Math.pow(tmpVec[i].x, 2) + Math.pow(tmpVec[i].y, 2) + Math.pow(tmpVec[i].z, 2));
-            if (dis > this.bR) {
-                this.bR = dis;
-            }
         }
     }
 

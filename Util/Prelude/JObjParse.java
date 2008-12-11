@@ -25,7 +25,7 @@ public class JObjParse {
     public ArrayList<Face> f = new ArrayList<Face>();
 
     public JObjParse(String file) {
-        readFile(file);
+        readFile("./Objects/" + file);
     }
 
     public Vector[] getVector() {

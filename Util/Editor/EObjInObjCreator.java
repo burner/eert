@@ -21,7 +21,6 @@ import Types.Geometrie.Face;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.Vector;
-import Util.Prelude.ObjParse;
 import java.util.LinkedList;
 import java.util.Random;
 

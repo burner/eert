@@ -47,5 +47,6 @@ public class EInfo {
         renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 80);
         renderer.draw(new String("ObjIns = " + this.engine.objectHandler.objIns.length), 20, glDrawable.getHeight() - 92);
         renderer.endRendering();
+        renderer.setColor(1f, 1f, 1f, 1f);
     }
 }
