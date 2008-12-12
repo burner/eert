@@ -42,7 +42,7 @@ public class Engine implements GLEventListener {
     private EInput input;
     private String szene;
     public EObjectHandler objectHandler;
-    private EInfo eInfo;
+    public EInfo eInfo;
     private EMusicPlayerMP3 music;
     private Calendar now = null;
     private long ms = 0;
@@ -97,9 +97,10 @@ public class Engine implements GLEventListener {
 
         //if true draw Info on screen
         frame();
-        if (this.drawInfo) {
+        if (this.drawInfo) {            
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
             this.eInfo.drawInfo(glDrawable);
+            this.eInfo.drawObj = 0;
         }
         UHPT.lastFrame = System.nanoTime();
     }

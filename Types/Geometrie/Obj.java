@@ -260,6 +260,9 @@ gl.glEnable(GL.GL_TEXTURE_2D);
         //dis = (float) Math.abs(Math.sqrt(Math.pow(this.cam.loc.x - this.origin.x, 2) + Math.pow(this.cam.loc.y - this.origin.y, 2) + Math.pow(this.cam.loc.z - this.origin.z, 2)));
         gl.glPushMatrix();
 
+        this.engine.eInfo.drawObj++;
+
+
         //get ObjIns and adjust the matrix
         ObjIns tmp = this.objIns.get(number);
         gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
