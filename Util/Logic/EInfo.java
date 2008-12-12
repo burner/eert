@@ -30,6 +30,7 @@ public class EInfo {
     public String octimeBuild;
     public String ocNodes;
     public int drawObj;
+    public int drawnNodes;
     private Engine engine;
 
     public EInfo(Engine engine) {
@@ -43,12 +44,16 @@ public class EInfo {
         renderer.draw(new String("ETA = " + new Long(1234567890 - (new Date().getTime() / 1000L)).toString()), 20, glDrawable.getHeight() - 20);
         renderer.draw(new String("FPS = " + this.engine.fps), 20, glDrawable.getHeight() - 32);
         renderer.draw(new String("Faces Rendered = " + this.engine.root.facRender), 20, glDrawable.getHeight() - 44);
-        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 56);
-        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 68);
-        renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 80);
-        renderer.draw(new String("ObjIns = " + this.engine.objectHandler.objIns.length), 20, glDrawable.getHeight() - 92);
-        renderer.draw(new String("Drawn Obj = " + this.drawObj), 20, glDrawable.getHeight() - 104);
+        renderer.draw(new String("Octreedepth = " + this.engine.root.treeDepth), 20, glDrawable.getHeight() - 56);
+        renderer.draw(new String("OctreeBuildTime = " + this.octimeBuild), 20, glDrawable.getHeight() - 68);
+        renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 80);
+        renderer.draw(new String("Drawn leaves = " + this.drawnNodes), 20, glDrawable.getHeight() - 92);
+        renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 104);
+        renderer.draw(new String("ObjIns = " + this.engine.objectHandler.objIns.length), 20, glDrawable.getHeight() - 116);
+        renderer.draw(new String("Drawn Obj = " + this.drawObj), 20, glDrawable.getHeight() - 128);
         renderer.endRendering();
         renderer.setColor(1f, 1f, 1f, 1f);
+        this.drawnNodes = 0;
+        this.drawObj = 0;
     }
 }

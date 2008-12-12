@@ -59,7 +59,7 @@ public class Engine implements GLEventListener {
     public void init(GLAutoDrawable glDrawable) {
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
-        this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
+        this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
@@ -86,7 +86,7 @@ public class Engine implements GLEventListener {
         gl.glLoadIdentity();
         gl.glEnable(GL.GL_TEXTURE_2D);
         long ocTimeTest = System.currentTimeMillis();
-        this.root = new EOcMaster(this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
+        this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         long ocTimeTestA = System.currentTimeMillis();
 
         cam.translateAccordingToCameraPosition(gl);
@@ -100,7 +100,6 @@ public class Engine implements GLEventListener {
         if (this.drawInfo) {            
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
             this.eInfo.drawInfo(glDrawable);
-            this.eInfo.drawObj = 0;
         }
         UHPT.lastFrame = System.nanoTime();
     }

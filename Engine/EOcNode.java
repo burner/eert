@@ -53,7 +53,7 @@ public class EOcNode {
         
         
         //Octree Depth
-        if (this.depth < 4) {
+        if (this.depth < this.root.treeDepth) {
             this.childs = makeChilds(xSizeH, ySizeH, zSizeH);
         }
         
@@ -64,12 +64,13 @@ public class EOcNode {
         System.out.println("Depth = " + depth + " x = " + this.xSize / 2 + " y = " + this.ySize / 2 + " z = " + this.zSize / 2);
     }
 
-    public void draw(GL gl) {
+    public void draw(GL gl) {        
         if (this.childs == null) {
             float dis;
             if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
                 return;
             } else {
+                this.root.engine.eInfo.drawnNodes++;
                 for (ObjIns obIns : this.objs) {
                     if (!this.root.drawn[obIns.objInsNumber]) {
                         dis = (float) Math.sqrt(Math.pow(this.root.cam.loc.x - obIns.origin.x, 2) + Math.pow(this.root.cam.loc.y - obIns.origin.y, 2) + Math.pow(this.root.cam.loc.z - obIns.origin.z, 2));
@@ -83,6 +84,7 @@ public class EOcNode {
             }
         } else {
             //drawBox(gl);
+            
             for (EOcNode child : this.childs) {
                 child.draw(gl);
             }

@@ -38,8 +38,12 @@ public class EOcMaster {
     private GL gl;
     public int facRender;
     public Camera cam;
+    public Engine engine;
+    public int treeDepth;
 
-    public EOcMaster(ObjIns[] allObj, Obj[] realObj, GL gl, Camera cam) {
+    public EOcMaster(Engine engine, ObjIns[] allObj, Obj[] realObj, GL gl, Camera cam) {
+        this.treeDepth = 4;
+        this.engine = engine;
         this.cam = cam;
         this.drawn = new boolean[allObj.length];
         this.realObjs = realObj;
