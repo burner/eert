@@ -19,17 +19,17 @@ import java.util.ArrayList;
  */
 public class JObjParse {
 
-    public ArrayList<Vector> v = new ArrayList<Vector>();
+    public ArrayList<Vector> vectors = new ArrayList<Vector>();
     public ArrayList<Vector> vn = new ArrayList<Vector>();
     public ArrayList<TexCoor> vt = new ArrayList<TexCoor>();
-    public ArrayList<Face> f = new ArrayList<Face>();
+    public ArrayList<Face> faces = new ArrayList<Face>();
 
     public JObjParse(String file) {
         readFile("./Objects/" + file);
     }
 
     public Vector[] getVector() {
-        Vector[] vector = this.v.toArray(new Vector[this.v.size()]);
+        Vector[] vector = this.vectors.toArray(new Vector[this.vectors.size()]);
         return vector;
     }
 
@@ -44,10 +44,26 @@ public class JObjParse {
     }
 
     public Face[] getFace() {
-        Face[] vector = this.f.toArray(new Face[this.f.size()]);
+        Face[] vector = this.faces.toArray(new Face[this.faces.size()]);
         return vector;
     }
 
+    private void makeFriends() {
+        //this one is expensive
+        for(Face faceToTest : this.faces) {
+            for(Face faceForTest : this.faces) {                
+                if(faceToTest.v1 == faceForTest.v1 && faceToTest.v2 == faceForTest.v2) {
+                    faceToTest.fr1 = faceForTest;
+                }
+                if(faceToTest.v2 == faceForTest.v2 && faceToTest.v3 == faceForTest.v3) {
+                    faceToTest.fr2 = faceForTest;
+                }
+                if(faceToTest.v3 == faceForTest.v3 && faceToTest.v1 == faceForTest.v1) {
+                    faceToTest.fr3 = faceForTest;
+                }
+            }
+        }
+    }
 
     void readFile(String file) {
         System.out.println(file);
@@ -94,13 +110,6 @@ public class JObjParse {
                 }
                 line = bufferedReader2.readLine();
             }
-
-
-
-
-
-
-
             bufferedReader.close();
         } catch (Exception e) {
             System.out.println("e: " + e.getMessage());
@@ -130,7 +139,7 @@ public class JObjParse {
         float tmpY = (new Double(new String(s[1]))).floatValue();
         float tmpZ = (new Double(new String(s[2]))).floatValue();
         Vector tmpVec = new Vector(tmpX, tmpY, tmpZ);
-        this.v.add(this.v.size(), tmpVec);
+        this.vectors.add(this.vectors.size(), tmpVec);
 
     }
 
@@ -227,9 +236,7 @@ public class JObjParse {
         }
 
 
-        Face tmpFace = new Face(this.v.get(index0), this.v.get(index3), this.v.get(index6), this.vn.get(index2), this.vn.get(index5), this.vn.get(index8), this.vt.get(index1), this.vt.get(index4), this.vt.get(index7));
-        this.f.add(tmpFace);
-
-
+        Face tmpFace = new Face(this.vectors.get(index0), this.vectors.get(index3), this.vectors.get(index6), this.vn.get(index2), this.vn.get(index5), this.vn.get(index8), this.vt.get(index1), this.vt.get(index4), this.vt.get(index7));
+        this.faces.add(tmpFace);
     }
 }

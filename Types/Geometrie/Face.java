@@ -22,6 +22,7 @@ public class Face {
     public Vector v1,  v2,  v3;
     public Vector vn1,  vn2,  vn3;
     public TexCoor vt1,  vt2,  vt3;
+    public Face fr1, fr2, fr3;      //friend1 is v1 & v2 and so on
 
     public Face(Vector v1, Vector v2, Vector v3, Vector vn1, Vector vn2, Vector vn3, TexCoor vt1, TexCoor vt2, TexCoor vt3) {
         this.v1 = v1;
