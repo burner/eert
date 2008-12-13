@@ -50,8 +50,10 @@ public class JObjParse {
 
     private void makeFriends() {
         //this one is expensive
-        for(Face faceToTest : this.faces) {
-            for(Face faceForTest : this.faces) {                
+        for(int i = 0; i < this.faces.size(); i++) {
+            for(int j = i+1; j < this.faces.size(); j++) {                
+		Face faceToTest = this.faces.get(i);
+		Face faceForTest = this.faces.get(j);
                 if(faceToTest.v1 == faceForTest.v1 && faceToTest.v2 == faceForTest.v2) {
                     faceToTest.fr1 = faceForTest;
                 }
