@@ -21,6 +21,7 @@ public class Face {
 
     public Vector v1,  v2,  v3;
     public Vector vn1,  vn2,  vn3;
+    public Vector faceNormal;
     public TexCoor vt1,  vt2,  vt3;
     public Face fr1, fr2, fr3;      //friend1 is v1 & v2 and so on
 

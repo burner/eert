@@ -81,6 +81,8 @@ public class Obj {
             this.fac.add(parse.getFace());
         }
 
+        makeFaceNormals();
+
         this.facNum[0] = this.fac.get(0).length;
         this.facNum[1] = this.fac.get(1).length;
         this.facNum[2] = this.fac.get(2).length;
@@ -151,7 +153,7 @@ public class Obj {
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage3.getWidth(), this.texImage3.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage3.getBuffer());
 
-        
+
         this.texImage4 = new ETexture(this.textures[4]);
 
         gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[4]);
@@ -177,10 +179,10 @@ public class Obj {
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage5.getWidth(), this.texImage5.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage5.getBuffer());
 
-gl.glEnable(GL.GL_TEXTURE_2D);
+        gl.glEnable(GL.GL_TEXTURE_2D);
 
         for (int j = 0; j < this.fac.size(); j++) {
-           
+
 
             gl.glNewList(this.listHandles[j], GL.GL_COMPILE);
             this.gl.glBegin(GL.GL_TRIANGLES);
@@ -296,6 +298,24 @@ gl.glEnable(GL.GL_TEXTURE_2D);
             this.facesRendered += this.facNum[5];
         }
         gl.glPopMatrix();
+    }
+
+    private void makeFaceNormals() {
+        Face face;
+        for (int i = 0; i < 6; i++) {
+            int facCount = this.fac.get(i).length;
+            for (int j = 0; j < facCount; j++) {
+                face = this.fac.get(j)[i];
+                //Crossprodukt
+                face.faceNormal = new Vector(face.v2.y*face.v3.z - face.v2.z*face.v3.y,
+                                             face.v2.z*face.v3.x - face.v2.x*face.v3.z,
+                                             face.v1.x*face.v3.y - face.v2.y*face.v2.x);
+                //Normalize to later use acos
+                //to get angle between face and lightvec
+                //angle = acos(v1 dotProduct v2)
+                face.faceNormal.normalize();
+            }
+        }
     }
 }
 
