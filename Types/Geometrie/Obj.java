@@ -305,7 +305,7 @@ public class Obj {
         for (int i = 0; i < 6; i++) {
             int facCount = this.fac.get(i).length;
             for (int j = 0; j < facCount; j++) {
-                face = this.fac.get(j)[i];
+                face = this.fac.get(i)[j];
                 //Crossprodukt
                 face.faceNormal = new Vector(face.v2.y*face.v3.z - face.v2.z*face.v3.y,
                                              face.v2.z*face.v3.x - face.v2.x*face.v3.z,

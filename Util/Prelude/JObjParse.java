@@ -37,6 +37,7 @@ public class JObjParse {
 
     public JObjParse(String file) {
         readFile("./Objects/" + file);
+        makeFriends();
     }
 
     public Vector[] getVector() {
