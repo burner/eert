@@ -366,7 +366,6 @@ public class Obj {
         }
 
         this.bR = dis;
-
     }
 }
 

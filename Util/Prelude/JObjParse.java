@@ -34,10 +34,14 @@ public class JObjParse {
     public ArrayList<Vector> vn = new ArrayList<Vector>();
     public ArrayList<TexCoor> vt = new ArrayList<TexCoor>();
     public ArrayList<Face> faces = new ArrayList<Face>();
+    private Vector middle;
+    public float boudingRadius;
 
     public JObjParse(String file) {
         readFile("./Objects/" + file);
         makeFriends();
+        makeMiddle();
+        makeBoundingSphere();
     }
 
     public Vector[] getVector() {
@@ -252,5 +256,30 @@ public class JObjParse {
 
         Face tmpFace = new Face(this.vectors.get(index0), this.vectors.get(index3), this.vectors.get(index6), this.vn.get(index2), this.vn.get(index5), this.vn.get(index8), this.vt.get(index1), this.vt.get(index4), this.vt.get(index7));
         this.faces.add(tmpFace);
+    }
+
+    private void makeMiddle() {
+        Vector middleM = new Vector();
+        int number = this.vectors.size();
+        for(Vector forMiddle : this.vectors) {
+            middleM.x += forMiddle.x / number;
+            middleM.y += forMiddle.y / number;
+            middleM.z += forMiddle.z / number;
+        }
+        this.middle = middleM;
+    }
+
+    private void makeBoundingSphere() {
+        float dis = 0f;
+        for(Vector toTest : this.vectors) {
+            float newDis = (float)Math.sqrt(Math.pow(toTest.x - this.middle.x, 2) +
+                                     Math.pow(toTest.y - this.middle.y, 2) +
+                                     Math.pow(toTest.z - this.middle.z, 2));
+
+            if(newDis > dis)
+                dis = newDis;
+        }
+
+        this.boudingRadius = dis;
     }
 }

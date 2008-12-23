@@ -36,6 +36,7 @@ public class EObjInObjCreator {
     private Vector[] vertex;
     private float boundingMax;
     private float boundingMin;
+    private float objInRadius;
     private int forObj;
     private Obj objParent;
 
@@ -50,6 +51,7 @@ public class EObjInObjCreator {
     public EObjInObjCreator(String hullObj, String inObj, String outFile, int number, int forObj) {
         JObjParse obParse = new JObjParse(hullObj);
         JObjParse inObjParse = new JObjParse(inObj);
+        this.objInRadius = inObjParse.boudingRadius;
         this.faces = obParse.getFace();
         this.forObj = forObj;
         toWrite = new String[number];
