@@ -86,13 +86,6 @@ public class Vector {
                 this.x * vector.y - this.y * vector.x);
     }
 
-    public Vector getCrossProdR(Vector vector1, Vector vector2) {
-        return new Vector(
-                vector1.y * vector2.z - vector1.z * vector2.y,
-                vector1.z * vector2.x - vector1.x * vector2.z,
-                vector1.x * vector2.y - vector1.y * vector2.x);
-    }
-
     @Override
     public String toString() {
         return new String(this.x + " " + this.y + " " + this.z);

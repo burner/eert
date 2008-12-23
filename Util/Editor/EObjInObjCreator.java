@@ -18,9 +18,11 @@
 package Util.Editor;
 
 import Types.Geometrie.Face;
+import Types.Geometrie.FaceForTest;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.Vector;
+import Util.Prelude.JObjParse;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -29,22 +31,35 @@ public class EObjInObjCreator {
     private LinkedList<ObjIns> createdObjs;
     private String[] toWrite;
     private Face[] faces;
+    private FaceForTest[] facesForTest;
     private Vector origin;
     private Vector[] vertex;
     private float boundingMax;
     private float boundingMin;
     private int forObj;
     private Obj objParent;
-/*
-    public EObjInObjCreator(String hullObj, String outFile, int number, int forObj) {
-        ObjParse obParse = new ObjParse(hullObj);
+
+    public static void main(String[] args) {
+        int number = new Integer(args[0]).intValue();
+        String outFile = args[1];
+        String hullObj = args[2];
+        String inObj = args[3];
+
+    }
+
+    public EObjInObjCreator(String hullObj, String inObj, String outFile, int number, int forObj) {
+        JObjParse obParse = new JObjParse(hullObj);
+        JObjParse inObjParse = new JObjParse(inObj);
+        this.faces = obParse.getFace();
         this.forObj = forObj;
-        toWrite = new String[number + 1];
+        toWrite = new String[number];
         this.origin = makeMiddle();
         this.boundingMax = makeBoundingSphere();
         this.boundingMin = makeBoundingSphereMin();
+        makeFacesForTest();
 
         createObjIns(number);
+        write();
     }
 
     private Vector makeMiddle() {
@@ -55,6 +70,13 @@ public class EObjInObjCreator {
             origin.z += (vecIdx.z / this.vertex.length);
         }
         return originRet;
+    }
+
+    private void makeFacesForTest() {
+        this.facesForTest = new FaceForTest[this.faces.length];
+        for(int i = 0; i < this.faces.length; i++) {
+            this.facesForTest[i] = new FaceForTest(this.faces[i]);
+        }
     }
 
     private float makeBoundingSphere() {
@@ -131,7 +153,7 @@ public class EObjInObjCreator {
         if (checkObjInsInside(toCheck)) {
             return true;
         }
-        if (checkObjInsObj(toCheck)) {
+        if (checkSphereTri(toCheck)) {
             if (checkObjInsObjIns(toCheck)) {
                 return true;
             } else {
@@ -165,15 +187,6 @@ public class EObjInObjCreator {
         }
     }
 
-    private boolean checkObjInsObj(ObjIns toCheck) {
-        for (Face face : this.faces) {
-            /*if (!checkSphereTri(toCheck, face)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private boolean checkObjInsObjIns(ObjIns toCheck) {
         for (ObjIns forCheck : this.createdObjs) {
             float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - forCheck.origin.x, 2) +
@@ -187,71 +200,20 @@ public class EObjInObjCreator {
         return true;
     }
 
-    private boolean checkSphereTri(ObjIns toCheck, Face face) {
-        Vector place = this.vertex[vec1];
-        //This should make a correct normal standing on the three vector's 
-        //faces outward
-        Vector normal = new Vector().getCrossProdR(this.vertex[vec1], this.vertex[vec2]);
-        normal.getCrossProd(this.vertex[vec3]);
-        normal.normalize();
+    private boolean checkSphereTri(ObjIns toCheck) {
+        float dis = 0f;
+        for(FaceForTest face : this.facesForTest) {
+            dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - face.middle.x, 2) +
+                    Math.pow(toCheck.origin.y - face.middle.y, 2) +
+                    Math.pow(toCheck.origin.z - face.middle.z, 2));
 
-        //get max vector to plane direction
-        //from ObjIns origin
-        normal.mult(toCheck.boundSph);
-        Vector maxVec = new Vector(toCheck.origin.addR(normal));
-
-        //is should give us the distance to the plane
-        float div = (float) Math.sqrt(Math.pow(normal.x, 2) + Math.pow(normal.y, 2) + Math.pow(normal.z, 2));
-        Vector pointPlace = new Vector(this.origin.x - place.x,
-                this.origin.y - place.y,
-                this.origin.z - place.z);
-        float dis = pointPlace.x * normal.x + pointPlace.y * normal.y + pointPlace.z * normal.z;
-        dis /= div;
-
-        //now check if dis - boundingSphere of objToCheck is greater than zero
-        if (dis - toCheck.boundSph < 0.0f || dis < 0.0f) {
-            return false;
-        }
-
-        //point divided by normal must be positv
-        if (dis < 0.0f) {
-            return false;
-        }
-
-        Vector point1 = this.vertex[vec1];
-        Vector point2 = this.vertex[vec2];
-        Vector point3 = this.vertex[vec3];
-
-        //check if point is outside triangle
-
-        Vector middle = new Vector((point1.x + point2.x + point3.x) / 3,
-                (point1.y + point2.y + point3.y) / 3,
-                (point1.z + point2.z + point3.z) / 3);
-
-        float triangleRadius = 0.0f;
-        float tmp;
-        for (int i = 0; i < 3; i++) {
-            tmp = (float) Math.sqrt(Math.pow(point1.x - middle.x, 2) +
-                    Math.pow(point1.y - middle.y, 2) +
-                    Math.pow(point1.z - middle.z, 2));
-            if (tmp > triangleRadius) {
-                triangleRadius = tmp;
+            if (dis - toCheck.boundSph - face.radius <= 0.0f) {
+                return false;
             }
         }
-
-        //middle of triangle to middle of objIns
-        //if negativ return false;
-        float disMiddle = (float) Math.sqrt(Math.pow(toCheck.origin.x - middle.x, 2) +
-                Math.pow(toCheck.origin.y - middle.y, 2) +
-                Math.pow(toCheck.origin.z - middle.z, 2));
-
-        if(disMiddle - triangleRadius < 0.0f) {
-            return false;
-        }
-
-        //All checks passed
         return true;
     }
+
 
     private void write() {
         int size = this.createdObjs.size();
@@ -259,6 +221,5 @@ public class EObjInObjCreator {
             this.toWrite[i] = this.createdObjs.poll().toString();
         }
 
-    }*/
-
+    }
 }

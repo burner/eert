@@ -79,7 +79,7 @@ public class Obj {
         this.cam = cam;
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.number = number;
-        GLU glu = new GLU();
+        
         for (int i = 0; i < file.length; i++) {
             JObjParse parse = new JObjParse(file[i]);
             this.vec.add(parse.getVector());
@@ -87,7 +87,7 @@ public class Obj {
             this.tex.add(parse.getTex());
             this.fac.add(parse.getFace());
         }
-
+        makeBoundingSphere();
         makeFaceNormals();
 
         this.facNum[0] = this.fac.get(0).length;
@@ -351,6 +351,22 @@ public class Obj {
                 this.edges.add(new Edge(toTest.v3, toTest.v1));
             }
         }
+    }
+
+    private void makeBoundingSphere() {
+        float dis = 0f;
+        Vector[] points = this.vec.get(0);
+        for(Vector toTest : points) {
+            float newDis = (float)Math.sqrt(Math.pow(toTest.x - this.origin.x, 2) +
+                                     Math.pow(toTest.y - this.origin.y, 2) +
+                                     Math.pow(toTest.z - this.origin.z, 2));
+
+            if(newDis > dis)
+                dis = newDis;
+        }
+
+        this.bR = dis;
+
     }
 }
 
