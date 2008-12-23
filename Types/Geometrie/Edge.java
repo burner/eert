@@ -21,6 +21,11 @@ public class Edge {
     public Vector dirX1;
     public Vector dirX2;
 
+    public Edge(Vector x1, Vector x2) {
+        this.x1 = x1;
+        this.x2 = x2;
+    }
+
     public Edge(Vector x1, Vector x2, Vector dirX1, Vector dirX2) {
         this.x1 = x1;
         this.x2 = x2;

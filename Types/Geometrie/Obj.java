@@ -24,6 +24,7 @@ import java.io.IOException;
 import javax.media.opengl.GL;
 
 import Util.*;
+import Util.Geometrie.VectorUtil;
 import Util.Prelude.JObjParse;
 import java.util.LinkedList;
 import javax.media.opengl.glu.GLU;
@@ -58,6 +59,11 @@ public class Obj {
     ETexture texImage4;
     ETexture texImage5;
 
+
+    //Shadow stuff below
+    public LinkedList<Face> cap;
+    public LinkedList<Edge> edges;
+
     public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
         this.image = new ETexture[6];
         this.textures = new String[6];
@@ -67,6 +73,7 @@ public class Obj {
         this.nor = new LinkedList<Vector[]>();
         this.tex = new LinkedList<TexCoor[]>();
         this.fac = new LinkedList<Face[]>();
+        this.cap = new LinkedList<Face>();
         this.objIns = new LinkedList<ObjIns>();
         this.gl = gl;
         this.cam = cam;
@@ -314,6 +321,34 @@ public class Obj {
                 //to get angle between face and lightvec
                 //angle = acos(v1 dotProduct v2)
                 face.faceNormal.normalize();
+            }
+        }
+    }
+
+    public void findFacesFacingLight(Vector vec, int res) {
+        Face[] forTest = this.fac.get(res);
+        for(Face toTest : forTest) {
+            if(90>VectorUtil.angle(toTest, vec)) {
+                this.cap.add(toTest);
+                toTest.lit = true;
+            } else {
+                toTest.lit = false;
+            }
+        }
+    }
+
+    public void makeSilhouette(int res) {
+         /* if a friend is not lit add the Edge to the
+          * list to be extruded*/
+        for(Face toTest : this.cap) {
+            if(!toTest.fr1.lit) {
+                this.edges.add(new Edge(toTest.v1, toTest.v2));
+            }
+            if(!toTest.fr2.lit) {
+                this.edges.add(new Edge(toTest.v2, toTest.v3));
+            }
+            if(!toTest.fr3.lit) {
+                this.edges.add(new Edge(toTest.v3, toTest.v1));
             }
         }
     }
