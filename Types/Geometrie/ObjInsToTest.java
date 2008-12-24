@@ -20,19 +20,19 @@ package Types.Geometrie;
 import Engine.Engine;
 import Util.Logic.UHPT;
 
-public class ObjIns {
+public class ObjInsToTest {
 
     public Obj parent;
     public int objNumber;
-    public Vector[] origin;
+    public Vector origin;
     public Vector rotation;
-    public Vector[] conMove;
     public Vector conRot;
     public float boundSph;
     public int objInsNumber;
     public Engine engine;
+    private Vector conMove;
 
-    public ObjIns(Obj parent, Vector[] origin, Vector rotation, int objInsNumber, int number) {
+    public ObjInsToTest(Obj parent, Vector origin, Vector rotation, int objInsNumber, int number) {
         this.engine = parent.engine;
         this.parent = parent;
         this.boundSph = this.parent.bR;
@@ -44,7 +44,7 @@ public class ObjIns {
         this.objInsNumber = objInsNumber - 1;
     }
 
-    public ObjIns(Obj parent, Vector[] origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
+    public ObjInsToTest(Obj parent, Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
         this.parent = parent;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
@@ -56,35 +56,17 @@ public class ObjIns {
     }
 
     //Place the instance at the right place according to the center of the ParentObj
-    private void place(Vector[] origin) {
-        this.origin = new Vector[origin.length];
-        for (int i = 0; i < origin.length; i++) {
-            this.origin[i] = new Vector(this.parent.origin.x + origin[i].x,
-                    this.parent.origin.y + origin[i].y,
-                    this.parent.origin.z + origin[i].z);
-        }
-    }
+    private void place(Vector origin) {
+        this.origin = new Vector(this.parent.origin.x + origin.x,
+                this.parent.origin.y + origin.y,
+                this.parent.origin.z + origin.z);
 
-    public void conMove(int number) {
-        if (this.conMove != null) {
-            if (number <= this.conMove.length) {
-                this.origin[number].x += this.conMove[number].x * UHPT.getETime() / 1000000000;
-                this.origin[number].y += this.conMove[number].y * UHPT.getETime() / 1000000000;
-                this.origin[number].z += this.conMove[number].z * UHPT.getETime() / 1000000000;
-            }
-        }
     }
 
     public void conRotate() {
         this.rotation.x += this.conRot.x * UHPT.getETime() / 1000000000 % 360;
         this.rotation.y += this.conRot.y * UHPT.getETime() / 1000000000 % 360;
         this.rotation.z += this.conRot.z * UHPT.getETime() / 1000000000 % 360;
-    }
-
-    public void setPos(float x, float y, float z, int i) {
-        this.origin[i].x = x;
-        this.origin[i].y = y;
-        this.origin[i].z = z;
     }
 
     public void setRot(float xR, float yR, float zR) {
@@ -95,15 +77,5 @@ public class ObjIns {
 
     public void setConRot(Vector newRot) {
         this.conRot = newRot;
-    }
-
-    @Override
-    public String toString() {
-        StringBuffer retString = new StringBuffer("oi " + this.objInsNumber + " " + this.rotation.x + " " + this.rotation.y + " " + this.rotation.z + " ");
-        for(int i  = 0; i < this.origin.length; i++) {
-            retString.append(this.origin[i].x + " " + this.origin[i].y + " " + this.origin[i].z + " ");
-            retString.append(this.conMove[i].x + " " + this.conMove[i].y + " " + this.conMove[i].z + " ");
-        }
-        return retString.toString();
     }
 }

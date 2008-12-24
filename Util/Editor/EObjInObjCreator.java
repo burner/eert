@@ -21,13 +21,14 @@ import Types.Geometrie.Face;
 import Types.Geometrie.FaceForTest;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
+import Types.Geometrie.ObjInsToTest;
 import Types.Geometrie.Vector;
 import Util.Prelude.JObjParse;
 import java.util.LinkedList;
 import java.util.Random;
 
 public class EObjInObjCreator {
-
+    private LinkedList<ObjInsToTest> tmpObjInsToTest;
     private LinkedList<ObjIns> createdObjs;
     private String[] toWrite;
     private Face[][] faces;
@@ -103,8 +104,8 @@ public class EObjInObjCreator {
         for (int i = 0; i < this.vertex.length; i++) {
             for (int j = 0; j < this.vertex[i].length; j++) {
                 float dis = (float) Math.sqrt(Math.pow(this.vertex[i][j].x - this.origin[j].x, 2) +
-                                              Math.pow(this.vertex[i][j].y - this.origin[j].y, 2) +
-                                              Math.pow(this.vertex[i][j].z - this.origin[j].z, 2));
+                        Math.pow(this.vertex[i][j].y - this.origin[j].y, 2) +
+                        Math.pow(this.vertex[i][j].z - this.origin[j].z, 2));
                 if (dis > this.boundingMax[i]) {
                     this.boundingMax[i] = dis;
                 }
@@ -116,8 +117,8 @@ public class EObjInObjCreator {
         for (int i = 0; i < this.vertex.length; i++) {
             for (int j = 0; j < this.vertex[i].length; j++) {
                 float dis = (float) Math.sqrt(Math.pow(this.vertex[i][j].x - this.origin[j].x, 2) +
-                                              Math.pow(this.vertex[i][j].y - this.origin[j].y, 2) +
-                                              Math.pow(this.vertex[i][j].z - this.origin[j].z, 2));
+                        Math.pow(this.vertex[i][j].y - this.origin[j].y, 2) +
+                        Math.pow(this.vertex[i][j].z - this.origin[j].z, 2));
                 if (dis < this.boundingMin[i]) {
                     this.boundingMin[i] = dis;
                 }
@@ -127,17 +128,22 @@ public class EObjInObjCreator {
     }
 
     private void createObjIns(int number) {
-        for (int i = 0; i < number;) {
-            Vector tmpPos = createPos();
-            Vector tmpRot = createRot();
-            Vector tmpConRot = createConRot();
-            ObjIns tmpObjIns = new ObjIns(this.objParent, tmpPos, tmpRot, tmpConRot, i, 0);
-            if (checkObjIns(tmpObjIns)) {
-                this.createdObjs.add(tmpObjIns);
-                i++;
-            } else {
-                continue;
+        this.createdObjs = new LinkedList<ObjIns>();
+        for (int i = 0; i < this.boundingMax.length; i++) {
+            this.tmpObjInsToTest = new LinkedList<ObjInsToTest>();
+            for (int j = 0; j < number;) {
+                Vector tmpPos = createPos(i);
+                Vector tmpRot = createRot();
+                Vector tmpConRot = createConRot();
+                ObjInsToTest tmpObjIns = new ObjInsToTest(this.objParent, tmpPos, tmpRot, tmpConRot, j, 0);
+                if (checkObjIns(tmpObjIns, i)) {
+                    this.tmpObjInsToTest.add(tmpObjIns);
+                    j++;
+                } else {
+                    continue;
+                }
             }
+            
         }
     }
 
@@ -168,7 +174,7 @@ public class EObjInObjCreator {
         return retVec;
     }
 
-    private boolean checkObjIns(ObjIns toCheck, int obj) {
+    private boolean checkObjIns(ObjInsToTest toCheck, int obj) {
         //do all tests
         if (checkObjInsOutside(toCheck, obj)) {
             return false;
@@ -186,7 +192,7 @@ public class EObjInObjCreator {
         return true;
     }
 
-    private boolean checkObjInsOutside(ObjIns toCheck, int obj) {
+    private boolean checkObjInsOutside(ObjInsToTest toCheck, int obj) {
         float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - this.origin[obj].x, 2) +
                 Math.pow(toCheck.origin.y - this.origin[obj].y, 2) +
                 Math.pow(toCheck.origin.z - this.origin[obj].z, 2));
@@ -198,7 +204,7 @@ public class EObjInObjCreator {
         }
     }
 
-    private boolean checkObjInsInside(ObjIns toCheck, int obj) {
+    private boolean checkObjInsInside(ObjInsToTest toCheck, int obj) {
         float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - this.origin[obj].x, 2) +
                 Math.pow(toCheck.origin.y - this.origin[obj].y, 2) +
                 Math.pow(toCheck.origin.z - this.origin[obj].z, 2));
@@ -210,8 +216,8 @@ public class EObjInObjCreator {
         }
     }
 
-    private boolean checkObjInsObjIns(ObjIns toCheck) {
-        for (ObjIns forCheck : this.createdObjs) {
+    private boolean checkObjInsObjIns(ObjInsToTest toCheck, int pos) {
+        for (ObjInsToTest forCheck : this.tmpObjInsToTest) {
             float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - forCheck.origin.x, 2) +
                     Math.pow(toCheck.origin.y - forCheck.origin.y, 2) +
                     Math.pow(toCheck.origin.z - forCheck.origin.z, 2));
@@ -223,7 +229,7 @@ public class EObjInObjCreator {
         return true;
     }
 
-    private boolean checkSphereTri(ObjIns toCheck, int obj) {
+    private boolean checkSphereTri(ObjInsToTest toCheck, int obj) {
         float dis = 0f;
         for (FaceForTest face : this.facesForTest[obj]) {
             dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - face.middle.x, 2) +

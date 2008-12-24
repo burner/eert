@@ -47,7 +47,7 @@ public class Obj {
     private GL gl;
     public int[] facNum;
     public int facesRendered;
-    private Engine engine;
+    public Engine engine;
     public String[] textures;
     private ETexture image[];
     private int[] listHandles;
@@ -274,7 +274,7 @@ public class Obj {
 
         //get ObjIns and adjust the matrix
         ObjIns tmp = this.objIns.get(number);
-        gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
+        gl.glTranslatef(tmp.pos.x, tmp.pos.y, tmp.pos.z);
         gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);

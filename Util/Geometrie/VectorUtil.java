@@ -69,4 +69,11 @@ public class VectorUtil {
                           v1.y + v2.y,
                           v1.z + v2.z);
     }
+
+     public Vector CrossProduct(Vector vector1, Vector vector2) {
+        return new Vector(
+                vector1.y * vector2.z - vector1.z * vector2.y,
+                vector1.z * vector2.x - vector1.x * vector2.z,
+                vector1.x * vector2.y - vector1.y * vector2.x);
+    }
 }
