@@ -19,12 +19,14 @@ package Types.Geometrie;
 
 import Engine.Engine;
 import Util.Logic.UHPT;
+import java.util.LinkedList;
 
 public class ObjInsToTest {
 
     public Obj parent;
     public int objNumber;
     public Vector origin;
+    public LinkedList<Vector> moveTo;
     public Vector rotation;
     public Vector conRot;
     public float boundSph;
@@ -42,6 +44,7 @@ public class ObjInsToTest {
         place(origin);
         this.objNumber = number;
         this.objInsNumber = objInsNumber - 1;
+        this.moveTo = new LinkedList<Vector>();
     }
 
     public ObjInsToTest(Obj parent, Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
@@ -53,6 +56,7 @@ public class ObjInsToTest {
         place(origin);
         this.objNumber = number;
         this.objInsNumber = objInsNumber - 1;
+        this.moveTo = new LinkedList<Vector>();
     }
 
     //Place the instance at the right place according to the center of the ParentObj

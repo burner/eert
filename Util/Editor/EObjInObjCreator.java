@@ -22,6 +22,7 @@ import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.ObjInsToTest;
 import Types.Geometrie.Vector;
+import Util.Geometrie.VectorUtil;
 import Util.Prelude.JObjParse;
 import java.util.LinkedList;
 import java.util.Random;
@@ -73,6 +74,15 @@ public class EObjInObjCreator {
 
     }
 
+    private void makeConMovements() {
+        for(ObjIns toMake : this.createdObjs) {
+            toMake.conMove[0] = VectorUtil.sub(toMake.places[0], toMake.origin);
+            for(int i = 1; i < this.numberOfTime; i++) {
+                toMake.conMove[0] = VectorUtil.sub(toMake.places[i], toMake.places[i-1]);
+            }
+        }
+    }
+
     private void makeInfosNeeded() {
         for (EHullObject toTest : EObjInObjCreator.hull) {
             if (toTest.timeIdx > this.numberOfTime) {
@@ -88,8 +98,8 @@ public class EObjInObjCreator {
                     float tmpDis = (float) Math.sqrt(Math.pow(hulls.origin.x, 2) +
                             Math.pow(hulls.origin.y, 2) +
                             Math.pow(hulls.origin.z, 2));
-                    if(this.boundingMax[i] < tmpDis) {
-                       this.boundingMax[i] = tmpDis;
+                    if (this.boundingMax[i] < tmpDis) {
+                        this.boundingMax[i] = tmpDis;
                     }
                 }
             }
@@ -101,6 +111,7 @@ public class EObjInObjCreator {
         makeBoundingSphereAroundHullSpheres();
 
         createObjIns(number);
+        makeConMovements();
         write();
     }
 
@@ -124,8 +135,30 @@ public class EObjInObjCreator {
                     continue;
                 }
             }
-            //Save all the ObjectInstancePosition 
+            //Save all the ObjectInstancePosition
 
+            //if ObjIns List doesn't exists
+            if (i == 0) {
+                for (int k = 0; k < this.tmpObjInsToTest.size(); k++) {
+                    //place the first on at origin
+                    this.createdObjs.add(new ObjIns(this.tmpObjInsToTest.get(k).origin,
+                            this.tmpObjInsToTest.get(k).rotation,
+                            this.tmpObjInsToTest.get(k).conRot,
+                            k,
+                            0));
+                }
+            } else {
+                //if the ObjIns List exists
+                //place all new places at objIns.places
+                for(int k = 0; k < this.tmpObjInsToTest.size(); k++) {
+                    if(this.createdObjs.get(k).places == null) {
+                        this.createdObjs.get(k).places = new Vector[this.numberOfTime];
+                        this.createdObjs.get(k).places[i] = new Vector(this.tmpObjInsToTest.get(k).origin);
+                    } else {
+                        this.createdObjs.get(k).places[i] = new Vector(this.tmpObjInsToTest.get(k).origin);
+                    }
+                }
+            }
         }
     }
 

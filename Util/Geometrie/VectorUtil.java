@@ -40,37 +40,37 @@ public class VectorUtil {
 
         //make vector from v1 to faceMiddle
         Vector dir = new Vector(xF - v1.x,
-                                yF - v1.y,
-                                zF - v1.z);
+                yF - v1.y,
+                zF - v1.z);
 
 
         float x = (float) Math.sqrt((f1.faceNormal.x * f1.faceNormal.x) +
-                            (f1.faceNormal.y * f1.faceNormal.y) +
-                            (f1.faceNormal.z * f1.faceNormal.z));
+                (f1.faceNormal.y * f1.faceNormal.y) +
+                (f1.faceNormal.z * f1.faceNormal.z));
 
 
         float dot = (xF * dir.x) + (yF * dir.y) + (zF * dir.z);
 
         float y = (float) Math.sqrt((dir.x * dir.x) +
-                                    (dir.y * dir.y) +
-                                    (dir.z * dir.z));
+                (dir.y * dir.y) +
+                (dir.z * dir.z));
 
-        return (float) Math.acos(dot/(x*y));
+        return (float) Math.acos(dot / (x * y));
     }
 
     public static Vector sub(Vector v1, Vector v2) {
         return new Vector(v1.x - v2.x,
-                          v1.y - v2.y,
-                          v1.z - v2.z);
+                v1.y - v2.y,
+                v1.z - v2.z);
     }
 
-     public static Vector add(Vector v1, Vector v2) {
+    public static Vector add(Vector v1, Vector v2) {
         return new Vector(v1.x + v2.x,
-                          v1.y + v2.y,
-                          v1.z + v2.z);
+                v1.y + v2.y,
+                v1.z + v2.z);
     }
 
-     public Vector CrossProduct(Vector vector1, Vector vector2) {
+    public Vector CrossProduct(Vector vector1, Vector vector2) {
         return new Vector(
                 vector1.y * vector2.z - vector1.z * vector2.y,
                 vector1.z * vector2.x - vector1.x * vector2.z,
