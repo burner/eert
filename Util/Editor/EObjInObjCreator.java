@@ -18,8 +18,6 @@
 package Util.Editor;
 
 import Types.Geometrie.EHullObject;
-import Types.Geometrie.Face;
-import Types.Geometrie.FaceForTest;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.ObjInsToTest;
@@ -29,18 +27,16 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class EObjInObjCreator {
+    //Infos needed for making
+    //all the ObjIns's
+
+    private int numberOfTime;
+    private float[] boundingMax;
+    private static float objInRadius;
     private LinkedList<ObjInsToTest> tmpObjInsToTest;
     private LinkedList<ObjIns> createdObjs;
     private static LinkedList<EHullObject> hull;
     private String[] toWrite;
-    private Face[][] faces;
-    private FaceForTest[][] facesForTest;
-    private Vector[] origin;
-    private Vector[][] vertex;
-    private float[] boundingMax;
-    private float[] boundingMin;
-    private float objInRadius;
-    private int forObj;
     private Obj objParent;
 
     public static void main(String[] args) {
@@ -51,11 +47,11 @@ public class EObjInObjCreator {
         objToPlace.makeBoundingSphere();
 
         //double the radius to make a obj fit
-        float objRadius = objToPlace.boudingRadius * 2;
+        EObjInObjCreator.objInRadius = objToPlace.boudingRadius * 2;
 
         //check if enought arguments are passed to make the
         //tool run
-        if(args.length < 8 && (args.length - 3) % 5 == 0) {
+        if (args.length < 8 && (args.length - 3) % 5 == 0) {
             System.out.println("Error: to few arguments");
             System.exit(0);
         }
@@ -65,95 +61,56 @@ public class EObjInObjCreator {
         for (int i = 3; i < args.length; i += 4) {
             //if -s is read the next for Strings make
             //up the hullobj
-            if(args[i].contentEquals(new String("-s"))) {
-                EObjInObjCreator.hull.add(new EHullObject(new Vector(new Float(args[i+1]).floatValue(),
-                                                         new Float(args[i+2]).floatValue(),
-                                                         new Float(args[i+3]).floatValue()),
-
-                                                         new Float(args[i+4]).floatValue() * objRadius,
-                                                         new Integer(args[i+5]).intValue()));
+            if (args[i].contentEquals(new String("-s"))) {
+                EObjInObjCreator.hull.add(new EHullObject(new Vector(new Float(args[i + 1]).floatValue(),
+                        new Float(args[i + 2]).floatValue(),
+                        new Float(args[i + 3]).floatValue()),
+                        new Float(args[i + 4]).floatValue() * EObjInObjCreator.objInRadius,
+                        new Integer(args[i + 5]).intValue()));
             }
         }
-
+        EObjInObjCreator hereComesIt = new EObjInObjCreator(inObj, outFile, number);
 
     }
 
-    public EObjInObjCreator(String hullObj, String inObj, String outFile, int number, int forObj) {
-        JObjParse inObjParse = new JObjParse(inObj);
-        this.objInRadius = inObjParse.boudingRadius;
-        this.forObj = forObj;
-        toWrite = new String[number];
-        makeMiddle();
-        makeBoundingSphere();
-        makeBoundingSphereMin();
-        makeFacesForTest();
+    private void makeInfosNeeded() {
+        for (EHullObject toTest : EObjInObjCreator.hull) {
+            if (toTest.timeIdx > this.numberOfTime) {
+                this.numberOfTime = toTest.timeIdx;
+            }
+        }
+    }
+
+    private void makeBoundingSphereAroundHullSpheres() {
+        for (int i = 0; i < this.numberOfTime; i++) {
+            for (EHullObject hulls : EObjInObjCreator.hull) {
+                if (hulls.timeIdx == i) {
+                    float tmpDis = (float) Math.sqrt(Math.pow(hulls.origin.x, 2) +
+                            Math.pow(hulls.origin.y, 2) +
+                            Math.pow(hulls.origin.z, 2));
+                    if(this.boundingMax[i] < tmpDis) {
+                       this.boundingMax[i] = tmpDis;
+                    }
+                }
+            }
+        }
+    }
+
+    public EObjInObjCreator(String hullObj, String outFile, int number) {
+        makeInfosNeeded();
+        makeBoundingSphereAroundHullSpheres();
 
         createObjIns(number);
         write();
     }
 
-    private void parseHullObj(String[] hull) {
-        JObjParse toParse;
-        for (int i = 0; i < hull.length; i++) {
-            toParse = new JObjParse(hull[i]);
-            this.vertex[i] = toParse.getVector();
-            this.faces[i] = toParse.getFace();
-        }
-    }
-
-    private void makeMiddle() {
-        this.origin = new Vector[this.vertex.length];
-        Vector forSave;
-        for (int i = 0; i < this.vertex.length; i++) {
-            for (Vector vecIdx : this.vertex[i]) {
-                forSave = new Vector();
-                forSave.x += (vecIdx.x / this.vertex[i].length);
-                forSave.y += (vecIdx.y / this.vertex[i].length);
-                forSave.z += (vecIdx.z / this.vertex[i].length);
-                this.origin[i] = forSave;
-            }
-        }
-    }
-
-    private void makeFacesForTest() {
-        for (int i = 0; i < this.faces.length; i++) {
-            this.facesForTest[i] = new FaceForTest[this.faces.length];
-            for (int j = 0; j < this.faces[i].length; j++) {
-                this.facesForTest[i][j] = new FaceForTest(this.faces[i][j]);
-            }
-        }
-    }
-
-    private void makeBoundingSphere() {
-        for (int i = 0; i < this.vertex.length; i++) {
-            for (int j = 0; j < this.vertex[i].length; j++) {
-                float dis = (float) Math.sqrt(Math.pow(this.vertex[i][j].x - this.origin[j].x, 2) +
-                        Math.pow(this.vertex[i][j].y - this.origin[j].y, 2) +
-                        Math.pow(this.vertex[i][j].z - this.origin[j].z, 2));
-                if (dis > this.boundingMax[i]) {
-                    this.boundingMax[i] = dis;
-                }
-            }
-        }
-    }
-
-    private void makeBoundingSphereMin() {
-        for (int i = 0; i < this.vertex.length; i++) {
-            for (int j = 0; j < this.vertex[i].length; j++) {
-                float dis = (float) Math.sqrt(Math.pow(this.vertex[i][j].x - this.origin[j].x, 2) +
-                        Math.pow(this.vertex[i][j].y - this.origin[j].y, 2) +
-                        Math.pow(this.vertex[i][j].z - this.origin[j].z, 2));
-                if (dis < this.boundingMin[i]) {
-                    this.boundingMin[i] = dis;
-                }
-            }
-        }
-
+    private boolean checkSpheres(ObjInsToTest toCheck, int obj) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void createObjIns(int number) {
         this.createdObjs = new LinkedList<ObjIns>();
-        for (int i = 0; i < this.boundingMax.length; i++) {
+        for (int i = 0; i < this.numberOfTime; i++) {
             this.tmpObjInsToTest = new LinkedList<ObjInsToTest>();
             for (int j = 0; j < number;) {
                 Vector tmpPos = createPos(i);
@@ -167,7 +124,8 @@ public class EObjInObjCreator {
                     continue;
                 }
             }
-            
+            //Save all the ObjectInstancePosition 
+
         }
     }
 
@@ -214,11 +172,11 @@ public class EObjInObjCreator {
     }
 
     private boolean checkObjInsOutside(ObjInsToTest toCheck, int obj) {
-        float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - this.origin[obj].x, 2) +
-                Math.pow(toCheck.origin.y - this.origin[obj].y, 2) +
-                Math.pow(toCheck.origin.z - this.origin[obj].z, 2));
+        float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x, 2) +
+                Math.pow(toCheck.origin.y, 2) +
+                Math.pow(toCheck.origin.z, 2));
 
-        if (dis + toCheck.boundSph >= this.boundingMax[obj]) {
+        if (dis + toCheck.boundSph >= this.boundingMax[obj] && dis - toCheck.boundSph <= -this.boundingMax[obj]) {
             return false;
         } else {
             return true;
@@ -232,20 +190,6 @@ public class EObjInObjCreator {
                     Math.pow(toCheck.origin.z - forCheck.origin.z, 2));
 
             if (dis - toCheck.boundSph - forCheck.boundSph <= 0.0f) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean checkSphere(ObjInsToTest toCheck, int obj) {
-        float dis = 0f;
-        for (FaceForTest face : this.facesForTest[obj]) {
-            dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - face.middle.x, 2) +
-                    Math.pow(toCheck.origin.y - face.middle.y, 2) +
-                    Math.pow(toCheck.origin.z - face.middle.z, 2));
-
-            if (dis - toCheck.boundSph - face.radius <= 0.0f) {
                 return false;
             }
         }
