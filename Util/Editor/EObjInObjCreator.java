@@ -17,6 +17,7 @@
  */
 package Util.Editor;
 
+import Types.Geometrie.EHullObject;
 import Types.Geometrie.Face;
 import Types.Geometrie.FaceForTest;
 import Types.Geometrie.Obj;
@@ -30,6 +31,7 @@ import java.util.Random;
 public class EObjInObjCreator {
     private LinkedList<ObjInsToTest> tmpObjInsToTest;
     private LinkedList<ObjIns> createdObjs;
+    private static LinkedList<EHullObject> hull;
     private String[] toWrite;
     private Face[][] faces;
     private FaceForTest[][] facesForTest;
@@ -45,10 +47,32 @@ public class EObjInObjCreator {
         int number = new Integer(args[0]).intValue();
         String outFile = args[1];
         String inObj = args[2];
+        JObjParse objToPlace = new JObjParse(args[2]);
+        objToPlace.makeBoundingSphere();
 
-        String[] hullObj = new String[args.length - 3];
-        for (int i = 3; i < args.length; i++) {
-            hullObj[i - 3] = args[i];
+        //double the radius to make a obj fit
+        float objRadius = objToPlace.boudingRadius * 2;
+
+        //check if enought arguments are passed to make the
+        //tool run
+        if(args.length < 8 && (args.length - 3) % 5 == 0) {
+            System.out.println("Error: to few arguments");
+            System.exit(0);
+        }
+
+        //make hull spheres
+        EObjInObjCreator.hull = new LinkedList<EHullObject>();
+        for (int i = 3; i < args.length; i += 4) {
+            //if -s is read the next for Strings make
+            //up the hullobj
+            if(args[i].contentEquals(new String("-s"))) {
+                EObjInObjCreator.hull.add(new EHullObject(new Vector(new Float(args[i+1]).floatValue(),
+                                                         new Float(args[i+2]).floatValue(),
+                                                         new Float(args[i+3]).floatValue()),
+
+                                                         new Float(args[i+4]).floatValue() * objRadius,
+                                                         new Integer(args[i+5]).intValue()));
+            }
         }
 
 
@@ -179,10 +203,7 @@ public class EObjInObjCreator {
         if (checkObjInsOutside(toCheck, obj)) {
             return false;
         }
-        if (checkObjInsInside(toCheck, obj)) {
-            return true;
-        }
-        if (checkSphereTri(toCheck, obj)) {
+        if (checkSpheres(toCheck, obj)) {
             if (checkObjInsObjIns(toCheck, obj)) {
                 return true;
             } else {
@@ -204,18 +225,6 @@ public class EObjInObjCreator {
         }
     }
 
-    private boolean checkObjInsInside(ObjInsToTest toCheck, int obj) {
-        float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - this.origin[obj].x, 2) +
-                Math.pow(toCheck.origin.y - this.origin[obj].y, 2) +
-                Math.pow(toCheck.origin.z - this.origin[obj].z, 2));
-
-        if (dis + toCheck.boundSph <= this.boundingMin[obj]) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     private boolean checkObjInsObjIns(ObjInsToTest toCheck, int pos) {
         for (ObjInsToTest forCheck : this.tmpObjInsToTest) {
             float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - forCheck.origin.x, 2) +
@@ -229,7 +238,7 @@ public class EObjInObjCreator {
         return true;
     }
 
-    private boolean checkSphereTri(ObjInsToTest toCheck, int obj) {
+    private boolean checkSphere(ObjInsToTest toCheck, int obj) {
         float dis = 0f;
         for (FaceForTest face : this.facesForTest[obj]) {
             dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - face.middle.x, 2) +

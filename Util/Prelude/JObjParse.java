@@ -24,10 +24,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-/**
- *
- * @author burner
- */
 public class JObjParse {
 
     public ArrayList<Vector> vectors = new ArrayList<Vector>();
@@ -269,7 +265,7 @@ public class JObjParse {
         this.middle = middleM;
     }
 
-    private void makeBoundingSphere() {
+    public void makeBoundingSphere() {
         float dis = 0f;
         for(Vector toTest : this.vectors) {
             float newDis = (float)Math.sqrt(Math.pow(toTest.x - this.middle.x, 2) +
