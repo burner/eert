@@ -32,6 +32,7 @@ public class ObjIns {
     public float boundSph;
     public int objInsNumber;
     public Engine engine;
+    public Vector pos;
 
     public ObjIns(Obj parent, Vector origin, Vector rotation, int objInsNumber, int number) {
         this.engine = parent.engine;
