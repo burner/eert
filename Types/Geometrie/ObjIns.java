@@ -46,6 +46,7 @@ public class ObjIns {
         this.objInsNumber = objInsNumber - 1;
     }
 
+
     public ObjIns(Obj parent, Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
         this.parent = parent;
         this.boundSph = this.parent.bR;
@@ -57,7 +58,32 @@ public class ObjIns {
         this.objInsNumber = objInsNumber - 1;
     }
 
+
+    public ObjIns(Obj parent, Vector origin, Vector rotation, Vector conRot, Vector[] conMove, int objInsNumber, int number) {
+        this.conMove = conMove;
+        this.parent = parent;
+        this.boundSph = this.parent.bR;
+        this.rotation = rotation;
+        this.conMove = null;
+        this.conRot = conRot;
+        place(origin);
+        this.objNumber = number;
+        this.objInsNumber = objInsNumber - 1;
+    }
+
+
     public ObjIns(Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
+        this.boundSph = this.parent.bR;
+        this.rotation = rotation;
+        this.conMove = null;
+        this.conRot = conRot;
+        place(origin);
+        this.objNumber = number;
+        this.objInsNumber = objInsNumber - 1;
+    }
+
+    public ObjIns(Vector origin, Vector rotation, Vector conRot, Vector[] conMove, int objInsNumber, int number) {
+        this.conMove =  conMove;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
         this.conMove = null;
@@ -111,11 +137,29 @@ public class ObjIns {
 
     @Override
     public String toString() {
-        StringBuffer retString = new StringBuffer("oi " + this.objInsNumber + " " + this.rotation.x + " " + this.rotation.y + " " + this.rotation.z + " ");
-        retString.append(this.origin.x + " " + this.origin.y + " " + this.origin.z + " ");
+        //default stuff and rotation
+        StringBuffer retString = new StringBuffer("oi " + this.objInsNumber + " " 
+                + this.rotation.x + " "
+                + this.rotation.y + " "
+                + this.rotation.z + " ");
+        
+        //constant Rotation
+        retString.append(this.conRot + " " 
+                + this.conRot.y + " "
+                + this.conRot.z + " ");
+
+        //Origin to start movement
+        retString.append(this.origin.x + " "
+                + this.origin.y + " "
+                + this.origin.z + " ");
+
+        //movements directions
         for (int i = 0; i < this.conMove.length; i++) {
-            retString.append(this.conMove[i].x + " " + this.conMove[i].y + " " + this.conMove[i].z + " ");
+            retString.append(this.conMove[i].x + " "
+                    + this.conMove[i].y + " "
+                    + this.conMove[i].z + " ");
         }
+        
         return retString.toString();
     }
 }

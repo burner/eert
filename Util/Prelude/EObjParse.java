@@ -23,9 +23,10 @@ import Types.Geometrie.ObjIns;
 import Util.Logic.Camera;
 import Util.*;
 import java.io.*;
-import java.util.*;
 
 import Types.*;
+import Types.Geometrie.Vector;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.opengl.GL;
@@ -55,17 +56,16 @@ public class EObjParse {
         this.objectIns = new LinkedList<Types.Geometrie.ObjIns>();
         this.objIns = 0;
         this.textures = new String[6];
-        
+
         parse();
         addObjInsToObj();
     }
 
     private void addObjInsToObj() {
-        for(ObjIns obIns : this.objectIns) {
+        for (ObjIns obIns : this.objectIns) {
             this.objects.get(obIns.objNumber).objIns.add(obIns);
         }
     }
-
 
     private void parse() {
         FileInputStream input;
@@ -83,7 +83,7 @@ public class EObjParse {
                 if (curLine == null) {
                     break;
                 }
-                if(curLine.charAt(0) == ' ') {
+                if (curLine.charAt(0) == ' ') {
                     continue;
                 }
                 if (curLine.charAt(0) == 'o') {
@@ -140,7 +140,7 @@ public class EObjParse {
             Logger.getLogger(EObjParse.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.objCount++;
-    }   
+    }
 
     private void addObjIns() {
         StringBuffer objNumber = new StringBuffer();
@@ -149,21 +149,21 @@ public class EObjParse {
             objNumber.append(curLine.charAt(i));
             i++;
         }
-        i++; 
-        
+        i++;
+
         int number = new Integer(objNumber.toString()).intValue();
         //if number != lastNumber objInsInterator = 0
         //this is done to give the ObjIns a right number 
-        if(this.lastObj == number) {
+        if (this.lastObj == number) {
             this.obj = lastObj;
         } else {
-            this.obj++; 
+            this.obj++;
         }
         this.lastObj = number;
         this.objIns += 1;
-        
-        
-        StringBuffer[] buffer = new StringBuffer[7];
+
+
+        StringBuffer[] buffer = new StringBuffer[9];
         buffer[0] = new StringBuffer();
         buffer[1] = new StringBuffer();
         buffer[2] = new StringBuffer();
@@ -171,20 +171,73 @@ public class EObjParse {
         buffer[4] = new StringBuffer();
         buffer[5] = new StringBuffer();
         buffer[6] = new StringBuffer();
-        byte fIdx = 0;
+        buffer[7] = new StringBuffer();
+        buffer[8] = new StringBuffer();
+
+        //read origin, start rotation and constant rotation
+        int fIdx = 0;
         for (; i < curLine.length(); i++) {
+            if (fIdx > 9) {
+                break;
+            }
             if (curLine.charAt(i) == ' ') {
                 fIdx++;
             } else {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
-        Types.Geometrie.Vector pos = new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(), new Float(buffer[1].toString()).floatValue(), new Float(buffer[2].toString()).floatValue());
-        Types.Geometrie.Vector rot = new Types.Geometrie.Vector(new Float(buffer[3].toString()).floatValue(), new Float(buffer[4].toString()).floatValue(), new Float(buffer[5].toString()).floatValue());
-        
-        //this.objInsInterator
-        
-        this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, this.objIns, this.obj));    
+
+        Types.Geometrie.Vector pos = new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(),
+                new Float(buffer[1].toString()).floatValue(),
+                new Float(buffer[2].toString()).floatValue());
+
+        Types.Geometrie.Vector rot = new Types.Geometrie.Vector(new Float(buffer[3].toString()).floatValue(),
+                new Float(buffer[4].toString()).floatValue(),
+                new Float(buffer[5].toString()).floatValue());
+
+        Types.Geometrie.Vector conRot = new Types.Geometrie.Vector(new Float(buffer[6].toString()).floatValue(),
+                new Float(buffer[7].toString()).floatValue(),
+                new Float(buffer[8].toString()).floatValue());
+
+
+        StringBuffer conMov0 = new StringBuffer();
+        StringBuffer conMov1 = new StringBuffer();
+        StringBuffer conMov2 = new StringBuffer();
+
+        LinkedList<Vector> conMoveVector = new LinkedList<Vector>();
+
+        fIdx = 0;
+        for (; i < curLine.length(); i++) {
+            //Blank
+            if (curLine.charAt(i) == ' ') {
+                //maximal three float for a conMov
+                if (fIdx == 2) {
+                    fIdx = 0;
+
+                    //if conMov2 is full
+                    //save new conMove
+                    conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
+                            new Float(conMov1.toString()).floatValue(),
+                            new Float(conMov2.toString()).floatValue()));
+                } else {
+                    fIdx++;
+                }
+            //none Blank
+            } else {
+                if (fIdx == 0) {
+                    conMov0.append(curLine.charAt(i));
+                } else if(fIdx == 1) {
+                    conMov1.append(curLine.charAt(i));
+                } else if(fIdx == 2) {
+                    conMov2.append(curLine.charAt(i));
+                }
+            }
+        }
+
+        Vector[] conMoveArray = new Vector[conMoveVector.size()];
+        conMoveVector.toArray(conMoveArray);
+
+        this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, conRot, conMoveArray, this.objIns, this.obj));
     }
 
     private void addObjTex() {

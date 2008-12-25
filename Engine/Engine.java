@@ -81,19 +81,26 @@ public class Engine implements GLEventListener {
 
     public void display(GLAutoDrawable glDrawable) {
         GL gl = glDrawable.getGL();
+        UHPT.updateUHPT();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
         gl.glEnable(GL.GL_TEXTURE_2D);
+
+        
+        //build octree
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         long ocTimeTestA = System.currentTimeMillis();
 
+
+        //set cam location
         cam.translateAccordingToCameraPosition(gl);
-        //cam.camRot(gl);
-        //cam.giveInfo();
-        //this.root.drawBox(gl);
+
+
+        //draw objects
         this.root.drawOctree(gl);
+
 
         //if true draw Info on screen
         frame();
