@@ -67,6 +67,14 @@ public class ObjIns {
         this.objInsNumber = objInsNumber - 1;
     }
 
+    public void update() {
+        if (UHPT.timeInterval < this.conMove.length) {
+            this.pos.x = this.pos.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
+            this.pos.y = this.pos.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
+            this.pos.z = this.pos.z + this.conMove[UHPT.timeInterval].z * UHPT.getETime() / 1000000000;
+        }
+    }
+
     //Place the instance at the right place according to the center of the ParentObj
     private void place(Vector origin) {
         this.origin = new Vector(this.parent.origin.x + origin.x,

@@ -31,6 +31,12 @@ public class EObjectHandler {
         this.objIns = new ObjIns[eObjParse.objectIns.size()];
         this.objIns = eObjParse.objectIns.toArray(this.objIns);
     }
+
+    public void updateObjIns() {
+        for(ObjIns toUpdate : this.objIns) {
+            toUpdate.update();
+        }
+    }
     
     
 

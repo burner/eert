@@ -17,14 +17,26 @@
  */
 package Util.Logic;
 public final class UHPT {
-    public static final long time = System.nanoTime();
+    public static long currentTime = System.nanoTime();
+    public static long startTime = System.nanoTime();
     public static long lastFrame = System.nanoTime();
+    public static long timeIntervalTimer = System.currentTimeMillis();
+    public static int timer = 15000;    //15000 millisec = one timeslice
+    public static int timeInterval = 0; //what timeslice
         
     public static final long getETime() {
-        return (long) (System.nanoTime() - UHPT.time);
+        return UHPT.currentTime;
     }
     
     public static final long starTime() {
-        return UHPT.time;
-    }  
+        return UHPT.startTime;
+    }
+
+    public static final void updateUHPT() {
+        UHPT.currentTime = System.nanoTime();
+        if(System.currentTimeMillis() > UHPT.timeIntervalTimer +  timer) {
+            UHPT.timeInterval++;
+            UHPT.timeIntervalTimer = System.currentTimeMillis();
+        }
+    }
 }
