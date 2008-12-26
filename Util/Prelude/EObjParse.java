@@ -48,19 +48,28 @@ public class EObjParse {
     public String[] textures;
 
     public EObjParse(Camera cam, String file, GL gl, Engine engine) {
+        //Save parameter
         this.engine = engine;
         this.cam = cam;
         this.gl = gl;
         this.file = file;
+
+        //Create all needed later
         this.objects = new LinkedList<Types.Geometrie.Obj>();
         this.objectIns = new LinkedList<Types.Geometrie.ObjIns>();
         this.objIns = 0;
         this.textures = new String[6];
 
+        //actually parse the szene File
         parse();
+
+        //add objIns to the corresponding Obj
         addObjInsToObj();
     }
 
+
+    //walk along all objIns's and add them to the
+    //ObjIns LinkedList within the right obj
     private void addObjInsToObj() {
         for (ObjIns obIns : this.objectIns) {
             this.objects.get(obIns.objNumber).objIns.add(obIns);
@@ -68,24 +77,35 @@ public class EObjParse {
     }
 
     private void parse() {
+        //needed to read a file
         FileInputStream input;
         DataInputStream data;
         BufferedReader reader;
         try {
+            //to know where you are
             System.out.println(new File(".").getAbsolutePath());
+
+            //setup to read the file line by line
             input = new FileInputStream("./Szenes/" + "SuzannTest3.eob");
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 
+            //read first line
             curLine = reader.readLine();
 
             while (curLine != null) {
+                //if no new line break
                 if (curLine == null) {
                     break;
                 }
+
+                //blank line
                 if (curLine.charAt(0) == ' ') {
+                    curLine = reader.readLine();
                     continue;
                 }
+
+                //call the right methode to parse the line
                 if (curLine.charAt(0) == 'o') {
                     if (curLine.charAt(1) == ' ') {
                         addObj();
@@ -99,6 +119,8 @@ public class EObjParse {
                 } else {
                     continue;
                 }
+
+                //read new line for next round
                 curLine = reader.readLine();
             }
             reader.close();
@@ -111,7 +133,11 @@ public class EObjParse {
         }
     }
 
+    //parse a new object
     private void addObj() {
+        //setup the StringBuffer Array
+        //to take up the six filenames
+        //for the object
         StringBuffer[] buffer = new StringBuffer[6];
         buffer[0] = new StringBuffer();
         buffer[1] = new StringBuffer();
@@ -119,6 +145,9 @@ public class EObjParse {
         buffer[3] = new StringBuffer();
         buffer[4] = new StringBuffer();
         buffer[5] = new StringBuffer();
+
+        //do the actually parsing
+        //fIdx indecies the StringBuffer Array
         byte fIdx = 0;
         for (int i = 2; i < curLine.length(); i++) {
             if (curLine.charAt(i) == ' ') {
@@ -127,6 +156,9 @@ public class EObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
+
+        //make a StringArray out of the buffer
+        //to give it to the object
         String[] objName = new String[6];
         objName[0] = buffer[0].toString();
         objName[1] = buffer[1].toString();
@@ -134,15 +166,21 @@ public class EObjParse {
         objName[3] = buffer[3].toString();
         objName[4] = buffer[4].toString();
         objName[5] = buffer[5].toString();
+
+        //create the object
         try {
             this.objects.add(new Obj(this.cam, objName, this.objCount, this.gl, this.engine));
         } catch (IOException ex) {
             Logger.getLogger(EObjParse.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //make note of the created object
         this.objCount++;
     }
 
+    //parse line containing an ObjectInstance
     private void addObjIns() {
+
+        //get the number of the instance
         StringBuffer objNumber = new StringBuffer();
         int i = 3;
         while (curLine.charAt(i) != ' ') {
@@ -163,6 +201,7 @@ public class EObjParse {
         this.objIns += 1;
 
 
+        //parse the origin the startrotation and the constatn rotation
         StringBuffer[] buffer = new StringBuffer[9];
         buffer[0] = new StringBuffer();
         buffer[1] = new StringBuffer();
@@ -175,6 +214,7 @@ public class EObjParse {
         buffer[8] = new StringBuffer();
 
         //read origin, start rotation and constant rotation
+        //from line
         int fIdx = 0;
         for (; i < curLine.length(); i++) {
             if (fIdx > 9) {
@@ -187,19 +227,26 @@ public class EObjParse {
             }
         }
 
+        //Vector for Origin
         Types.Geometrie.Vector pos = new Types.Geometrie.Vector(new Float(buffer[0].toString()).floatValue(),
                 new Float(buffer[1].toString()).floatValue(),
                 new Float(buffer[2].toString()).floatValue());
 
+        //Vector for start Rotation
         Types.Geometrie.Vector rot = new Types.Geometrie.Vector(new Float(buffer[3].toString()).floatValue(),
                 new Float(buffer[4].toString()).floatValue(),
                 new Float(buffer[5].toString()).floatValue());
 
+        //Vector for constant Rotation
         Types.Geometrie.Vector conRot = new Types.Geometrie.Vector(new Float(buffer[6].toString()).floatValue(),
                 new Float(buffer[7].toString()).floatValue(),
                 new Float(buffer[8].toString()).floatValue());
 
 
+        //tmp Stringbuffer for the three floats
+        //needed for one of the Positions
+        //the movements are computed later
+        //buffers are reused every round
         StringBuffer conMov0 = new StringBuffer();
         StringBuffer conMov1 = new StringBuffer();
         StringBuffer conMov2 = new StringBuffer();
@@ -234,13 +281,16 @@ public class EObjParse {
             }
         }
 
+        //Copy the LinkedList into an array
         Vector[] conMoveArray = new Vector[conMoveVector.size()];
         conMoveVector.toArray(conMoveArray);
 
         this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, conRot, conMoveArray, this.objIns, this.obj));
     }
 
+    //Parse a line containing texture url
     private void addObjTex() {
+        //Buffer
         StringBuffer[] buffer = new StringBuffer[7];
         buffer[0] = new StringBuffer();
         buffer[1] = new StringBuffer();
@@ -249,6 +299,8 @@ public class EObjParse {
         buffer[4] = new StringBuffer();
         buffer[5] = new StringBuffer();
         buffer[6] = new StringBuffer();
+
+        //actually parse the line
         byte fIdx = 0;
         for (int i = 3; i < curLine.length(); i++) {
             if (curLine.charAt(i) == ' ') {
@@ -257,6 +309,9 @@ public class EObjParse {
                 buffer[fIdx].append(curLine.charAt(i));
             }
         }
+
+        //Make an String array
+        //and copy the StringBuffer into it
         String[] objName = new String[6];
         objName[0] = buffer[0].toString();
         objName[1] = buffer[1].toString();
@@ -283,5 +338,3 @@ public class EObjParse {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
-
-
