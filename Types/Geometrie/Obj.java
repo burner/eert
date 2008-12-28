@@ -58,8 +58,6 @@ public class Obj {
     ETexture texImage3;
     ETexture texImage4;
     ETexture texImage5;
-
-
     //Shadow stuff below
     public LinkedList<Face> cap;
     public LinkedList<Edge> edges;
@@ -79,7 +77,7 @@ public class Obj {
         this.cam = cam;
         this.origin = new Vector(0.0f, 0.0f, 0.0f);
         this.number = number;
-        
+
         for (int i = 0; i < file.length; i++) {
             JObjParse parse = new JObjParse(file[i]);
             this.vec.add(parse.getVector());
@@ -270,8 +268,14 @@ public class Obj {
 
         this.engine.eInfo.drawObj++;
         //get ObjIns and adjust the matrix
+
         ObjIns tmp = this.objIns.get(number);
-        gl.glTranslatef(tmp.pos.x, tmp.pos.y, tmp.pos.z);
+        if (tmp.pos != null) {
+            gl.glTranslatef(tmp.pos.x, tmp.pos.y, tmp.pos.z);
+        } else {
+            gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
+        }
+
         gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
@@ -305,7 +309,6 @@ public class Obj {
     }
 
     public void renderShadow() {
-        
     }
 
     private void makeFaceNormals() {
@@ -315,9 +318,9 @@ public class Obj {
             for (int j = 0; j < facCount; j++) {
                 face = this.fac.get(i)[j];
                 //Crossprodukt
-                face.faceNormal = new Vector(face.v2.y*face.v3.z - face.v2.z*face.v3.y,
-                                             face.v2.z*face.v3.x - face.v2.x*face.v3.z,
-                                             face.v1.x*face.v3.y - face.v2.y*face.v2.x);
+                face.faceNormal = new Vector(face.v2.y * face.v3.z - face.v2.z * face.v3.y,
+                        face.v2.z * face.v3.x - face.v2.x * face.v3.z,
+                        face.v1.x * face.v3.y - face.v2.y * face.v2.x);
                 //Normalize to later use acos
                 //to get angle between face and lightvec
                 //angle = acos(v1 dotProduct v2)
@@ -328,8 +331,8 @@ public class Obj {
 
     public void findFacesFacingLight(Vector vec, int res) {
         Face[] forTest = this.fac.get(res);
-        for(Face toTest : forTest) {
-            if(90>VectorUtil.angle(toTest, vec)) {
+        for (Face toTest : forTest) {
+            if (90 > VectorUtil.angle(toTest, vec)) {
                 this.cap.add(toTest);
                 toTest.lit = true;
             } else {
@@ -339,16 +342,16 @@ public class Obj {
     }
 
     public void makeSilhouette(int res) {
-         /* if a friend is not lit add the Edge to the
-          * list to be extruded*/
-        for(Face toTest : this.cap) {
-            if(!toTest.fr1.lit) {
+        /* if a friend is not lit add the Edge to the
+         * list to be extruded*/
+        for (Face toTest : this.cap) {
+            if (!toTest.fr1.lit) {
                 this.edges.add(new Edge(toTest.v1, toTest.v2));
             }
-            if(!toTest.fr2.lit) {
+            if (!toTest.fr2.lit) {
                 this.edges.add(new Edge(toTest.v2, toTest.v3));
             }
-            if(!toTest.fr3.lit) {
+            if (!toTest.fr3.lit) {
                 this.edges.add(new Edge(toTest.v3, toTest.v1));
             }
         }
@@ -357,13 +360,14 @@ public class Obj {
     private void makeBoundingSphere() {
         float dis = 0f;
         Vector[] points = this.vec.get(0);
-        for(Vector toTest : points) {
-            float newDis = (float)Math.sqrt(Math.pow(toTest.x - this.origin.x, 2) +
-                                     Math.pow(toTest.y - this.origin.y, 2) +
-                                     Math.pow(toTest.z - this.origin.z, 2));
+        for (Vector toTest : points) {
+            float newDis = (float) Math.sqrt(Math.pow(toTest.x - this.origin.x, 2) +
+                    Math.pow(toTest.y - this.origin.y, 2) +
+                    Math.pow(toTest.z - this.origin.z, 2));
 
-            if(newDis > dis)
+            if (newDis > dis) {
                 dis = newDis;
+            }
         }
 
         this.bR = dis;

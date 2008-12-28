@@ -81,7 +81,9 @@ public class Engine implements GLEventListener {
 
     public void display(GLAutoDrawable glDrawable) {
         GL gl = glDrawable.getGL();
+
         UHPT.updateUHPT();
+        this.objectHandler.updateObjIns();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();

@@ -26,6 +26,7 @@ import java.io.*;
 
 import Types.*;
 import Types.Geometrie.Vector;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,7 +87,7 @@ public class EObjParse {
             System.out.println(new File(".").getAbsolutePath());
 
             //setup to read the file line by line
-            input = new FileInputStream("./Szenes/" + "SuzannTest3.eob");
+            input = new FileInputStream("./Szenes/" + "SuzannTest4.eob");
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 
@@ -131,6 +132,7 @@ public class EObjParse {
             System.out.println("Unknown Error");
             e.printStackTrace();
         }
+        
     }
 
     //parse a new object
@@ -217,7 +219,7 @@ public class EObjParse {
         //from line
         int fIdx = 0;
         for (; i < curLine.length(); i++) {
-            if (fIdx > 9) {
+            if (fIdx > 8) {
                 break;
             }
             if (curLine.charAt(i) == ' ') {
@@ -251,7 +253,7 @@ public class EObjParse {
         StringBuffer conMov1 = new StringBuffer();
         StringBuffer conMov2 = new StringBuffer();
 
-        LinkedList<Vector> conMoveVector = new LinkedList<Vector>();
+        ArrayList<Vector> conMoveVector = new ArrayList<Vector>();
 
         fIdx = 0;
         for (; i < curLine.length(); i++) {
@@ -273,17 +275,20 @@ public class EObjParse {
             } else {
                 if (fIdx == 0) {
                     conMov0.append(curLine.charAt(i));
-                } else if(fIdx == 1) {
+                } else if (fIdx == 1) {
                     conMov1.append(curLine.charAt(i));
-                } else if(fIdx == 2) {
+                } else if (fIdx == 2) {
                     conMov2.append(curLine.charAt(i));
                 }
             }
         }
+        conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
+                new Float(conMov1.toString()).floatValue(),
+                new Float(conMov2.toString()).floatValue()));
 
         //Copy the LinkedList into an array
         Vector[] conMoveArray = new Vector[conMoveVector.size()];
-        conMoveVector.toArray(conMoveArray);
+        conMoveArray = conMoveVector.toArray(conMoveArray);
 
         this.objectIns.add(new ObjIns(this.objects.get(number), pos, rot, conRot, conMoveArray, this.objIns, this.obj));
     }

@@ -57,6 +57,9 @@ public class ObjIns {
     }
 
     public void update() {
+        if(this.conMove == null) {
+            return;
+        }
         if (UHPT.timeInterval < this.conMove.length) {
             this.pos.x = this.pos.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
             this.pos.y = this.pos.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
