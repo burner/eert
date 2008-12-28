@@ -188,9 +188,8 @@ public class Obj {
 
         gl.glEnable(GL.GL_TEXTURE_2D);
 
+        //Build the six display lists
         for (int j = 0; j < this.fac.size(); j++) {
-
-
             gl.glNewList(this.listHandles[j], GL.GL_COMPILE);
             this.gl.glBegin(GL.GL_TRIANGLES);
             //gl.glColor3f(1.0f, 1.0f, 1.0f);
@@ -270,8 +269,6 @@ public class Obj {
         gl.glPushMatrix();
 
         this.engine.eInfo.drawObj++;
-
-
         //get ObjIns and adjust the matrix
         ObjIns tmp = this.objIns.get(number);
         gl.glTranslatef(tmp.pos.x, tmp.pos.y, tmp.pos.z);
@@ -305,6 +302,10 @@ public class Obj {
             this.facesRendered += this.facNum[5];
         }
         gl.glPopMatrix();
+    }
+
+    public void renderShadow() {
+        
     }
 
     private void makeFaceNormals() {

@@ -1,4 +1,4 @@
-/*
+ /*
  *EERT = EERT enhanced rendering technology
  *
  *Copyright (C) [2008] [Robert "BuRnEr" Schadek]

@@ -34,31 +34,6 @@ public class ObjIns {
     public Engine engine;
     public Vector pos;
 
-    public ObjIns(Obj parent, Vector origin, Vector rotation, int objInsNumber, int number) {
-        this.engine = parent.engine;
-        this.parent = parent;
-        this.boundSph = this.parent.bR;
-        this.rotation = rotation;
-        this.conMove = null;
-        this.conRot = new Vector();
-        place(origin);
-        this.objNumber = number;
-        this.objInsNumber = objInsNumber - 1;
-    }
-
-
-    public ObjIns(Obj parent, Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
-        this.parent = parent;
-        this.boundSph = this.parent.bR;
-        this.rotation = rotation;
-        this.conMove = null;
-        this.conRot = conRot;
-        place(origin);
-        this.objNumber = number;
-        this.objInsNumber = objInsNumber - 1;
-    }
-
-
     public ObjIns(Obj parent, Vector origin, Vector rotation, Vector conRot, Vector[] conMove, int objInsNumber, int number) {
         this.conMove = conMove;
         this.parent = parent;
@@ -71,19 +46,7 @@ public class ObjIns {
         this.objInsNumber = objInsNumber - 1;
     }
 
-
     public ObjIns(Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
-        this.boundSph = this.parent.bR;
-        this.rotation = rotation;
-        this.conMove = null;
-        this.conRot = conRot;
-        place(origin);
-        this.objNumber = number;
-        this.objInsNumber = objInsNumber - 1;
-    }
-
-    public ObjIns(Vector origin, Vector rotation, Vector conRot, Vector[] conMove, int objInsNumber, int number) {
-        this.conMove =  conMove;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
         this.conMove = null;
