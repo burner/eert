@@ -39,7 +39,7 @@ public class ObjIns {
         this.parent = parent;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
-        this.conMove = null;
+
         this.conRot = conRot;
         place(origin);
         this.objNumber = number;
@@ -57,13 +57,18 @@ public class ObjIns {
     }
 
     public void update() {
-        if(this.conMove == null) {
+        if (this.conMove == null) {
             return;
-        }
+        }/*
         if (UHPT.timeInterval < this.conMove.length) {
-            this.pos.x = this.pos.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
-            this.pos.y = this.pos.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
-            this.pos.z = this.pos.z + this.conMove[UHPT.timeInterval].z * UHPT.getETime() / 1000000000;
+        this.pos.x = this.pos.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
+        this.pos.y = this.pos.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
+        this.pos.z = this.pos.z + this.conMove[UHPT.timeInterval].z * UHPT.getETime() / 1000000000;
+        }*/
+        if (UHPT.timeInterval < this.conMove.length) {
+            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
+            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
+            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.getETime() / 1000000000;
         }
     }
 
@@ -104,28 +109,19 @@ public class ObjIns {
     @Override
     public String toString() {
         //default stuff and rotation
-        StringBuffer retString = new StringBuffer("oi " + this.objInsNumber + " " 
-                + this.rotation.x + " "
-                + this.rotation.y + " "
-                + this.rotation.z + " ");
-        
+        StringBuffer retString = new StringBuffer("oi " + this.objInsNumber + " " + this.rotation.x + " " + this.rotation.y + " " + this.rotation.z + " ");
+
         //constant Rotation
-        retString.append(this.conRot + " " 
-                + this.conRot.y + " "
-                + this.conRot.z + " ");
+        retString.append(this.conRot + " " + this.conRot.y + " " + this.conRot.z + " ");
 
         //Origin to start movement
-        retString.append(this.origin.x + " "
-                + this.origin.y + " "
-                + this.origin.z + " ");
+        retString.append(this.origin.x + " " + this.origin.y + " " + this.origin.z + " ");
 
         //movements directions
         for (int i = 0; i < this.conMove.length; i++) {
-            retString.append(this.conMove[i].x + " "
-                    + this.conMove[i].y + " "
-                    + this.conMove[i].z + " ");
+            retString.append(this.conMove[i].x + " " + this.conMove[i].y + " " + this.conMove[i].z + " ");
         }
-        
+
         return retString.toString();
     }
 }

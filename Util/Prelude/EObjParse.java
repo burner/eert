@@ -253,7 +253,7 @@ public class EObjParse {
         StringBuffer conMov1 = new StringBuffer();
         StringBuffer conMov2 = new StringBuffer();
 
-        ArrayList<Vector> conMoveVector = new ArrayList<Vector>();
+        ArrayList<Vector> conMoveVector = new ArrayList<Vector>(0);
 
         fIdx = 0;
         for (; i < curLine.length(); i++) {
@@ -268,6 +268,10 @@ public class EObjParse {
                     conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
                             new Float(conMov1.toString()).floatValue(),
                             new Float(conMov2.toString()).floatValue()));
+
+                    conMov0 = new StringBuffer();
+                    conMov1 = new StringBuffer();
+                    conMov2 = new StringBuffer();
                 } else {
                     fIdx++;
                 }

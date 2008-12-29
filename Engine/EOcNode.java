@@ -83,7 +83,7 @@ public class EOcNode {
                 }
             }
         } else {
-            //drawBox(gl);
+            drawBox(gl);
             
             for (EOcNode child : this.childs) {
                 child.draw(gl);
