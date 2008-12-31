@@ -32,6 +32,7 @@ public class EOcMaster {
     public boolean[] drawn;
     private EOcNode root;
     private Vector middle;
+    private float radius;
     private float xSize = 0;
     private float ySize = 0;
     private float zSize = 0;
@@ -51,68 +52,35 @@ public class EOcMaster {
         this.objs = allObj;
         this.numNodes = 0;
         makeFirstCubeInfo();
-        this.root = new EOcNode(this, this.objs, this.middle, this.xSize, this.ySize, this.zSize, this.drawn, 0);
+        this.root = new EOcNode(this, this.objs, this.middle, this.radius, this.drawn, 0);
     }
 
     private void makeFirstCubeInfo() {
         this.middle = new Vector();
-        float xP = 0.0f;
-        float yP = 0.0f;
-        float zP = 0.0f;
-        float xN = 0.0f;
-        float yN = 0.0f;
-        float zN = 0.0f;
+
+        this.radius = 0f;
+
+        //make the middle of all objIns
         for (ObjIns obj : this.objs) {
             //middle
             this.middle.x += obj.origin.x / this.objs.length;
             this.middle.y += obj.origin.y / this.objs.length;
             this.middle.z += obj.origin.z / this.objs.length;
+        }
 
-            //expension
+        //make a bounding sphere around all ObjIns
+        for(ObjIns obj : this.objs) {
+            float dis = (float) Math.sqrt(Math.pow(obj.origin.x - this.middle.x, 2) +
+                                          Math.pow(obj.origin.y - this.middle.y, 2) +
+                                          Math.pow(obj.origin.z - this.middle.z, 2));
 
-            if (xN > obj.origin.x - obj.boundSph) {
-                xN = obj.origin.x - obj.boundSph;
-            }
+            dis += obj.boundSph;
 
-            if (yN > obj.origin.y - obj.boundSph) {
-                yN = obj.origin.y - obj.boundSph;
-            }
-
-            if (zN > obj.origin.z - obj.boundSph) {
-                zN = obj.origin.z - obj.boundSph;
-            }
-
-            if (xP < obj.origin.x + obj.boundSph) {
-                xP = obj.origin.x + obj.boundSph;
-            }
-
-            if (yP < obj.origin.y + obj.boundSph) {
-                yP = obj.origin.y + obj.boundSph;
-            }
-
-            if (zP < obj.origin.z + obj.boundSph) {
-                zP = obj.origin.z + obj.boundSph;
+            if(dis > this.radius) {
+                this.radius = dis;
             }
         }
 
-        if (Math.abs(xP) >= Math.abs(xN)) {
-            this.xSize = Math.abs(xP) * 2.0f;
-        } else {
-            this.xSize = Math.abs(xN) * 2.0f;
-        }
-
-        if (Math.abs(xP) >= Math.abs(xN)) {
-            this.ySize = Math.abs(yP) * 2.0f;
-        } else {
-            this.ySize = Math.abs(yN) * 2.0f;
-        }
-
-        if (Math.abs(zP) >= Math.abs(zN)) {
-            this.zSize = Math.abs(zP) * 2.0f;
-        } else {
-            this.zSize = Math.abs(zN) * 2.0f;
-        }
-        //System.out.println("xP = " + xP + " yP = " + yP + " zP = " + zP + " xN = " + xN + " yN = " + yN + " zN = " + zN + " xSize = " + this.xSize +" ySize = " + this.ySize +" zSize = " + this.zSize);
     }
 
     public void drawOctree(GL gl) {
