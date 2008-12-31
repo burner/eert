@@ -69,51 +69,50 @@ public class EOcMaster {
             this.middle.z += obj.origin.z / this.objs.length;
 
             //expension
+
             if (xN > obj.origin.x - obj.boundSph) {
                 xN = obj.origin.x - obj.boundSph;
             }
+
             if (yN > obj.origin.y - obj.boundSph) {
                 yN = obj.origin.y - obj.boundSph;
             }
+
             if (zN > obj.origin.z - obj.boundSph) {
                 zN = obj.origin.z - obj.boundSph;
             }
+
             if (xP < obj.origin.x + obj.boundSph) {
                 xP = obj.origin.x + obj.boundSph;
             }
+
             if (yP < obj.origin.y + obj.boundSph) {
                 yP = obj.origin.y + obj.boundSph;
             }
+
             if (zP < obj.origin.z + obj.boundSph) {
                 zP = obj.origin.z + obj.boundSph;
             }
         }
 
-        xP = Math.abs(xP);
-        yP = Math.abs(yP);
-        zP = Math.abs(zP);
-
-        xN = Math.abs(xN);
-        yN = Math.abs(yN);
-        zN = Math.abs(zN);
-
-        if (xP >= xN) {
-            this.xSize = xP * 2.0f;
+        if (Math.abs(xP) >= Math.abs(xN)) {
+            this.xSize = Math.abs(xP) * 2.0f;
         } else {
-            this.xSize = xN * 2.0f;
+            this.xSize = Math.abs(xN) * 2.0f;
         }
 
-        if (xP >= xN) {
-            this.ySize = yP * 2.0f;
+        if (Math.abs(xP) >= Math.abs(xN)) {
+            this.ySize = Math.abs(yP) * 2.0f;
         } else {
-            this.ySize = yN * 2.0f;
+            this.ySize = Math.abs(yN) * 2.0f;
         }
 
-        if (zP >= zN) {
-            this.zSize = zP * 2.0f;
+        if (Math.abs(zP) >= Math.abs(zN)) {
+            this.zSize = Math.abs(zP) * 2.0f;
         } else {
-            this.zSize = zN * 2.0f;
+            this.zSize = Math.abs(zN) * 2.0f;
         }
+        //System.out.println("xP = " + xP + " yP = " + yP + " zP = " + zP + " xN = " + xN + " yN = " + yN + " zN = " + zN + " xSize = " + this.xSize +" ySize = " + this.ySize +" zSize = " + this.zSize);
     }
 
     public void drawOctree(GL gl) {

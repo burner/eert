@@ -52,7 +52,7 @@ public class EObjInObjCreator {
 
         //check if enought arguments are passed to make the
         //tool run
-        if (args.length < 8 && (args.length - 3) % 5 == 0) {
+        if (args.length < 7 && (args.length - 3) % 4 == 0) {
             System.out.println("Error: to few arguments");
             System.exit(0);
         }
