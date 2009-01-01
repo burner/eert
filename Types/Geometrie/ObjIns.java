@@ -61,9 +61,9 @@ public class ObjIns {
             return;
         }
         if (UHPT.timeInterval < this.conMove.length) {
-            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.timeDiff /1000;
-            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.timeDiff /1000;
-            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.timeDiff /1000;
+            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.timeDiff;
+            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.timeDiff;
+            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.timeDiff;
         }
     }
 
@@ -74,7 +74,7 @@ public class ObjIns {
                 this.parent.origin.z + origin.z);
 
     }
-
+/*
     public void conMove(int number) {
         if (this.conMove != null) {
             if (number <= this.conMove.length) {
@@ -84,7 +84,7 @@ public class ObjIns {
             }
         }
     }
-
+*/
     public void conRotate() {
         this.rotation.x += this.conRot.x * UHPT.getETime() / 1000000000 % 360;
         this.rotation.y += this.conRot.y * UHPT.getETime() / 1000000000 % 360;

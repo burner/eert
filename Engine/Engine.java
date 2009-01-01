@@ -110,7 +110,7 @@ public class Engine implements GLEventListener {
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
             this.eInfo.drawInfo(glDrawable);
         }
-        UHPT.lastFrame = System.nanoTime();
+        UHPT.lastFrame = System.currentTimeMillis();
     }
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
