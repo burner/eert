@@ -59,16 +59,11 @@ public class ObjIns {
     public void update() {
         if (this.conMove == null) {
             return;
-        }/*
+        }
         if (UHPT.timeInterval < this.conMove.length) {
-        this.pos.x = this.pos.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
-        this.pos.y = this.pos.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
-        this.pos.z = this.pos.z + this.conMove[UHPT.timeInterval].z * UHPT.getETime() / 1000000000;
-        }*/
-        if (UHPT.timeInterval < this.conMove.length) {
-            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.getETime() / 1000000000;
-            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.getETime() / 1000000000;
-            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.getETime() / 1000000000;
+            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.timeDiff /1000;
+            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.timeDiff /1000;
+            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.timeDiff /1000;
         }
     }
 

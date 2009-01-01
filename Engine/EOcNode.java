@@ -72,7 +72,7 @@ public class EOcNode {
                 }
             }
         } else {
-            drawBox(gl);
+            //drawBox(gl);
             
             for (EOcNode child : this.childs) {
                 child.draw(gl);
@@ -162,7 +162,7 @@ public class EOcNode {
 
     private EOcNode[] makeChilds() {
         LinkedList<EOcNode> tmpChilds = new LinkedList<EOcNode>();
-        //important needs to be created within this contidional execution
+        //important! needs to be created within this contidional execution
         //otherwise the child test in draw does not work
         EOcNode ch1 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.radius / 2,
                                                                    middle.y - this.radius / 2,
