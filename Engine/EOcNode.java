@@ -127,34 +127,34 @@ public class EOcNode {
 
         //Back
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(-this.radius, -this.radius, -this.radius);
+        gl.glVertex3f(this.radius, -this.radius, -this.radius);
+        gl.glVertex3f(this.radius, this.radius, -this.radius);
+        gl.glVertex3f(-this.radius, this.radius, -this.radius);
         gl.glEnd();
 
         //Front
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
+        gl.glVertex3f(-this.radius, -this.radius, this.radius);
+        gl.glVertex3f(this.radius, -this.radius, this.radius);
+        gl.glVertex3f(this.radius, this.radius, this.radius);
+        gl.glVertex3f(-this.radius, this.radius, this.radius);
         gl.glEnd();
 
         //Left
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
-        gl.glVertex3f(-this.xSize / 2, -this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(-this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(-this.radius, -this.radius, -this.radius);
+        gl.glVertex3f(-this.radius, -this.radius, this.radius);
+        gl.glVertex3f(-this.radius, this.radius, this.radius);
+        gl.glVertex3f(-this.radius, this.radius, -this.radius);
         gl.glEnd();
 
         //Right
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, -this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, -this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, this.zSize / 2);
-        gl.glVertex3f(this.xSize / 2, this.ySize / 2, -this.zSize / 2);
+        gl.glVertex3f(this.radius, -this.radius, -this.radius);
+        gl.glVertex3f(this.radius, -this.radius, this.radius);
+        gl.glVertex3f(this.radius, this.radius, this.radius);
+        gl.glVertex3f(this.radius, this.radius, -this.radius);
         gl.glEnd();
 
         gl.glPopMatrix();
