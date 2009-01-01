@@ -31,20 +31,21 @@ public class EFileWrite {
 
     private String[] toWrite;
 
-    public EFileWrite(String[] toRight) {
+    public EFileWrite(String[] toRight, String outFile) {
         this.toWrite = toRight;
-        writeToFile();        
+        writeToFile(outFile);
     }
 
-    private void writeToFile() {
+    private void writeToFile(String outFile) {
         FileOutputStream fos;
         DataOutputStream dos;
         try {
-            File file = new File(this.toWrite[0]);
+            File file = new File(outFile);
             fos = new FileOutputStream(file);
             dos = new DataOutputStream(fos);
-            for(int i = 1; i < this.toWrite.length; i++) {
-                dos.writeChars(this.toWrite[i]);
+            for(int i = 0; i < this.toWrite.length; i++) {
+                dos.writeBytes(this.toWrite[i]);
+                dos.writeBytes("\n");
             }
 
         } catch (IOException e) {

@@ -47,11 +47,10 @@ public class ObjIns {
     }
 
     public ObjIns(Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
-        this.boundSph = this.parent.bR;
         this.rotation = rotation;
         this.conMove = null;
         this.conRot = conRot;
-        place(origin);
+        placeNew(origin);
         this.objNumber = number;
         this.objInsNumber = objInsNumber - 1;
     }
@@ -61,10 +60,14 @@ public class ObjIns {
             return;
         }
         if (UHPT.timeInterval < this.conMove.length) {
-            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.timeDiff;
-            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.timeDiff;
-            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.timeDiff;
+            this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.timeDiff / 1000000000;
+            this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.timeDiff / 1000000000;
+            this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.timeDiff / 1000000000;
         }
+        this.rotation.x += this.conRot.x * UHPT.timeDiff / 10000 % 360;
+        this.rotation.y += this.conRot.y * UHPT.timeDiff / 10000 % 360;
+        this.rotation.z += this.conRot.z * UHPT.timeDiff / 10000 % 360;
+
     }
 
     //Place the instance at the right place according to the center of the ParentObj
@@ -74,21 +77,18 @@ public class ObjIns {
                 this.parent.origin.z + origin.z);
 
     }
-/*
-    public void conMove(int number) {
-        if (this.conMove != null) {
-            if (number <= this.conMove.length) {
-                this.origin.x += this.conMove[number].x * UHPT.getETime() / 1000000000;
-                this.origin.y += this.conMove[number].y * UHPT.getETime() / 1000000000;
-                this.origin.z += this.conMove[number].z * UHPT.getETime() / 1000000000;
-            }
-        }
+
+    private void placeNew(Vector origin) {
+        this.origin = new Vector(origin.x,
+                origin.y,
+                origin.z);
+
     }
-*/
+
     public void conRotate() {
-        this.rotation.x += this.conRot.x * UHPT.getETime() / 1000000000 % 360;
-        this.rotation.y += this.conRot.y * UHPT.getETime() / 1000000000 % 360;
-        this.rotation.z += this.conRot.z * UHPT.getETime() / 1000000000 % 360;
+        this.rotation.x += this.conRot.x * UHPT.timeDiff / 10000 % 360;
+        this.rotation.y += this.conRot.y * UHPT.timeDiff / 10000 % 360;
+        this.rotation.z += this.conRot.z * UHPT.timeDiff / 10000 % 360;
     }
 
     public void setRot(float xR, float yR, float zR) {
@@ -104,17 +104,17 @@ public class ObjIns {
     @Override
     public String toString() {
         //default stuff and rotation
-        StringBuffer retString = new StringBuffer("oi " + this.objInsNumber + " " + this.rotation.x + " " + this.rotation.y + " " + this.rotation.z + " ");
+        StringBuffer retString = new StringBuffer("oi " + "0" + " " + this.origin.x + " " + this.origin.y + " " + this.origin.z + " ");
 
         //constant Rotation
-        retString.append(this.conRot + " " + this.conRot.y + " " + this.conRot.z + " ");
+        retString.append(this.rotation.toString() + " ");
 
         //Origin to start movement
-        retString.append(this.origin.x + " " + this.origin.y + " " + this.origin.z + " ");
+        retString.append(this.conRot.toString() + " ");
 
         //movements directions
         for (int i = 0; i < this.conMove.length; i++) {
-            retString.append(this.conMove[i].x + " " + this.conMove[i].y + " " + this.conMove[i].z + " ");
+            retString.append(this.conMove[i].toString() + " ");
         }
 
         return retString.toString();

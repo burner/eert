@@ -82,8 +82,13 @@ public class Engine implements GLEventListener {
     public void display(GLAutoDrawable glDrawable) {
         GL gl = glDrawable.getGL();
 
+        //funny timer stuff ... do not change        
         UHPT.updateUHPT();
-        this.objectHandler.updateObjIns();
+        
+        //update all objsIns
+        this.objectHandler.updateObjIns();     
+
+        //OpenGL housekeeping
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
@@ -110,7 +115,9 @@ public class Engine implements GLEventListener {
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
             this.eInfo.drawInfo(glDrawable);
         }
-        UHPT.lastFrame = System.currentTimeMillis();
+
+
+        
     }
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {

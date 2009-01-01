@@ -47,9 +47,8 @@ public class ObjInsToTest {
         this.moveTo = new LinkedList<Vector>();
     }
 
-    public ObjInsToTest(Obj parent, Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
-        this.parent = parent;
-        this.boundSph = this.parent.bR;
+    public ObjInsToTest(Vector origin, Vector rotation, Vector conRot, int objInsNumber, int number) {
+        //this.boundSph = this.parent.bR;
         this.rotation = rotation;
         this.conMove = null;
         this.conRot = conRot;
@@ -61,9 +60,9 @@ public class ObjInsToTest {
 
     //Place the instance at the right place according to the center of the ParentObj
     private void place(Vector origin) {
-        this.origin = new Vector(this.parent.origin.x + origin.x,
-                this.parent.origin.y + origin.y,
-                this.parent.origin.z + origin.z);
+        this.origin = new Vector(origin.x,
+                origin.y,
+                origin.z);
 
     }
 

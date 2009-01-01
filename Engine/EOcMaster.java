@@ -228,6 +228,7 @@ public class EOcMaster {
         this.frustum[3][1] /= t;
         this.frustum[3][2] /= t;
         this.frustum[3][3] /= t;
+        
         /* Extract the FAR plane */
         this.frustum[4][0] = clip[ 3] - clip[ 2];
         this.frustum[4][1] = clip[ 7] - clip[ 6];

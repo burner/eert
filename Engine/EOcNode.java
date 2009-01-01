@@ -39,11 +39,8 @@ public class EOcNode {
         this.depth = depth;
         this.radius = radius;
         this.drawn = drawn;
-
-
         
-        this.objs = checkAllObjects(objs);
-        
+        this.objs = checkAllObjects(objs);       
         
         //Octree Depth
         if (this.depth < this.root.treeDepth) {
@@ -162,7 +159,7 @@ public class EOcNode {
 
     private EOcNode[] makeChilds() {
         LinkedList<EOcNode> tmpChilds = new LinkedList<EOcNode>();
-        //important! needs to be created within this contidional execution
+        //important needs to be created within this contidional execution
         //otherwise the child test in draw does not work
         EOcNode ch1 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.radius / 2,
                                                                    middle.y - this.radius / 2,

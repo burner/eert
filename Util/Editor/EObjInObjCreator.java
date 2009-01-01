@@ -17,8 +17,6 @@
  */
 package Util.Editor;
 
-import Types.Geometrie.EHullObject;
-import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.ObjInsToTest;
 import Types.Geometrie.Vector;
@@ -31,103 +29,56 @@ public class EObjInObjCreator {
     //Infos needed for making
     //all the ObjIns's
 
-    private int numberOfTime;
-    private float[] boundingMax;
+    private float distance;
     private static float objInRadius;
     private LinkedList<ObjInsToTest> tmpObjInsToTest;
     private LinkedList<ObjIns> createdObjs;
-    private static LinkedList<EHullObject> hull;
     private String[] toWrite;
-    private Obj objParent;
 
     public static void main(String[] args) {
         int number = new Integer(args[0]).intValue();
-        String outFile = args[1];
-        String inObj = args[2];
-        JObjParse objToPlace = new JObjParse(args[2]);
+        int times = new Integer(args[1]).intValue();
+        String outFile = args[2];
+        String inObj = args[3];
+        JObjParse objToPlace = new JObjParse(inObj);
         objToPlace.makeBoundingSphere();
+        EObjInObjCreator.objInRadius = objToPlace.boudingRadius;
 
-        //double the radius to make a obj fit
-        EObjInObjCreator.objInRadius = objToPlace.boudingRadius * 2;
 
-        //check if enought arguments are passed to make the
-        //tool run
-        if (args.length < 7 && (args.length - 3) % 4 == 0) {
-            System.out.println("Error: to few arguments");
-            System.exit(0);
-        }
 
-        //make hull spheres
-        EObjInObjCreator.hull = new LinkedList<EHullObject>();
-        for (int i = 3; i < args.length; i += 4) {
-            //if -s is read the next for Strings make
-            //up the hullobj
-            if (args[i].contentEquals(new String("-s"))) {
-                EObjInObjCreator.hull.add(new EHullObject(new Vector(new Float(args[i + 1]).floatValue(),
-                        new Float(args[i + 2]).floatValue(),
-                        new Float(args[i + 3]).floatValue()),
-                        new Float(args[i + 4]).floatValue() * EObjInObjCreator.objInRadius,
-                        new Integer(args[i + 5]).intValue()));
-            }
-        }
-        EObjInObjCreator hereComesIt = new EObjInObjCreator(inObj, outFile, number);
+        EObjInObjCreator make = new EObjInObjCreator(outFile, number, times);
+
 
     }
 
-    private void makeConMovements() {
-        for(ObjIns toMake : this.createdObjs) {
-            toMake.conMove[0] = VectorUtil.sub(toMake.places[0], toMake.origin);
-            for(int i = 1; i < this.numberOfTime; i++) {
-                toMake.conMove[0] = VectorUtil.sub(toMake.places[i], toMake.places[i-1]);
+    private void makeConMovements(int times) {
+        for (ObjIns toMake : this.createdObjs) {
+            toMake.conMove = new Vector[times-1];
+            toMake.conMove[0] = VectorUtil.sub(toMake.places[1], toMake.origin);
+            for (int i = 1; i < times - 1; i++) {
+                toMake.conMove[i] = VectorUtil.sub(toMake.places[i], toMake.places[i - 1]);
+                toMake.conMove[i].mult(0.00000001f);
             }
         }
     }
 
-    private void makeInfosNeeded() {
-        for (EHullObject toTest : EObjInObjCreator.hull) {
-            if (toTest.timeIdx > this.numberOfTime) {
-                this.numberOfTime = toTest.timeIdx;
-            }
-        }
+    public EObjInObjCreator(String outFile, int number, int times) {
+        this.distance = EObjInObjCreator.objInRadius;
+        createObjIns(number, times);
+        makeConMovements(times);
+        write(outFile);
     }
 
-    private void makeBoundingSphereAroundHullSpheres() {
-        for (int i = 0; i < this.numberOfTime; i++) {
-            for (EHullObject hulls : EObjInObjCreator.hull) {
-                if (hulls.timeIdx == i) {
-                    float tmpDis = (float) Math.sqrt(Math.pow(hulls.origin.x, 2) +
-                            Math.pow(hulls.origin.y, 2) +
-                            Math.pow(hulls.origin.z, 2));
-                    if (this.boundingMax[i] < tmpDis) {
-                        this.boundingMax[i] = tmpDis;
-                    }
-                }
-            }
-        }
-    }
 
-    public EObjInObjCreator(String hullObj, String outFile, int number) {
-        makeInfosNeeded();
-        makeBoundingSphereAroundHullSpheres();
-
-        createObjIns(number);
-        makeConMovements();
-        write();
-    }
-
-    private boolean checkSpheres(ObjInsToTest toCheck, int obj) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private void createObjIns(int number) {
+    private void createObjIns(int number, int times) {
         this.createdObjs = new LinkedList<ObjIns>();
-        for (int i = 0; i < this.numberOfTime; i++) {
+        for (int i = 0; i < times +1; i++) {
             this.tmpObjInsToTest = new LinkedList<ObjInsToTest>();
             for (int j = 0; j < number;) {
-                Vector tmpPos = createPos(i);
+                Vector tmpPos = createPos();
                 Vector tmpRot = createRot();
                 Vector tmpConRot = createConRot();
-                ObjInsToTest tmpObjIns = new ObjInsToTest(this.objParent, tmpPos, tmpRot, tmpConRot, j, 0);
+                ObjInsToTest tmpObjIns = new ObjInsToTest(tmpPos, tmpRot, tmpConRot, j, 0);
                 if (checkObjIns(tmpObjIns, i)) {
                     this.tmpObjInsToTest.add(tmpObjIns);
                     j++;
@@ -150,23 +101,36 @@ public class EObjInObjCreator {
             } else {
                 //if the ObjIns List exists
                 //place all new places at objIns.places
-                for(int k = 0; k < this.tmpObjInsToTest.size(); k++) {
-                    if(this.createdObjs.get(k).places == null) {
-                        this.createdObjs.get(k).places = new Vector[this.numberOfTime];
-                        this.createdObjs.get(k).places[i] = new Vector(this.tmpObjInsToTest.get(k).origin);
+                for (int k = 0; k < this.tmpObjInsToTest.size(); k++) {
+                    if (this.createdObjs.get(k).places == null) {
+                        this.createdObjs.get(k).places = new Vector[times];
+                        this.createdObjs.get(k).places[0] = new Vector(this.tmpObjInsToTest.get(k).origin);
                     } else {
-                        this.createdObjs.get(k).places[i] = new Vector(this.tmpObjInsToTest.get(k).origin);
+                        this.createdObjs.get(k).places[i-1] = new Vector(this.tmpObjInsToTest.get(k).origin);
                     }
                 }
             }
         }
     }
 
-    private Vector createPos(int obj) {
+    private Vector createPos() {
         Random rand = new Random();
-        Vector retVec = new Vector(rand.nextFloat() * this.boundingMax[obj],
-                rand.nextFloat() * this.boundingMax[obj],
-                rand.nextFloat() * this.boundingMax[obj]);
+        Vector retVec = new Vector(rand.nextFloat() * this.distance,
+                rand.nextFloat() * this.distance,
+                rand.nextFloat() * this.distance);
+                
+        boolean pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.x *= -1;
+        }
+        pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.y *= -1;
+        }
+        pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.z *= -1;
+        }
 
         return retVec;
     }
@@ -177,46 +141,55 @@ public class EObjInObjCreator {
                 rand.nextFloat() * 360.0f,
                 rand.nextFloat() * 360.0f);
 
+        boolean pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.x *= -1;
+        }
+        pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.y *= -1;
+        }
+        pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.z *= -1;
+        }
+
         return retVec;
     }
 
     private Vector createConRot() {
         Random rand = new Random();
-        Vector retVec = new Vector(rand.nextFloat() * 20.0f,
-                rand.nextFloat() * 20.0f,
-                rand.nextFloat() * 20.0f);
+        Vector retVec = new Vector(rand.nextFloat() * 0.0004f,
+                rand.nextFloat() * 0.0004f,
+                rand.nextFloat() * 0.0004f);
+
+        boolean pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.x *= -1;
+        }
+        pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.y *= -1;
+        }
+        pos = rand.nextBoolean();
+        if(!pos) {
+            retVec.z *= -1;
+        }
 
         return retVec;
     }
 
     private boolean checkObjIns(ObjInsToTest toCheck, int obj) {
         //do all tests
-        if (checkObjInsOutside(toCheck, obj)) {
-            return false;
-        }
-        if (checkSpheres(toCheck, obj)) {
-            if (checkObjInsObjIns(toCheck, obj)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean checkObjInsOutside(ObjInsToTest toCheck, int obj) {
-        float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x, 2) +
-                Math.pow(toCheck.origin.y, 2) +
-                Math.pow(toCheck.origin.z, 2));
-
-        if (dis + toCheck.boundSph >= this.boundingMax[obj] && dis - toCheck.boundSph <= -this.boundingMax[obj]) {
-            return false;
-        } else {
+        if (checkObjInsObjIns(toCheck)) {
             return true;
+        } else {
+            return false;
         }
+
     }
 
-    private boolean checkObjInsObjIns(ObjInsToTest toCheck, int pos) {
+    private boolean checkObjInsObjIns(ObjInsToTest toCheck) {
         for (ObjInsToTest forCheck : this.tmpObjInsToTest) {
             float dis = (float) Math.sqrt(Math.pow(toCheck.origin.x - forCheck.origin.x, 2) +
                     Math.pow(toCheck.origin.y - forCheck.origin.y, 2) +
@@ -229,11 +202,15 @@ public class EObjInObjCreator {
         return true;
     }
 
-    private void write() {
+    private void write(String outFile) {
         int size = this.createdObjs.size();
-        for (int i = 1; i < size; i++) {
+        this.toWrite = new String[size];
+        for (int i = 0; i < size; i++) {
             this.toWrite[i] = this.createdObjs.poll().toString();
         }
+
+        EFileWrite write = new EFileWrite(this.toWrite, outFile);
+
 
     }
 }
