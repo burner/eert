@@ -16,30 +16,31 @@
  *this program; if not, see <http://www.gnu.org/licenses/>.
  */
 package Util.Logic;
+
 public final class UHPT {
 
     public static long currentTime = System.nanoTime();
     public static long startTime = System.nanoTime();
     public static long lastFrame = System.nanoTime();
     public static long timeDiff = System.nanoTime();
-
     public static long timeIntervalTimer = System.currentTimeMillis();
-    public static int timer = 10000;    //15000 millisec = one timeslice
+    public static int timer = 7500;    //15000 millisec = one timeslice
     public static int timeInterval = 0; //what timeslice
-        
+
     public static final long getETime() {
         return UHPT.currentTime;
     }
-    
+
     public static final long starTime() {
         return UHPT.startTime;
     }
 
     public static final void updateUHPT() {
 
- UHPT.currentTime = System.nanoTime();
+        UHPT.currentTime = System.nanoTime();
         UHPT.timeDiff = UHPT.currentTime - UHPT.lastFrame;
-        if(System.currentTimeMillis() > UHPT.timeIntervalTimer +  timer) {
+        if (System.currentTimeMillis() > UHPT.timeIntervalTimer + timer) {
+            System.out.println("timerInterval Update");
             UHPT.timeInterval++;
             UHPT.timeIntervalTimer = System.currentTimeMillis();
         }

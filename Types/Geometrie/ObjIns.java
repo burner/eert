@@ -58,12 +58,13 @@ public class ObjIns {
     public void update() {
         if (this.conMove == null) {
             return;
-        }
+        }        
         if (UHPT.timeInterval < this.conMove.length) {
             this.origin.x = this.origin.x + this.conMove[UHPT.timeInterval].x * UHPT.timeDiff / 1000000000;
             this.origin.y = this.origin.y + this.conMove[UHPT.timeInterval].y * UHPT.timeDiff / 1000000000;
             this.origin.z = this.origin.z + this.conMove[UHPT.timeInterval].z * UHPT.timeDiff / 1000000000;
         }
+        
         this.rotation.x += this.conRot.x * UHPT.timeDiff / 10000 % 360;
         this.rotation.y += this.conRot.y * UHPT.timeDiff / 10000 % 360;
         this.rotation.z += this.conRot.z * UHPT.timeDiff / 10000 % 360;

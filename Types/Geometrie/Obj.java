@@ -267,19 +267,20 @@ public class Obj {
         gl.glPushMatrix();
 
         this.engine.eInfo.drawObj++;
-        //get ObjIns and adjust the matrix
 
+        //get ObjIns
         ObjIns tmp = this.objIns.get(number);
-        if (tmp.pos != null) {
-            gl.glTranslatef(tmp.pos.x, tmp.pos.y, tmp.pos.z);
-        } else {
-            gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
-        }
 
+        //Translate to position
+        gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
+
+        //Rotate
         gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
         gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
         gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
 
+        //Call the right list according
+        //to the distance from cam location
         if (dis < 10.0f) {
             gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[0]);
             gl.glCallList(this.listHandles[0]);

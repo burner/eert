@@ -74,7 +74,7 @@ public class EOcMaster {
                                           Math.pow(obj.origin.y - this.middle.y, 2) +
                                           Math.pow(obj.origin.z - this.middle.z, 2));
 
-            dis += obj.boundSph;
+            dis += Math.abs(obj.boundSph);
 
             if(dis > this.radius) {
                 this.radius = dis;

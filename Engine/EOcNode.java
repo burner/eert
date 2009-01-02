@@ -39,28 +39,37 @@ public class EOcNode {
         this.depth = depth;
         this.radius = radius;
         this.drawn = drawn;
-        
-        this.objs = checkAllObjects(objs);       
-        
+
+        this.objs = checkAllObjects(objs);
+
         //Octree Depth
         if (this.depth < this.root.treeDepth) {
             this.childs = makeChilds();
         }
-        
+
     }
 
-  
-    public void draw(GL gl) {        
+    public void draw(GL gl) {
+        //If this node has no more child
+        //draw all objIns not yet drawn
+            
         if (this.childs == null) {
             float dis;
+            //If the distance is 0.0
+            //this node is not within
+            //the frustun
+            drawBox(gl);
             if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
                 return;
             } else {
                 this.root.engine.eInfo.drawnNodes++;
                 for (ObjIns obIns : this.objs) {
                     if (!this.root.drawn[obIns.objInsNumber]) {
-                        dis = (float) Math.sqrt(Math.pow(this.root.cam.loc.x - obIns.origin.x, 2) + Math.pow(this.root.cam.loc.y - obIns.origin.y, 2) + Math.pow(this.root.cam.loc.z - obIns.origin.z, 2));
-                        //System.out.println("ObjIns = " + obIns.objInsNumber);
+                        dis = (float) Math.sqrt(Math.pow(this.root.cam.loc.x - obIns.origin.x, 2) +
+                                Math.pow(this.root.cam.loc.y - obIns.origin.y, 2) +
+                                Math.pow(this.root.cam.loc.z - obIns.origin.z, 2));
+
+                        //below this the actually rendering take place
                         obIns.parent.render(obIns.objInsNumber, dis);
                         this.root.drawn[obIns.objInsNumber] = true;
                     } else {
@@ -69,8 +78,7 @@ public class EOcNode {
                 }
             }
         } else {
-            //drawBox(gl);
-            
+            //drawBox(gl);            
             for (EOcNode child : this.childs) {
                 child.draw(gl);
             }
@@ -108,9 +116,11 @@ public class EOcNode {
         //the error-margin shouldn't be to big, but the check is much cheaper
         //and easier to understand
 
-        float dis = (float) Math.abs(Math.sqrt(Math.pow(this.middle.x - obj.origin.x, 2) + Math.pow(this.middle.y - obj.origin.y, 2) + Math.pow(this.middle.z - obj.origin.z, 2)));
+        float dis = (float) Math.sqrt((obj.origin.x - this.middle.x)*(obj.origin.x - this.middle.x) +
+                (obj.origin.y - this.middle.y)*(obj.origin.y - this.middle.y) +
+                (obj.origin.z - this.middle.z)*(obj.origin.z - this.middle.z));
 
-        if (dis - this.radius - obj.boundSph < 0.0f) {
+        if (dis - obj.boundSph < this.radius) {
             return true;
         } else {
             return false;
@@ -162,56 +172,56 @@ public class EOcNode {
         //important needs to be created within this contidional execution
         //otherwise the child test in draw does not work
         EOcNode ch1 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.radius / 2,
-                                                                   middle.y - this.radius / 2,
-                                                                   middle.z - this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y - this.radius / 2,
+                middle.z - this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch1.objs.length > 0) {
             tmpChilds.add(ch1);
         }
 
         EOcNode ch2 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.radius / 2,
-                                                                   middle.y - this.radius / 2,
-                                                                   middle.z + this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y - this.radius / 2,
+                middle.z + this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch2.objs.length > 0) {
             tmpChilds.add(ch2);
         }
 
         EOcNode ch3 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.radius / 2,
-                                                                   middle.y - this.radius / 2,
-                                                                   middle.z - this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y - this.radius / 2,
+                middle.z - this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch3.objs.length > 0) {
             tmpChilds.add(ch3);
         }
 
         EOcNode ch4 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.radius / 2,
-                                                                   middle.y - this.radius / 2,
-                                                                   middle.z + this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y - this.radius / 2,
+                middle.z + this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch4.objs.length > 0) {
             tmpChilds.add(ch4);
         }
         EOcNode ch5 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.radius / 2,
-                                                                   middle.y + this.radius / 2,
-                                                                   middle.z - this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y + this.radius / 2,
+                middle.z - this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch5.objs.length > 0) {
             tmpChilds.add(ch5);
         }
 
         EOcNode ch6 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.radius / 2,
-                                                                   middle.y + this.radius / 2,
-                                                                   middle.z + this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y + this.radius / 2,
+                middle.z + this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch6.objs.length > 0) {
             tmpChilds.add(ch6);
         }
 
         EOcNode ch7 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.radius / 2,
-                                                                   middle.y + this.radius / 2,
-                                                                   middle.z - this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y + this.radius / 2,
+                middle.z - this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch7.objs.length > 0) {
             tmpChilds.add(ch7);
         }
 
         EOcNode ch8 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.radius / 2,
-                                                                   middle.y + this.radius / 2,
-                                                                   middle.z + this.radius / 2), this.radius/2, this.drawn, depth + 1);
+                middle.y + this.radius / 2,
+                middle.z + this.radius / 2), this.radius / 2, this.drawn, depth + 1);
         if (ch8.objs.length > 0) {
             tmpChilds.add(ch8);
         }
