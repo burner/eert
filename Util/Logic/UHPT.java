@@ -24,7 +24,7 @@ public final class UHPT {
     public static long timeDiff = System.nanoTime();
 
     public static long timeIntervalTimer = System.currentTimeMillis();
-    public static int timer = 15000;    //15000 millisec = one timeslice
+    public static int timer = 10000;    //15000 millisec = one timeslice
     public static int timeInterval = 0; //what timeslice
         
     public static final long getETime() {
