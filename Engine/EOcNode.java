@@ -32,13 +32,15 @@ public class EOcNode {
     private Vector middle;
     private float radius;
     private int depth;
+    private float bSize;
 
-    public EOcNode(EOcMaster root, ObjIns[] objs, Vector middle, float radius, boolean[] drawn, int depth) {
+    public EOcNode(EOcMaster root, ObjIns[] objs, Vector middle, float radius, float bSize, boolean[] drawn, int depth) {
         this.root = root;
         this.middle = middle;
         this.depth = depth;
         this.radius = radius;
         this.drawn = drawn;
+	this.bSize = bSize;
 
         this.objs = checkAllObjects(objs);
 

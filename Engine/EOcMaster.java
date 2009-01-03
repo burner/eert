@@ -33,9 +33,7 @@ public class EOcMaster {
     private EOcNode root;
     private Vector middle;
     private float radius;
-    private float xSize = 0;
-    private float ySize = 0;
-    private float zSize = 0;
+    private float bSize = 0;
     private GL gl;
     public int facRender;
     public Camera cam;
@@ -52,7 +50,7 @@ public class EOcMaster {
         this.objs = allObj;
         this.numNodes = 0;
         makeFirstCubeInfo();
-        this.root = new EOcNode(this, this.objs, this.middle, this.radius, this.drawn, 0);
+        this.root = new EOcNode(this, this.objs, this.middle, this.radius, this.bSize, this.drawn, 0);
     }
 
     private void makeFirstCubeInfo() {
@@ -79,6 +77,19 @@ public class EOcMaster {
             if(dis > this.radius) {
                 this.radius = dis;
             }
+
+	    dis = obj.origin.x - this.middle.x;
+	    if(this.bSize < Math.abs(dis)) {
+		this.bSize = Math.abs(dis);
+	    }
+	    dis = obj.origin.y - this.middle.y;
+	    if(this.bSize < Math.abs(dis)) {
+		this.bSize = Math.abs(dis);
+	    }
+	    dis = obj.origin.z - this.middle.z;
+	    if(this.bSize < Math.abs(dis)) {
+		this.bSize = Math.abs(dis);
+	    }
         }
 
     }
