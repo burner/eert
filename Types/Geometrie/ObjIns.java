@@ -39,7 +39,6 @@ public class ObjIns {
         this.parent = parent;
         this.boundSph = this.parent.bR;
         this.rotation = rotation;
-
         this.conRot = conRot;
         place(origin);
         this.objNumber = number;

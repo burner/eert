@@ -52,8 +52,8 @@ public class Engine implements GLEventListener {
         this.szene = szene;
         this.cam = cam;
         this.frame = frame;
-        //this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
-        //this.music.play();
+        this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
+        this.music.play();
     }
 
     public void init(GLAutoDrawable glDrawable) {

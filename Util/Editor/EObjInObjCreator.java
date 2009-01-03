@@ -115,9 +115,9 @@ public class EObjInObjCreator {
 
     private Vector createPos() {
         Random rand = new Random();
-        Vector retVec = new Vector(rand.nextFloat() * this.distance,
-                rand.nextFloat() * this.distance,
-                rand.nextFloat() * this.distance);
+        Vector retVec = new Vector(rand.nextFloat() * this.distance * 5,
+                rand.nextFloat() * this.distance * 5,
+                rand.nextFloat() * this.distance * 5);
                 
         boolean pos = rand.nextBoolean();
         if(!pos) {

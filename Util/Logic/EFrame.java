@@ -21,6 +21,8 @@ import Engine.*;
 import com.sun.opengl.util.Animator;
 import javax.media.opengl.GLCanvas;
 import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -31,7 +33,7 @@ public class EFrame extends Frame {
     private Camera cam;
     public final Animator animator;
 
-    public EFrame(String szene) {
+    public EFrame(String szene, boolean fullScreen) {
         this.cam = new Camera();
         this.setSize(1024, 640);
         this.canvas = new GLCanvas();
@@ -39,7 +41,13 @@ public class EFrame extends Frame {
         this.add(this.canvas);
         this.animator = new Animator(this.canvas);
         this.setTitle("EERT");
-        //this.setUndecorated(true);
+        if (fullScreen) {
+            this.setUndecorated(true);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            gs.setFullScreenWindow(this);
+            this.toFront();
+        }
         this.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
@@ -55,7 +63,7 @@ public class EFrame extends Frame {
                 }).start();
             }
         });
-       this.setVisible(true);
+        this.setVisible(true);
     }
 }
 

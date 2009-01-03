@@ -87,7 +87,7 @@ public class EObjParse {
             System.out.println(new File(".").getAbsolutePath());
 
             //setup to read the file line by line
-            input = new FileInputStream("./Szenes/" + "SuzannTest5.eob");
+            input = new FileInputStream("./Szenes/" + this.file);
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 
@@ -266,8 +266,8 @@ public class EObjParse {
                     //if conMov2 is full
                     //save new conMove
                     conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
-                            new Float(conMov1.toString()).floatValue(),
-                            new Float(conMov2.toString()).floatValue()));
+                                                 new Float(conMov1.toString()).floatValue(),
+                                                 new Float(conMov2.toString()).floatValue()));
 
                     conMov0 = new StringBuffer();
                     conMov1 = new StringBuffer();
@@ -288,8 +288,8 @@ public class EObjParse {
         }
         if(conMov0.length() > 0 && conMov1.length() > 0 && conMov2.length() > 0) {
         conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
-                new Float(conMov1.toString()).floatValue(),
-                new Float(conMov2.toString()).floatValue()));
+                                     new Float(conMov1.toString()).floatValue(),
+                                     new Float(conMov2.toString()).floatValue()));
         }
         //Copy the LinkedList into an array
         Vector[] conMoveArray = new Vector[conMoveVector.size()];

@@ -81,20 +81,19 @@ public class EOcMaster {
                 this.radius = dis;
             }
 
-	    dis = obj.origin.x - this.middle.x;
-	    if(this.bSize < Math.abs(dis)) {
-		this.bSize = Math.abs(dis);
-	    }
-	    dis = obj.origin.y - this.middle.y;
-	    if(this.bSize < Math.abs(dis)) {
-		this.bSize = Math.abs(dis);
-	    }
-	    dis = obj.origin.z - this.middle.z;
-	    if(this.bSize < Math.abs(dis)) {
-		this.bSize = Math.abs(dis);
-	    }
+            dis = obj.origin.x - this.middle.x;
+            if (this.bSize < Math.abs(dis)) {
+                this.bSize = Math.abs(dis);
+            }
+            dis = obj.origin.y - this.middle.y;
+            if (this.bSize < Math.abs(dis)) {
+                this.bSize = Math.abs(dis);
+            }
+            dis = obj.origin.z - this.middle.z;
+            if (this.bSize < Math.abs(dis)) {
+                this.bSize = Math.abs(dis);
+            }
         }
-
     }
 
     public void drawOctree(GL gl) {
