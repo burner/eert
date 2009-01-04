@@ -34,10 +34,12 @@ public class EObjInObjCreator {
     private LinkedList<ObjInsToTest> tmpObjInsToTest;
     private LinkedList<ObjIns> createdObjs;
     private String[] toWrite;
+    private static int posNumber;
 
     public static void main(String[] args) {
         int number = new Integer(args[0]).intValue();
         int times = new Integer(args[1]).intValue();
+        EObjInObjCreator.posNumber = times;
         String outFile = args[2];
         String inObj = args[3];
         JObjParse objToPlace = new JObjParse(inObj);
@@ -52,6 +54,9 @@ public class EObjInObjCreator {
     }
 
     private void makeConMovements(int times) {
+        if(EObjInObjCreator.posNumber == 1) {
+            return;
+        }
         for (ObjIns toMake : this.createdObjs) {
             toMake.conMove = new Vector[times-1];
             toMake.conMove[0] = VectorUtil.sub(toMake.places[1], toMake.origin);
