@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import javax.media.opengl.GL;
 
 public class ESkyBox {
+
     private Engine engine;
     private Camera cam;
     private String[] textures;
@@ -37,13 +38,13 @@ public class ESkyBox {
     private ETexture texImage4;
     private ETexture texImage5;
 
-
-    public ESkyBox(GL gl, Engine engine, Camera cam, String[] textures, float expanse) {
+    public ESkyBox(GL gl, Engine engine, Camera cam, String[] textures, float expanse) throws FileNotFoundException {
         this.gl = gl;
         this.engine = engine;
         this.cam = cam;
         this.textures = textures;
         this.expanse = expanse;
+        makeSkyBox();
     }
 
     private void makeSkyBox() throws FileNotFoundException {
@@ -61,7 +62,6 @@ public class ESkyBox {
                 GL.GL_NEAREST);
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage0.getWidth(), this.texImage0.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage0.getBuffer());
-
 
         this.texImage1 = new ETexture(this.textures[1]);
 
@@ -87,7 +87,6 @@ public class ESkyBox {
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage2.getWidth(), this.texImage2.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage2.getBuffer());
 
-
         this.texImage3 = new ETexture(this.textures[3]);
 
         gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[3]);
@@ -99,7 +98,6 @@ public class ESkyBox {
                 GL.GL_NEAREST);
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage3.getWidth(), this.texImage3.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage3.getBuffer());
-
 
         this.texImage4 = new ETexture(this.textures[4]);
 
@@ -113,7 +111,6 @@ public class ESkyBox {
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage4.getWidth(), this.texImage4.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage4.getBuffer());
 
-
         this.texImage5 = new ETexture(this.textures[5]);
 
         gl.glBindTexture(GL.GL_TEXTURE_2D, this.textureHandles[5]);
@@ -125,6 +122,55 @@ public class ESkyBox {
                 GL.GL_NEAREST);
         gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, this.texImage5.getWidth(), this.texImage5.getHeight(),
                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, this.texImage5.getBuffer());
+
+
+        //Back
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex3f(-this.expanse, -this.expanse, -this.expanse);
+        gl.glVertex3f(this.expanse, -this.expanse, -this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
+        gl.glEnd();
+
+        //Front
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex3f(-this.expanse, -this.expanse, this.expanse);
+        gl.glVertex3f(this.expanse, -this.expanse, this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
+        gl.glEnd();
+
+        //Left
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex3f(-this.expanse, -this.expanse, -this.expanse);
+        gl.glVertex3f(-this.expanse, -this.expanse, this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
+        gl.glEnd();
+
+        //Right
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex3f(this.expanse, -this.expanse, -this.expanse);
+        gl.glVertex3f(this.expanse, -this.expanse, this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
+        gl.glEnd();
+
+        //Top
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
+        gl.glEnd();
+
+        //Bottom
+        gl.glBegin(GL.GL_QUADS);
+        gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
+        gl.glVertex3f(this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
+        gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
+        gl.glEnd();
 
     }
 }
