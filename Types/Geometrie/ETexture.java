@@ -93,11 +93,6 @@ public class ETexture {
         }
     }
 
-    /**
-     * convert argb to rgba
-     * @param array
-     * @return
-     */
     public static byte[] convertToRGBA(int[] array) {
         byte[] data = new byte[array.length * 4];
         int count = 0;

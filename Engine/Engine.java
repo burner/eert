@@ -17,6 +17,7 @@
  */
 package Engine;
 
+import Types.Geometrie.ESkyBox;
 import Util.Logic.EObjectHandler;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
@@ -47,6 +48,7 @@ public class Engine implements GLEventListener {
     private Calendar now = null;
     private long ms = 0;
     public String[] textures;
+    public ESkyBox skybox;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
@@ -66,8 +68,6 @@ public class Engine implements GLEventListener {
         gl.glEnable(GL.GL_DEPTH_TEST);
         //gl.glEnable(GL.GL_LIGHTING);
         gl.glPushMatrix();
-        gl.glTranslatef(4.0f, 4.0f, 4.0f);
-        gl.glTranslatef(-4.0f, -4.0f, -4.0f);
         gl.glPopMatrix();
         gl.glEnable(GL.GL_CULL_FACE);
         gl.glDepthFunc(GL.GL_LEQUAL);
@@ -108,6 +108,7 @@ public class Engine implements GLEventListener {
         //draw objects
         this.root.drawOctree(gl);
 
+        this.skybox.draw();
 
         //if true draw Info on screen
         frame();

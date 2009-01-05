@@ -25,6 +25,7 @@ import Util.*;
 import java.io.*;
 
 import Types.*;
+import Types.Geometrie.ESkyBox;
 import Types.Geometrie.Vector;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -117,6 +118,8 @@ public class EObjParse {
                     }
                 } else if (curLine.charAt(0) == 'p') {
                     addPathPoint();
+                } else if (curLine.charAt(0) == 's') {
+                    addSkyBox();
                 } else {
                     continue;
                 }
@@ -132,7 +135,7 @@ public class EObjParse {
             System.out.println("Unknown Error");
             e.printStackTrace();
         }
-        
+
     }
 
     //parse a new object
@@ -266,8 +269,8 @@ public class EObjParse {
                     //if conMov2 is full
                     //save new conMove
                     conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
-                                                 new Float(conMov1.toString()).floatValue(),
-                                                 new Float(conMov2.toString()).floatValue()));
+                            new Float(conMov1.toString()).floatValue(),
+                            new Float(conMov2.toString()).floatValue()));
 
                     conMov0 = new StringBuffer();
                     conMov1 = new StringBuffer();
@@ -286,10 +289,10 @@ public class EObjParse {
                 }
             }
         }
-        if(conMov0.length() > 0 && conMov1.length() > 0 && conMov2.length() > 0) {
-        conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
-                                     new Float(conMov1.toString()).floatValue(),
-                                     new Float(conMov2.toString()).floatValue()));
+        if (conMov0.length() > 0 && conMov1.length() > 0 && conMov2.length() > 0) {
+            conMoveVector.add(new Vector(new Float(conMov0.toString()).floatValue(),
+                    new Float(conMov1.toString()).floatValue(),
+                    new Float(conMov2.toString()).floatValue()));
         }
         //Copy the LinkedList into an array
         Vector[] conMoveArray = new Vector[conMoveVector.size()];
@@ -342,6 +345,34 @@ public class EObjParse {
         this.engine.textures[3] = this.textures[3];
         this.engine.textures[4] = this.textures[4];
         this.engine.textures[5] = this.textures[5];
+    }
+
+    private void addSkyBox() throws FileNotFoundException {
+        //parse the float representing the expanse of the skybox
+        StringBuffer distance = new StringBuffer();
+        int i;
+        for (i = 2; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
+                break;
+            }
+            distance.append(curLine.charAt(i));
+        }
+        float expanse = new Float(distance.toString()).floatValue();
+
+        StringBuffer buffer = new StringBuffer();
+                
+        i++;
+        for (; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
+                break;
+            } else {
+                buffer.append(curLine.charAt(i));
+            }
+        }
+        String texName = buffer.toString();
+
+        this.engine.skybox = new ESkyBox(gl, this.engine, this.engine.cam, texName, expanse);
+
     }
 
     private void addPathPoint() {
