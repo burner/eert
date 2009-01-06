@@ -68,63 +68,63 @@ public class ESkyBox {
         //Front
         gl.glBegin(GL.GL_QUADS);
         gl.glBindTexture(GL.GL_TEXTURE_2D, this.texHandle0);
-        gl.glTexCoord2f(0.333333333333f, 0.25f);
+        gl.glTexCoord2f(0.25f, 0.6666f);
         gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
-        gl.glTexCoord2f(0.333333333333f, 0.5f);
+        gl.glTexCoord2f(0.25f, 0.3333f);
         gl.glVertex3f(-this.expanse, -this.expanse, -this.expanse);
-        gl.glTexCoord2f(0.666666666666f, 0.5f);
+        gl.glTexCoord2f(0.5f, 0.3333f);
         gl.glVertex3f(this.expanse, -this.expanse, -this.expanse);
-        gl.glTexCoord2f(0.666666666666f, 0.25f);
+        gl.glTexCoord2f(0.5f, 0.6666f);
         gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
 
         //Back
-        gl.glTexCoord2f(1f, 1f);
+        gl.glTexCoord2f(0.75f, 0.6666f);
         gl.glVertex3f(this.expanse, this.expanse, this.expanse);
-        gl.glTexCoord2f(1f, 0f);
+        gl.glTexCoord2f(0.75f, 0.3333f);
         gl.glVertex3f(this.expanse, -this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 1f);
+        gl.glTexCoord2f(1f, 0.3333f);
         gl.glVertex3f(-this.expanse, -this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 0f);
+        gl.glTexCoord2f(1f, 0.6666f);
         gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
 
         //Right
-        gl.glTexCoord2f(1f, 1f);
+        gl.glTexCoord2f(0.5f, 0.3333f);
         gl.glVertex3f(this.expanse, -this.expanse, -this.expanse);
-        gl.glTexCoord2f(1f, 0f);
+        gl.glTexCoord2f(0.75f, 0.3333f);
         gl.glVertex3f(this.expanse, -this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 1f);
+        gl.glTexCoord2f(0.75f, 0.6666f);
         gl.glVertex3f(this.expanse, this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 0f);
+        gl.glTexCoord2f(0.5f, 0.6666f);
         gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
 
         //Left
-        gl.glTexCoord2f(1f, 1f);
+        gl.glTexCoord2f(0, 0.6666f);
         gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
-        gl.glTexCoord2f(1f, 0f);
+        gl.glTexCoord2f(0, 0.3333f);
         gl.glVertex3f(-this.expanse, -this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 1f);
+        gl.glTexCoord2f(0.25f, 0.3333f);
         gl.glVertex3f(-this.expanse, -this.expanse, -this.expanse);
-        gl.glTexCoord2f(0f, 0f);
+        gl.glTexCoord2f(0.25f, 0.6666f);
         gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
 
         //Top
-        gl.glTexCoord2f(1f, 1f);
+        gl.glTexCoord2f(0.25f, 1f);
         gl.glVertex3f(-this.expanse, this.expanse, this.expanse);
-        gl.glTexCoord2f(1f, 0f);
+        gl.glTexCoord2f(0.25f, 0.6666f);
         gl.glVertex3f(-this.expanse, this.expanse, -this.expanse);
-        gl.glTexCoord2f(0f, 1f);
+        gl.glTexCoord2f(0.5f, 0.6666f);
         gl.glVertex3f(this.expanse, this.expanse, -this.expanse);
-        gl.glTexCoord2f(0f, 0f);
+        gl.glTexCoord2f(0.5f, 1f);
         gl.glVertex3f(this.expanse, this.expanse, this.expanse);
 
         //Bottom
-        gl.glTexCoord2f(1f, 1f);
+        gl.glTexCoord2f(0.25f, 0.3333f);
         gl.glVertex3f(-this.expanse, -this.expanse, -this.expanse);
-        gl.glTexCoord2f(1f, 0f);
+        gl.glTexCoord2f(0.25f, 0f);
         gl.glVertex3f(-this.expanse, -this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 1f);
+        gl.glTexCoord2f(0.5f, 0f);
         gl.glVertex3f(this.expanse, -this.expanse, this.expanse);
-        gl.glTexCoord2f(0f, 0f);
+        gl.glTexCoord2f(0.5f, 0.3333f);
         gl.glVertex3f(this.expanse, -this.expanse, -this.expanse);
 
         gl.glEnd();
