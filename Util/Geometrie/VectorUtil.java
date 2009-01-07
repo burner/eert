@@ -64,6 +64,12 @@ public class VectorUtil {
                 v1.z - v2.z);
     }
 
+    public static Vector mult(Vector v, float scalar) {
+	return new Vector(v.x * scalar,
+		v.y * scalar,
+		v.z * scalar);
+}
+
     public static Vector add(Vector v1, Vector v2) {
         return new Vector(v1.x + v2.x,
                 v1.y + v2.y,

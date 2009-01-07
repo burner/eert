@@ -133,9 +133,14 @@ public class Engine implements GLEventListener {
         final float h = (float) width / (float) height;
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
+
+	//Info needed to make the sphere
+	//around the frustum
         this.cam.farPlane = 500.0f;
         this.cam.nearPlane = 1.0f;
         this.cam.viewAngle = 45.0f;
+	this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane)/2;
+
         glu.gluPerspective(45.0f, h, 1.0, 500.0);
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();

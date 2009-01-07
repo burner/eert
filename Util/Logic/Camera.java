@@ -38,10 +38,15 @@ public class Camera {
     float pitch = 0.0f; // left-right
     float roll = 0.0f;    // Vector in camera direction: look-at-vector
     float speed;
+
+    //Frustum infos
     public float nearPlane;
     public float farPlane;
     public float viewAngle;
+    public float zHalf;
     public Vector dirVector;
+    public Vector frustMiddle;
+    public float frustRadius;
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
@@ -195,6 +200,13 @@ public class Camera {
 
         this.dirVector = new Vector(x, y, z);
         this.dirVector.normalize();
+
+	this.frustumMiddle = VectorUtil.add(this.loc, VectorUtil.mult(this.dirVector, this.zHalf + this.nearPlane));
+	
+	float viewLength = this.farPlane - this.nearPlane;
+	float heightWidth = viewLength * Math.tan(this.viewAngle * 0.5f);
+	 
+
     }
 
     public void drawCam() {
