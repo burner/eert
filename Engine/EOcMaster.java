@@ -20,6 +20,7 @@ package Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.Vector;
+import Types.Illumination.PointLight;
 import Util.Geometrie.VectorUtil;
 import Util.Logic.Camera;
 import javax.media.opengl.GL;
@@ -42,6 +43,7 @@ public class EOcMaster {
     public Engine engine;
     public int treeDepth;
 
+    public float frustLight;
 
     public EOcMaster(Engine engine, ObjIns[] allObj, Obj[] realObj, GL gl, Camera cam) {
         this.treeDepth = 4;
@@ -53,7 +55,7 @@ public class EOcMaster {
         this.objs = allObj;
         this.numNodes = 0;
         makeFirstCubeInfo();
-        this.bHalf = this.bSize/2;
+        this.bHalf = this.bSize / 2;
         this.root = new EOcNode(this, this.objs, this.middle, this.radius, this.bSize, this.drawn, 0);
     }
 
@@ -71,14 +73,14 @@ public class EOcMaster {
         }
 
         //make a bounding sphere around all ObjIns
-        for(ObjIns obj : this.objs) {
+        for (ObjIns obj : this.objs) {
             float dis = (float) Math.sqrt(Math.pow(obj.origin.x - this.middle.x, 2) +
-                                          Math.pow(obj.origin.y - this.middle.y, 2) +
-                                          Math.pow(obj.origin.z - this.middle.z, 2));
+                    Math.pow(obj.origin.y - this.middle.y, 2) +
+                    Math.pow(obj.origin.z - this.middle.z, 2));
 
             dis += Math.abs(obj.boundSph);
 
-            if(dis > this.radius) {
+            if (dis > this.radius) {
                 this.radius = dis;
             }
 
@@ -105,13 +107,13 @@ public class EOcMaster {
         }
         this.drawn = new boolean[this.objs.length];
 
-        
+
         //actually draw
         //drawBox(gl);
         extractFrustum();
         this.facRender = 0;
         this.root.draw(gl);
-    
+
         //make Info
         for (Obj rObj : this.realObjs) {
             this.facRender += rObj.facesRendered;
@@ -242,7 +244,7 @@ public class EOcMaster {
         this.frustum[3][1] /= t;
         this.frustum[3][2] /= t;
         this.frustum[3][3] /= t;
-        
+
         /* Extract the FAR plane */
         this.frustum[4][0] = clip[ 3] - clip[ 2];
         this.frustum[4][1] = clip[ 7] - clip[ 6];
@@ -269,41 +271,22 @@ public class EOcMaster {
         this.frustum[5][2] /= t;
         this.frustum[5][3] /= t;
 
-        Vector v1 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
-                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
-                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
 
-        Vector v2 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
-                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
-                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
+        //Boudingsphere around the frustum and all lights
+        this.engine.cam.updateFrustMiddle();
 
-        Vector v3 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
-                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
-                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
+        //Check if a light is outside of the boundingsphere
+        //and if so extend the radius of the sphere
+        if(this.engine.lights == null) {
+            return;
+        }
+        for(PointLight light: this.engine.lights.lights) {
+            this.frustLight = this.cam.frustRadius;
+            float dis = VectorUtil.distance(this.cam.frustMiddle, light.origin);
+            if(dis > this.frustLight) {
+                this.frustLight = dis;
+            }
+        }
 
-        Vector v4 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
-                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
-                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
-
-
-        Vector v5 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
-                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
-                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
-
-        Vector v6 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
-                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
-                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
-
-        Vector v7 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
-                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
-                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
-
-        Vector v8 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
-                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
-                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
-
-
-        System.out.print(VectorUtil.add(VectorUtil.add(v1, v2), VectorUtil.add(v3, v4)) + " ");
-        System.out.println(VectorUtil.add(VectorUtil.add(v5, v6), VectorUtil.add(v7, v8)));
     }
 }

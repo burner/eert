@@ -112,4 +112,10 @@ public class VectorUtil {
 
         return divisor;
     }
+
+    public static float distance(Vector x, Vector y) {
+        return (float) Math.sqrt(Math.pow((x.x - y.x), 2) +
+                Math.pow((x.y - y.y), 2) +
+                Math.pow((x.z - y.z), 2));
+    }
 }

@@ -18,6 +18,7 @@
 package Engine;
 
 import Types.Geometrie.ESkyBox;
+import Types.Illumination.LightManagement;
 import Util.Logic.EObjectHandler;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
@@ -49,6 +50,8 @@ public class Engine implements GLEventListener {
     private long ms = 0;
     public String[] textures;
     public ESkyBox skybox;
+
+    public LightManagement lights;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
