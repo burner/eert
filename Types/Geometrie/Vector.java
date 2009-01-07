@@ -77,6 +77,12 @@ public class Vector {
         this.y *= scalar;
         this.z *= scalar;
     }
+
+    public void div(float scalar) {
+        this.x /= scalar;
+        this.y /= scalar;
+        this.z /= scalar;
+    }
         
 
     public Vector getCrossProd(Vector vector) {

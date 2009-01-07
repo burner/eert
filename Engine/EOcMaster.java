@@ -20,6 +20,7 @@ package Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.Vector;
+import Util.Geometrie.VectorUtil;
 import Util.Logic.Camera;
 import javax.media.opengl.GL;
 
@@ -267,5 +268,42 @@ public class EOcMaster {
         this.frustum[5][1] /= t;
         this.frustum[5][2] /= t;
         this.frustum[5][3] /= t;
+
+        Vector v1 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
+                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
+                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
+
+        Vector v2 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
+                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
+                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
+
+        Vector v3 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
+                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
+                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
+
+        Vector v4 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
+                new Vector(this.frustum[5][0], this.frustum[5][1], this.frustum[5][2]), this.frustum[5][3],
+                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
+
+
+        Vector v5 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
+                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
+                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
+
+        Vector v6 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[3][0], this.frustum[3][1], this.frustum[3][2]), this.frustum[3][3],
+                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
+                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
+
+        Vector v7 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
+                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
+                new Vector(this.frustum[1][0], this.frustum[1][1], this.frustum[1][2]), this.frustum[1][3]);
+
+        Vector v8 = VectorUtil.threePlaneIntersec(new Vector(this.frustum[2][0], this.frustum[2][1], this.frustum[2][2]), this.frustum[2][3],
+                new Vector(this.frustum[4][0], this.frustum[4][1], this.frustum[4][2]), this.frustum[4][3],
+                new Vector(this.frustum[0][0], this.frustum[0][1], this.frustum[0][2]), this.frustum[0][3]);
+
+
+        System.out.print(VectorUtil.add(VectorUtil.add(v1, v2), VectorUtil.add(v3, v4)) + " ");
+        System.out.println(VectorUtil.add(VectorUtil.add(v5, v6), VectorUtil.add(v7, v8)));
     }
 }

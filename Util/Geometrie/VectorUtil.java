@@ -70,10 +70,40 @@ public class VectorUtil {
                 v1.z + v2.z);
     }
 
-    public Vector CrossProduct(Vector vector1, Vector vector2) {
+    public static Vector crossProduct(Vector vector1, Vector vector2) {
         return new Vector(
                 vector1.y * vector2.z - vector1.z * vector2.y,
                 vector1.z * vector2.x - vector1.x * vector2.z,
                 vector1.x * vector2.y - vector1.y * vector2.x);
+    }
+
+    public static Vector threePlaneIntersec(Vector n1, float d1, Vector n2, float d2, Vector n3, float d3) {
+        /*
+                    d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )
+        P = 	-------------------------------------------------------------------------
+                                N1 . ( N2 * N3 )
+         */
+        n1.normalize();
+        n2.normalize();
+        n3.normalize();
+
+        Vector n2n3C = crossProduct(n2, n3);
+        Vector n3n1C = crossProduct(n3, n1);
+        Vector n1n2C = crossProduct(n1, n2);
+
+        Vector copyN2N3C = new Vector(n2n3C);
+
+        n2n3C.mult(d1);
+        n3n1C.mult(d2);
+        n1n2C.mult(d3);
+
+        Vector divisor = add(n2n3C, n3n1C);
+        divisor.add(n1n2C);
+
+        float divident = dotProduct(n1, copyN2N3C);
+
+        divisor.div(divident);
+
+        return divisor;
     }
 }

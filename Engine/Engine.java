@@ -133,7 +133,10 @@ public class Engine implements GLEventListener {
         final float h = (float) width / (float) height;
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(50.0f, h, 1.0, 1000.0);
+        this.cam.farPlane = 500.0f;
+        this.cam.nearPlane = 1.0f;
+        this.cam.viewAngle = 45.0f;
+        glu.gluPerspective(45.0f, h, 1.0, 500.0);
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
     }

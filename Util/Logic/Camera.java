@@ -38,6 +38,10 @@ public class Camera {
     float pitch = 0.0f; // left-right
     float roll = 0.0f;    // Vector in camera direction: look-at-vector
     float speed;
+    public float nearPlane;
+    public float farPlane;
+    public float viewAngle;
+    public Vector dirVector;
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
@@ -182,6 +186,15 @@ public class Camera {
         gl.glRotatef(this.heading, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(-loc.x, -loc.y, -loc.z);
 
+    }
+
+    private void makeBoundingSphere() {
+        float x = (float) (Math.sin(this.pitch) * Math.cos(this.heading));
+        float y = (float) (Math.sin(this.pitch) * Math.sin(this.heading));
+        float z = (float) Math.cos(this.pitch);
+
+        this.dirVector = new Vector(x, y, z);
+        this.dirVector.normalize();
     }
 
     public void drawCam() {
