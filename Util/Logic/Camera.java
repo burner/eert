@@ -19,6 +19,7 @@ package Util.Logic;
 
 import Util.Logic.UHPT;
 import Types.Geometrie.Vector;
+import Util.Geometrie.VectorUtil;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.*;
 
@@ -201,11 +202,29 @@ public class Camera {
         this.dirVector = new Vector(x, y, z);
         this.dirVector.normalize();
 
-	this.frustumMiddle = VectorUtil.add(this.loc, VectorUtil.mult(this.dirVector, this.zHalf + this.nearPlane));
-	
-	float viewLength = this.farPlane - this.nearPlane;
-	float heightWidth = viewLength * Math.tan(this.viewAngle * 0.5f);
-	 
+        this.frustMiddle = VectorUtil.add(this.loc, VectorUtil.mult(this.dirVector, this.zHalf + this.nearPlane));
+
+        float viewLength = this.farPlane - this.nearPlane;
+        float heightWidth = (float) (viewLength * Math.tan(this.viewAngle * 0.5f));
+
+        Vector farUpCorner = new Vector(heightWidth, heightWidth, viewLength);
+
+        this.frustRadius = (float) Math.sqrt(Math.pow((this.frustMiddle.x - farUpCorner.x), 2) +
+                Math.pow((this.frustMiddle.y - farUpCorner.y), 2) +
+                Math.pow((this.frustMiddle.z - farUpCorner.z), 2));
+
+
+    }
+
+    public void updateFrustMiddle() {
+        float x = (float) (Math.sin(this.pitch) * Math.cos(this.heading));
+        float y = (float) (Math.sin(this.pitch) * Math.sin(this.heading));
+        float z = (float) Math.cos(this.pitch);
+
+        this.dirVector = new Vector(x, y, z);
+        this.dirVector.normalize();
+
+        this.frustMiddle = VectorUtil.add(this.loc, VectorUtil.mult(this.dirVector, this.zHalf + this.nearPlane));
 
     }
 

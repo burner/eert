@@ -65,10 +65,10 @@ public class VectorUtil {
     }
 
     public static Vector mult(Vector v, float scalar) {
-	return new Vector(v.x * scalar,
-		v.y * scalar,
-		v.z * scalar);
-}
+        return new Vector(v.x * scalar,
+                v.y * scalar,
+                v.z * scalar);
+    }
 
     public static Vector add(Vector v1, Vector v2) {
         return new Vector(v1.x + v2.x,
@@ -85,9 +85,9 @@ public class VectorUtil {
 
     public static Vector threePlaneIntersec(Vector n1, float d1, Vector n2, float d2, Vector n3, float d3) {
         /*
-                    d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )
+        d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )
         P = 	-------------------------------------------------------------------------
-                                N1 . ( N2 * N3 )
+        N1 . ( N2 * N3 )
          */
         n1.normalize();
         n2.normalize();
