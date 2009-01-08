@@ -194,7 +194,7 @@ public class Camera {
 
     }
 
-    private void makeBoundingSphere() {
+    public void makeBoundingSphere() {
         float x = (float) (Math.sin(this.pitch) * Math.cos(this.heading));
         float y = (float) (Math.sin(this.pitch) * Math.sin(this.heading));
         float z = (float) Math.cos(this.pitch);

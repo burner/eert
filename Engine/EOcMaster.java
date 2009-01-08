@@ -32,6 +32,7 @@ public class EOcMaster {
     private ObjIns[] objs;
     private Obj[] realObjs;
     public boolean[] drawn;
+    public boolean[] lightDrawn;
     private EOcNode root;
     private Vector middle;
     private float radius;
@@ -42,7 +43,6 @@ public class EOcMaster {
     public Camera cam;
     public Engine engine;
     public int treeDepth;
-
     public float frustLight;
 
     public EOcMaster(Engine engine, ObjIns[] allObj, Obj[] realObj, GL gl, Camera cam) {
@@ -50,7 +50,7 @@ public class EOcMaster {
         this.engine = engine;
         this.cam = cam;
         this.drawn = new boolean[allObj.length];
-	this.lightDrawn = new boolean[allObj.length];
+        this.lightDrawn = new boolean[allObj.length];
         this.realObjs = realObj;
         this.gl = gl;
         this.objs = allObj;
@@ -122,8 +122,8 @@ public class EOcMaster {
     }
 
     public void drawLightVolume(GL gl) {
-	this.lightDrawn = new boolean[this.objs.length];
-	this.root.drawLight(gl);
+        this.lightDrawn = new boolean[this.objs.length];
+        this.root.drawLight(gl);
     }
 
     public void drawBox(GL gl) {
@@ -282,13 +282,13 @@ public class EOcMaster {
 
         //Check if a light is outside of the boundingsphere
         //and if so extend the radius of the sphere
-        if(this.engine.lights == null) {
+        if (this.engine.lights == null) {
             return;
         }
-        for(PointLight light: this.engine.lights.lights) {
+        for (PointLight light : this.engine.lights.lights) {
             this.frustLight = this.cam.frustRadius;
             float dis = VectorUtil.distance(this.cam.frustMiddle, light.origin);
-            if(dis > this.frustLight) {
+            if (dis > this.frustLight) {
                 this.frustLight = dis;
             }
         }

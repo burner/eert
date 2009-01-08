@@ -60,7 +60,7 @@ public class Obj {
     ETexture texImage5;
     //Shadow stuff below
     public LinkedList<Face> cap;
-    public LinkedList<Edge> edges;
+    public LinkedList<Edge> edgesToExtrude;
 
     public Obj(Camera cam, String[] file, int number, GL gl, Engine engine) throws IOException {
         this.image = new ETexture[6];
@@ -347,13 +347,13 @@ public class Obj {
          * list to be extruded*/
         for (Face toTest : this.cap) {
             if (!toTest.fr1.lit) {
-                this.edges.add(new Edge(toTest.v1, toTest.v2));
+                this.edgesToExtrude.add(toTest.ed1);
             }
             if (!toTest.fr2.lit) {
-                this.edges.add(new Edge(toTest.v2, toTest.v3));
+                this.edgesToExtrude.add(toTest.ed2);
             }
             if (!toTest.fr3.lit) {
-                this.edges.add(new Edge(toTest.v3, toTest.v1));
+                this.edgesToExtrude.add(toTest.ed3);
             }
         }
     }
@@ -372,6 +372,72 @@ public class Obj {
         }
 
         this.bR = dis;
+    }
+
+    private void drawShadowVolume(int number) {
+        this.gl.glPushMatrix();
+        ObjIns tmp = this.objIns.get(number);
+
+        //Translate to position
+        gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
+
+        //Rotate
+        gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
+
+        //Extrude the Silhouette
+        for (Edge extrude : this.edgesToExtrude) {
+            //make vertex who form
+            //quads of shadowcone
+            Vector lightEx1 = new Vector(extrude.x1.subR(this.engine.lights.lights.get(0).origin));
+            lightEx1.normalize();
+            lightEx1.mult(this.engine.lights.lights.get(0).radius);
+
+            Vector lightEx2 = new Vector(extrude.x2.subR(this.engine.lights.lights.get(0).origin));
+            lightEx2.normalize();
+            lightEx2.mult(this.engine.lights.lights.get(0).radius);
+
+
+            //Draw the quad
+            this.gl.glBegin(GL.GL_QUADS);
+            this.gl.glVertex3f(lightEx2.x, lightEx2.y, lightEx2.z);
+            this.gl.glVertex3f(lightEx1.x, lightEx1.y, lightEx1.z);
+            this.gl.glVertex3f(extrude.x1.x, extrude.x1.y, extrude.x1.z);
+            this.gl.glVertex3f(extrude.x2.x, extrude.x2.y, extrude.x2.z);
+            this.gl.glEnd();
+        }
+
+
+        //Draw cap
+        this.gl.glBegin(GL.GL_TRIANGLES);
+        for (Face capFace : this.cap) {
+            //draw frontcap
+            this.gl.glVertex3f(capFace.v1.x, capFace.v1.y, capFace.v1.z);
+            this.gl.glVertex3f(capFace.v2.x, capFace.v2.y, capFace.v2.z);
+            this.gl.glVertex3f(capFace.v3.x, capFace.v3.y, capFace.v3.z);
+
+            //make corresponding
+            //back face
+            Vector backCap1 = new Vector(capFace.v1.subR(this.engine.lights.lights.get(0).origin));
+            Vector backCap2 = new Vector(capFace.v2.subR(this.engine.lights.lights.get(0).origin));
+            Vector backCap3 = new Vector(capFace.v3.subR(this.engine.lights.lights.get(0).origin));
+            backCap1.normalize();
+            backCap2.normalize();
+            backCap3.normalize();
+
+            backCap1.mult(200f);
+            backCap2.mult(200f);
+            backCap3.mult(200f);
+
+            //draw backcap
+            this.gl.glVertex3f(backCap3.x, backCap3.y, backCap3.z);
+            this.gl.glVertex3f(backCap2.x, backCap2.y, backCap2.z);
+            this.gl.glVertex3f(backCap1.x, backCap1.y, backCap1.z);
+        }
+        this.gl.glEnd();
+
+        this.gl.glPopMatrix();
     }
 }
 

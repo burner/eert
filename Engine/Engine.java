@@ -50,25 +50,24 @@ public class Engine implements GLEventListener {
     private long ms = 0;
     public String[] textures;
     public ESkyBox skybox;
-
     public LightManagement lights;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
 
-	//Setup the camera and make
-	//the boundingSphere for it
+        //Setup the camera and make
+        //the boundingSphere for it
         this.cam = cam;
         this.cam.farPlane = 500.0f;
         this.cam.nearPlane = 1.0f;
         this.cam.viewAngle = 45.0f;
-	this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane)/2;
-	this.cam.makeBoundingSphere();
-        
-	
-	this.frame = frame;
+        this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane) / 2;
+        this.cam.makeBoundingSphere();
 
-	//MP3 Player runs in own thread
+
+        this.frame = frame;
+
+        //MP3 Player runs in own thread
         this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
         this.music.play();
     }
@@ -99,9 +98,9 @@ public class Engine implements GLEventListener {
 
         //funny timer stuff ... do not change        
         UHPT.updateUHPT();
-        
+
         //update all objsIns
-        this.objectHandler.updateObjIns();     
+        this.objectHandler.updateObjIns();
 
         //OpenGL housekeeping
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
@@ -109,7 +108,7 @@ public class Engine implements GLEventListener {
         gl.glLoadIdentity();
         gl.glEnable(GL.GL_TEXTURE_2D);
 
-        
+
         //build octree
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
@@ -117,28 +116,28 @@ public class Engine implements GLEventListener {
 
 
         //set cam location
-	//and make middle
+        //and make middle
         this.cam.translateAccordingToCameraPosition(gl);
-	this.cam.updateBoudingSphere();
+        this.cam.updateFrustMiddle();
 
         //draw objects
         this.root.drawOctree(gl);
-	
-	//make shadows
-	this.root.drawLightVolume(gl);
 
-	//make skybox
+        //make shadows
+        this.root.drawLightVolume(gl);
+
+        //make skybox
         this.skybox.draw();
 
         //if true draw Info on screen
         frame();
-        if (this.drawInfo) {            
+        if (this.drawInfo) {
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
             this.eInfo.drawInfo(glDrawable);
         }
 
 
-        
+
     }
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {
@@ -154,13 +153,13 @@ public class Engine implements GLEventListener {
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
 
-	//Info needed to make the sphere
-	//around the frustum
+        //Info needed to make the sphere
+        //around the frustum
         this.cam.farPlane = 500.0f;
         this.cam.nearPlane = 1.0f;
         this.cam.viewAngle = 45.0f;
-	this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane)/2;
-	this.cam.makeBoundingSphere();
+        this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane) / 2;
+        this.cam.makeBoundingSphere();
 
         glu.gluPerspective(45.0f, h, 1.0, 500.0);
         gl.glMatrixMode(GL.GL_MODELVIEW);
