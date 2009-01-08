@@ -50,6 +50,7 @@ public class EOcMaster {
         this.engine = engine;
         this.cam = cam;
         this.drawn = new boolean[allObj.length];
+	this.lightDrawn = new boolean[allObj.length];
         this.realObjs = realObj;
         this.gl = gl;
         this.objs = allObj;
@@ -107,7 +108,6 @@ public class EOcMaster {
         }
         this.drawn = new boolean[this.objs.length];
 
-
         //actually draw
         //drawBox(gl);
         extractFrustum();
@@ -119,6 +119,11 @@ public class EOcMaster {
             this.facRender += rObj.facesRendered;
         }
         gl.glDisable(GL.GL_TEXTURE);
+    }
+
+    public void drawLightVolume(GL gl) {
+	this.lightDrawn = new boolean[this.objs.length];
+	this.root.drawLight(gl);
     }
 
     public void drawBox(GL gl) {

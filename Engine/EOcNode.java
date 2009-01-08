@@ -60,7 +60,7 @@ public class EOcNode {
         if (this.childs == null) {
             float dis;
             //If the distance is 0.0
-            //this node is not within
+            //the node is not within
             //the frustun
             //drawBox(gl);
             if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
@@ -89,6 +89,15 @@ public class EOcNode {
             return;
         }
     }
+
+    public void drawLight(GL gl) {
+	 //If this node has no more child
+        //draw all objIns not yet drawn
+        if (this.childs == null) {
+	}
+	
+    }
+
 
     private float SphereInFrustum(float x, float y, float z, float radius) {
         int p;

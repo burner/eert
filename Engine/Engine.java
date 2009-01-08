@@ -55,8 +55,20 @@ public class Engine implements GLEventListener {
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
+
+	//Setup the camera and make
+	//the boundingSphere for it
         this.cam = cam;
-        this.frame = frame;
+        this.cam.farPlane = 500.0f;
+        this.cam.nearPlane = 1.0f;
+        this.cam.viewAngle = 45.0f;
+	this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane)/2;
+	this.cam.makeBoundingSphere();
+        
+	
+	this.frame = frame;
+
+	//MP3 Player runs in own thread
         this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
         this.music.play();
     }
@@ -105,12 +117,17 @@ public class Engine implements GLEventListener {
 
 
         //set cam location
-        cam.translateAccordingToCameraPosition(gl);
-
+	//and make middle
+        this.cam.translateAccordingToCameraPosition(gl);
+	this.cam.updateBoudingSphere();
 
         //draw objects
         this.root.drawOctree(gl);
+	
+	//make shadows
+	this.root.drawLightVolume(gl);
 
+	//make skybox
         this.skybox.draw();
 
         //if true draw Info on screen
@@ -143,6 +160,7 @@ public class Engine implements GLEventListener {
         this.cam.nearPlane = 1.0f;
         this.cam.viewAngle = 45.0f;
 	this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane)/2;
+	this.cam.makeBoundingSphere();
 
         glu.gluPerspective(45.0f, h, 1.0, 500.0);
         gl.glMatrixMode(GL.GL_MODELVIEW);
