@@ -18,6 +18,7 @@
 package Types.Geometrie;
 
 import Engine.Engine;
+import Types.Illumination.PointLight;
 import Util.Logic.Camera;
 import Util.Logic.UHPT;
 import java.io.IOException;
@@ -330,7 +331,28 @@ public class Obj {
         }
     }
 
-    public void findFacesFacingLight(Vector vec, int res) {
+    public void findFacesFacingLight(int res) {
+        //make sphere coord
+        //need to make the rotation
+        //of the object to appear in the light
+        PointLight toLight = new PointLight(this.engine.lights.lights.get(0));
+
+        //radius
+        double radius = Math.sqrt(Math.pow(toLight.origin.x, 2) + Math.pow(toLight.origin.y, 2) + Math.pow(toLight.origin.z, 2));
+
+        //make phi
+        double phi;
+        if(toLight.origin.x >= 0) {
+            phi = Math.acos(toLight.origin.x / Math.sqrt((toLight.origin.x * toLight.origin.x) + (toLight.origin.y * toLight.origin.y)));
+        } else {
+            phi = 2 * Math.PI - Math.acos(toLight.origin.x / Math.sqrt((toLight.origin.x * toLight.origin.x) + (toLight.origin.y * toLight.origin.y)));
+        }
+
+        //make theta
+        double theta;
+        theta = (Math.PI / 2) - Math.atan(toLight.origin.z / Math.sqrt((toLight.origin.x * toLight.origin.x) + (toLight.origin.y * toLight.origin.y)));
+
+
         Face[] forTest = this.fac.get(res);
         for (Face toTest : forTest) {
             if (90 > VectorUtil.angle(toTest, vec)) {
@@ -375,6 +397,7 @@ public class Obj {
     }
 
     private void drawShadowVolume(int number) {
+        
         this.gl.glPushMatrix();
         ObjIns tmp = this.objIns.get(number);
 

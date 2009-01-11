@@ -30,4 +30,10 @@ public class PointLight {
         this.radius = radius;
         this.color = color;
     }
+
+    public PointLight(PointLight toCopy) {
+        this.origin = new Vector(toCopy.origin);
+        this.radius = toCopy.radius;
+        this.color = new Color(toCopy.color.getRGB());
+    }
 }
