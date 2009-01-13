@@ -15,13 +15,19 @@
  *You should have received a copy of the GNU General Public License along with
  *this program; if not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Util.Prelude;
 
+import com.sun.opengl.util.StreamUtil;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.String;
 import java.util.LinkedList;
 import javax.media.opengl.GL;
 
@@ -31,50 +37,120 @@ import javax.media.opengl.GL;
  */
 public class ShaderLoader {
 
-    private int handle;
     private GL gl;
-    private int program;
+    public int program;
+    private int[] status;
+    public int shaderprogram;
+    private int shaderprogramG;
 
-    public ShaderLoader(GL gl, boolean vShaderOrFShader, String filename) throws FileNotFoundException, IOException {
+    public ShaderLoader(GL gl, boolean verOrFra, String filename) {
         //save the gl context
         this.gl = gl;
 
+        //String extensions = gl.glGetString(GL.GL_EXTENSIONS);
+        //System.out.println(extensions.replace(' ', '\n'));
+
         //make handle depending of the kind of shader
-        if (vShaderOrFShader) {
-            this.handle = gl.glCreateShader(GL.GL_VERTEX_SHADER);
+        int Handle;
+        if (verOrFra) {
+            Handle = gl.glCreateShaderObjectARB(GL.GL_VERTEX_SHADER);
         } else {
-            this.handle = gl.glCreateShader(GL.GL_FRAGMENT_SHADER);
+            Handle = gl.glCreateShaderObjectARB(GL.GL_FRAGMENT_SHADER);
         }
 
+        System.out.println(new File(".").getAbsolutePath());
         //open File containing shader
-        BufferedReader brv = new BufferedReader(new FileReader(filename));
-        String line;
+        String[] source = null;
+        try {
+            source = (new String(StreamUtil.readAll(new FileInputStream(filename)))).split("\n");
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+        gl.glShaderSourceARB(Handle, source.length, source, null);
+        gl.glCompileShaderARB(Handle);
 
-        //read the file line by line and a "\n"
-        LinkedList<String> prog = new LinkedList<String>();
-        while ((line = brv.readLine()) != null) {
-            prog.add(line + "\n");
+
+        if(verOrFra) {
+            check(Handle, 0);
+        } else {
+            check(Handle, 1);
         }
 
-        //make a stringArray out of it
-        String[] progToSend = prog.toArray(new String[prog.size()]);
+        //compile shader
 
-        //count the lineLength for every line
-        int[] n = new int[progToSend.length];
-        for (int i = 0; i < progToSend.length; i++) {
-            n[i] = progToSend[i].length();
-        }
+        int shaderprogramT = gl.glCreateProgramObjectARB();
+        gl.glAttachObjectARB(shaderprogramT, Handle);
+        gl.glLinkProgramARB(shaderprogramT);
 
-        //compule the shader
-        gl.glShaderSource(this.handle, progToSend.length, progToSend, n, 0);
-        gl.glCompileShader(this.handle);
-        int shaderprogram = gl.glCreateProgram();
-        gl.glAttachShader(shaderprogram, this.handle);
-        gl.glLinkProgram(shaderprogram);
-        gl.glValidateProgram(shaderprogram);
+        gl.glUseProgramObjectARB(shaderprogramT);
     }
 
+    public ShaderLoader(GL gl, String vertFile, String fragFile) {
+        this.gl = gl;
+        //save the gl context
+        int vertHandle =  gl.glCreateShaderObjectARB (GL.GL_VERTEX_SHADER);
+        int fragHandle =  gl.glCreateShaderObjectARB (GL.GL_FRAGMENT_SHADER);
+
+
+        String[] vsrc = null;
+		try
+		{
+			vsrc = (new String (StreamUtil.readAll (new FileInputStream (
+				vertFile)))).split ("\n");
+		}
+		catch (Exception ex)
+		{
+			System.err.println (ex);
+		}
+		gl.glShaderSource(vertHandle, vsrc.length, vsrc, null);
+		gl.glCompileShaderARB (vertHandle);
+        check(vertHandle, 0);
+
+
+
+        String[] fsrc = null;
+		try
+		{
+			fsrc = (new String (StreamUtil.readAll (new FileInputStream (
+				fragFile)))).split ("\n");
+		}
+		catch (Exception ex)
+		{
+			System.err.println (ex);
+		}
+
+		gl.glShaderSource(fragHandle, fsrc.length, fsrc, null);
+		gl.glCompileShaderARB (fragHandle);
+        check(fragHandle, 1);
+
+
+        this.shaderprogramG = gl.glCreateProgramObjectARB();
+        gl.glAttachObjectARB(shaderprogramG, vertHandle);
+        gl.glAttachObjectARB(shaderprogramG, fragHandle);
+        gl.glValidateProgram(shaderprogramG);
+		gl.glLinkProgramARB(shaderprogramG);
+
+        gl.glUseProgramObjectARB(shaderprogramG);
+    }
+
+    //check compiler info for errors
+  boolean check(int shader, int type){
+    int[]success = new int[1];
+    this.gl.glGetShaderiv(shader, GL.GL_COMPILE_STATUS, success, 0);
+    if(success[0]!=GL.GL_FALSE) {
+      System.out.println("No error in "+(type==0?"vertex":"fragment")+" compilation");
+      return true;
+    }
+    byte[] log = new byte[1000];
+    this.gl.glGetShaderInfoLog(shader, GL.GL_OBJECT_INFO_LOG_LENGTH_ARB, success, 0, log, 0);
+    System.out.println("Error in "+(type==0?"vertex":"fragment")+" compilation");
+    for (int i = 0; i < success[0]; i++) {
+      System.out.print((char) log[i]);
+    }
+    return false;
+  }
+
     public void bindProgram() {
-        gl.glUseProgram(this.program);
+        gl.glUseProgramObjectARB(shaderprogramG);
     }
 }
