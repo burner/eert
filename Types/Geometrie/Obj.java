@@ -337,6 +337,74 @@ public class Obj {
         //of the object to appear in the light
         PointLight toLight = new PointLight(this.engine.lights.lights.get(0));
 
+        //transform and rotate the
+        //according to the modelviewMatrix
+
+        gl.glPushMatrix();
+
+        //get ObjIns
+        ObjIns tmp = this.objIns.get(number);
+
+        //Translate to position
+        gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
+
+        //Rotate
+        gl.glRotatef(tmp.rotation.x, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(tmp.rotation.y, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(tmp.rotation.z, 0.0f, 0.0f, 1.0f);
+
+        //extract matrix
+        float[] mvMatrix = new float[16];
+        gl.glGetFloatv(GL.GL_MODELVIEW_MATRIX, mvMatrix, 0);
+        gl.glPopMatrix();
+
+        //Extract the modelviewmatrix
+        //or better copy out the import part
+        float[][] toCon = new float[3][3];
+        toCon[0][0] = mvMatrix[0];
+        toCon[0][1] = mvMatrix[4];
+        toCon[0][2] = mvMatrix[8];
+        toCon[1][0] = mvMatrix[1];
+        toCon[1][1] = mvMatrix[5];
+        toCon[1][2] = mvMatrix[9];
+        toCon[2][0] = mvMatrix[2];
+        toCon[2][1] = mvMatrix[6];
+        toCon[2][2] = mvMatrix[10];
+
+        //1 / det
+        float oneDDet = 1f / ((toCon[0][0] * toCon[1][1] * toCon[2][2]) + (toCon[0][1] * toCon[1][2] * toCon[2][0]) + (toCon[0][2] * toCon[1][0] * toCon[2][1]) -
+                (toCon[0][1] * toCon[1][0] * toCon[2][2]) * (toCon[0][0] * toCon[1][2] * toCon[2][1]) * (toCon[0][2] * toCon[1][1] * toCon[2][0]));
+
+        //make the matrix to multiple with 1/det
+
+        float[][] toMul = new float[3][3];
+        //first row
+        toMul[0][0] = (toCon[1][1]*toCon[2][2]) - (toCon[1][2]*toCon[2][1]);
+        toMul[0][1] = (-toCon[0][1]*toCon[2][2]) + (toCon[0][2]*toCon[1][2]);
+        toMul[0][2] = (toCon[0][1]*toCon[1][2]) - (toCon[0][2]*toCon[1][1]);
+
+        //second row
+        toMul[1][0] = (-toCon[1][0]*toCon[2][2]) + (toCon[1][2]*toCon[2][0]);
+        toMul[1][1] = (toCon[0][0]*toCon[2][2]) - (toCon[0][2]*toCon[2][0]);
+        toMul[1][2] = (-toCon[0][0]*toCon[1][1]) + (toCon[0][2]*toCon[1][0]);
+        
+        //thrid row
+        toMul[2][0] = (toCon[1][0]*toCon[2][1]) - (toCon[1][1]*toCon[2][0]);
+        toMul[2][1] = (-toCon[0][0]*toCon[2][1]) + (toCon[0][1]*toCon[2][0]);
+        toMul[2][2] = (toCon[0][0]*toCon[1][1]) - (toCon[0][1]*toCon[1][0]);
+
+        //after these multiplications
+        //you should have the inverse
+        toMul[0][0] *= oneDDet;
+        toMul[0][1] *= oneDDet;
+        toMul[0][2] *= oneDDet;
+        toMul[1][0] *= oneDDet;
+        toMul[1][1] *= oneDDet;
+        toMul[1][2] *= oneDDet;
+        toMul[2][0] *= oneDDet;
+        toMul[2][1] *= oneDDet;
+        toMul[2][2] *= oneDDet;
+
         //radius
         double radius = Math.sqrt(Math.pow(toLight.origin.x, 2) + Math.pow(toLight.origin.y, 2) + Math.pow(toLight.origin.z, 2));
 
