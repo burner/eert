@@ -332,11 +332,6 @@ public class Obj {
     }
 
     public void findFacesFacingLight(int res) {
-        //make sphere coord
-        //need to make the rotation
-        //of the object to appear in the light
-        PointLight toLight = new PointLight(this.engine.lights.lights.get(0));
-
         //transform and rotate the
         //according to the modelviewMatrix
 
@@ -379,19 +374,19 @@ public class Obj {
 
         float[][] toMul = new float[3][3];
         //first row
-        toMul[0][0] = (toCon[1][1]*toCon[2][2]) - (toCon[1][2]*toCon[2][1]);
-        toMul[0][1] = (-toCon[0][1]*toCon[2][2]) + (toCon[0][2]*toCon[1][2]);
-        toMul[0][2] = (toCon[0][1]*toCon[1][2]) - (toCon[0][2]*toCon[1][1]);
+        toMul[0][0] = (toCon[1][1] * toCon[2][2]) - (toCon[1][2] * toCon[2][1]);
+        toMul[0][1] = (-toCon[0][1] * toCon[2][2]) + (toCon[0][2] * toCon[1][2]);
+        toMul[0][2] = (toCon[0][1] * toCon[1][2]) - (toCon[0][2] * toCon[1][1]);
 
         //second row
-        toMul[1][0] = (-toCon[1][0]*toCon[2][2]) + (toCon[1][2]*toCon[2][0]);
-        toMul[1][1] = (toCon[0][0]*toCon[2][2]) - (toCon[0][2]*toCon[2][0]);
-        toMul[1][2] = (-toCon[0][0]*toCon[1][1]) + (toCon[0][2]*toCon[1][0]);
-        
+        toMul[1][0] = (-toCon[1][0] * toCon[2][2]) + (toCon[1][2] * toCon[2][0]);
+        toMul[1][1] = (toCon[0][0] * toCon[2][2]) - (toCon[0][2] * toCon[2][0]);
+        toMul[1][2] = (-toCon[0][0] * toCon[1][1]) + (toCon[0][2] * toCon[1][0]);
+
         //thrid row
-        toMul[2][0] = (toCon[1][0]*toCon[2][1]) - (toCon[1][1]*toCon[2][0]);
-        toMul[2][1] = (-toCon[0][0]*toCon[2][1]) + (toCon[0][1]*toCon[2][0]);
-        toMul[2][2] = (toCon[0][0]*toCon[1][1]) - (toCon[0][1]*toCon[1][0]);
+        toMul[2][0] = (toCon[1][0] * toCon[2][1]) - (toCon[1][1] * toCon[2][0]);
+        toMul[2][1] = (-toCon[0][0] * toCon[2][1]) + (toCon[0][1] * toCon[2][0]);
+        toMul[2][2] = (toCon[0][0] * toCon[1][1]) - (toCon[0][1] * toCon[1][0]);
 
         //after these multiplications
         //you should have the inverse
@@ -405,25 +400,25 @@ public class Obj {
         toMul[2][1] *= oneDDet;
         toMul[2][2] *= oneDDet;
 
-        //radius
-        double radius = Math.sqrt(Math.pow(toLight.origin.x, 2) + Math.pow(toLight.origin.y, 2) + Math.pow(toLight.origin.z, 2));
+        //make sphere coord
+        //need to make the rotation
+        //of the object to appear in the light
+        PointLight toLight = new PointLight(this.engine.lights.lights.get(0));
 
-        //make phi
-        double phi;
-        if(toLight.origin.x >= 0) {
-            phi = Math.acos(toLight.origin.x / Math.sqrt((toLight.origin.x * toLight.origin.x) + (toLight.origin.y * toLight.origin.y)));
-        } else {
-            phi = 2 * Math.PI - Math.acos(toLight.origin.x / Math.sqrt((toLight.origin.x * toLight.origin.x) + (toLight.origin.y * toLight.origin.y)));
-        }
+        //mult the vector of light pos
+        //with the inverse modelview matrix
+        float x = toLight.origin.x * toMul[0][0] + toLight.origin.y * toMul[0][1] + toLight.origin.z * toMul[0][2];
+        float y = toLight.origin.x * toMul[1][0] + toLight.origin.y * toMul[1][1] + toLight.origin.z * toMul[1][2];
+        float z = toLight.origin.x * toMul[2][0] + toLight.origin.y * toMul[2][1] + toLight.origin.z * toMul[2][2];
 
-        //make theta
-        double theta;
-        theta = (Math.PI / 2) - Math.atan(toLight.origin.z / Math.sqrt((toLight.origin.x * toLight.origin.x) + (toLight.origin.y * toLight.origin.y)));
-
+        //save it back to the light
+        toLight.origin.x = x;
+        toLight.origin.y = y;
+        toLight.origin.z = z;
 
         Face[] forTest = this.fac.get(res);
         for (Face toTest : forTest) {
-            if (90 > VectorUtil.angle(toTest, vec)) {
+            if (90 > VectorUtil.angle(toTest, toLight.origin)) {
                 this.cap.add(toTest);
                 toTest.lit = true;
             } else {
@@ -465,7 +460,7 @@ public class Obj {
     }
 
     private void drawShadowVolume(int number) {
-        
+
         this.gl.glPushMatrix();
         ObjIns tmp = this.objIns.get(number);
 
