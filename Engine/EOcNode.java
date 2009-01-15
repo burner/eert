@@ -20,6 +20,7 @@ package Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.Geometrie.Vector;
+import Util.Geometrie.VectorUtil;
 import java.util.LinkedList;
 import javax.media.opengl.GL;
 
@@ -42,7 +43,7 @@ public class EOcNode {
         this.radius = radius;
         this.drawn = drawn;
         this.bSize = bSize;
-        this.bHalf = this.bSize/2;
+        this.bHalf = this.bSize / 2;
 
         this.objs = checkAllObjects(objs);
 
@@ -56,7 +57,7 @@ public class EOcNode {
     public void draw(GL gl) {
         //If this node has no more child
         //draw all objIns not yet drawn
-            
+
         if (this.childs == null) {
             float dis;
             //If the distance is 0.0
@@ -91,13 +92,22 @@ public class EOcNode {
     }
 
     public void drawLight(GL gl) {
-	 //If this node has no more child
+        //If this node has no more child
         //draw all objIns not yet drawn
         if (this.childs == null) {
-	}
-	
+        }
+
     }
 
+    //this one tests if a sphere namely
+    //a objIns is in the viewSphere
+    private boolean pointInSphere(ObjIns test) {
+        float dis = Math.abs(VectorUtil.distance(this.root.cam.frustMiddle, test.origin));
+        if(dis - test.boundSph > this.root.cam.frustRadius) {
+            return false;
+        }
+        return true;
+    }
 
     private float SphereInFrustum(float x, float y, float z, float radius) {
         int p;
@@ -129,9 +139,9 @@ public class EOcNode {
         //the error-margin shouldn't be to big, but the check is much cheaper
         //and easier to understand
 
-        float dis = (float) Math.sqrt((obj.origin.x - this.middle.x)*(obj.origin.x - this.middle.x) +
-                (obj.origin.y - this.middle.y)*(obj.origin.y - this.middle.y) +
-                (obj.origin.z - this.middle.z)*(obj.origin.z - this.middle.z));
+        float dis = (float) Math.sqrt((obj.origin.x - this.middle.x) * (obj.origin.x - this.middle.x) +
+                (obj.origin.y - this.middle.y) * (obj.origin.y - this.middle.y) +
+                (obj.origin.z - this.middle.z) * (obj.origin.z - this.middle.z));
 
         if (dis - obj.boundSph < this.radius) {
             return true;
@@ -185,56 +195,56 @@ public class EOcNode {
         //important needs to be created within this contidional execution
         //otherwise the child test in draw does not work
         EOcNode ch1 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.bHalf,
-                                                                   middle.y - this.bHalf,
-                                                                   middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y - this.bHalf,
+                middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch1.objs.length > 0) {
             tmpChilds.add(ch1);
         }
 
         EOcNode ch2 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.bHalf,
-                                                                   middle.y - this.bHalf,
-                                                                   middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y - this.bHalf,
+                middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch2.objs.length > 0) {
             tmpChilds.add(ch2);
         }
 
         EOcNode ch3 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.bHalf,
-                                                                   middle.y + this.bHalf,
-                                                                   middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y + this.bHalf,
+                middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch3.objs.length > 0) {
             tmpChilds.add(ch3);
         }
 
         EOcNode ch4 = new EOcNode(this.root, this.objs, new Vector(middle.x - this.bHalf,
-                                                                   middle.y + this.bHalf,
-                                                                   middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y + this.bHalf,
+                middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch4.objs.length > 0) {
             tmpChilds.add(ch4);
         }
         EOcNode ch5 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.bHalf,
-                                                                   middle.y - this.bHalf,
-                                                                   middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y - this.bHalf,
+                middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch5.objs.length > 0) {
             tmpChilds.add(ch5);
         }
 
         EOcNode ch6 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.bHalf,
-                                                                   middle.y - this.bHalf,
-                                                                   middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y - this.bHalf,
+                middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch6.objs.length > 0) {
             tmpChilds.add(ch6);
         }
 
         EOcNode ch7 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.bHalf,
-                                                                   middle.y + this.bHalf,
-                                                                   middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y + this.bHalf,
+                middle.z - this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch7.objs.length > 0) {
             tmpChilds.add(ch7);
         }
 
         EOcNode ch8 = new EOcNode(this.root, this.objs, new Vector(middle.x + this.bHalf,
-                                                                   middle.y + this.bHalf,
-                                                                   middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
+                middle.y + this.bHalf,
+                middle.z + this.bHalf), this.radius / 2, this.bHalf, this.drawn, depth + 1);
         if (ch8.objs.length > 0) {
             tmpChilds.add(ch8);
         }
