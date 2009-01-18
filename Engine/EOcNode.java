@@ -95,15 +95,33 @@ public class EOcNode {
         //If this node has no more child
         //draw all objIns not yet drawn
         if (this.childs == null) {
+            if(sphereInSphere()) {
+                for (ObjIns obIns : this.objs) {
+                    if (!this.root.drawn[obIns.objInsNumber]) {
+                        float dis = VectorUtil.distance(obIns.origin, this.root.cam.loc);
+                        obIns.parent.findFacesFacingLight(dis, obIns.objInsNumber);
+                        obIns.parent.renderShadow(obIns.objInsNumber);
+                        this.root.drawn[obIns.objInsNumber] = true;
+                    } else {
+                        continue;
+                    }
+                }
+            } else {
+                return;
+            }
+        } else {
+            for (EOcNode child : this.childs) {
+                child.drawLight(gl);
+            }
+            return;
         }
-
     }
 
     //this one tests if a sphere namely
     //a objIns is in the viewSphere
-    private boolean pointInSphere(ObjIns test) {
-        float dis = Math.abs(VectorUtil.distance(this.root.cam.frustMiddle, test.origin));
-        if(dis - test.boundSph > this.root.cam.frustRadius) {
+    private boolean sphereInSphere() {
+        float dis = Math.abs(VectorUtil.distance(this.root.cam.frustMiddle, this.middle));
+        if(dis - this.radius > this.root.cam.frustRadius) {
             return false;
         }
         return true;

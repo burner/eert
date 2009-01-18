@@ -310,7 +310,14 @@ public class Obj {
         gl.glPopMatrix();
     }
 
-    public void renderShadow() {
+    public void renderShadow(int obNumb) {
+        //draw stuff
+        makeSilhouette();
+        drawShadowVolume(obNumb);
+
+        //clean up so next objIns finds anything clear
+        this.edgesToExtrude = new LinkedList<Edge>();
+        this.cap = new LinkedList<Face>();
     }
 
     private void makeFaceNormals() {
@@ -331,14 +338,14 @@ public class Obj {
         }
     }
 
-    public void findFacesFacingLight(int res) {
+    public void findFacesFacingLight(float dis, int numberOfObjIns) {
         //transform and rotate the
         //according to the modelviewMatrix
 
         gl.glPushMatrix();
 
         //get ObjIns
-        ObjIns tmp = this.objIns.get(number);
+        ObjIns tmp = this.objIns.get(numberOfObjIns);
 
         //Translate to position
         gl.glTranslatef(tmp.origin.x, tmp.origin.y, tmp.origin.z);
@@ -360,9 +367,23 @@ public class Obj {
 
         float[] inverseModel = VectorUtil.invertModelView(mvMatrix);
 
-        toLight.origin = VectorUtil.multWithGLMatrix(mvMatrix, toLight.origin);
-  
+        toLight.origin = VectorUtil.multWithGLMatrix(inverseModel, toLight.origin);
 
+        int res;
+        if(dis < 10.0f) {
+            res = 0;
+        } else if(dis < 20.0f) {
+            res = 1;
+        } else if (dis < 40.0f) {
+            res = 2;
+        } else if (dis < 60.0f) {
+            res = 3;
+        } else if (dis < 120.0f) {
+            res = 4;
+        } else {
+            res = 5;
+        }
+  
         Face[] forTest = this.fac.get(res);
         for (Face toTest : forTest) {
             if (90 > VectorUtil.angle(toTest, toLight.origin)) {
