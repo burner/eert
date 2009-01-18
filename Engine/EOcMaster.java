@@ -44,6 +44,7 @@ public class EOcMaster {
     public Engine engine;
     public int treeDepth;
     public float frustLight;
+    private int shadowList;
 
     public EOcMaster(Engine engine, ObjIns[] allObj, Obj[] realObj, GL gl, Camera cam) {
         this.treeDepth = 4;
@@ -123,7 +124,79 @@ public class EOcMaster {
 
     public void drawLightVolume(GL gl) {
         this.lightDrawn = new boolean[this.objs.length];
+
+        //make the list of shadow volumes
+        //this one gone take a lot of juice
+        //goes all the way done the octree
+        gl.glNewList(this.shadowList, GL.GL_COMPILE);
         this.root.drawLight(gl);
+        gl.glEndList();
+
+
+        //setup Opengl
+        gl.glColorMask(false, false, false, false);
+        gl.glDepthMask(false);
+
+        gl.glEnable(GL.GL_STENCIL_TEST);
+        gl.glStencilFunc(GL.GL_ALWAYS, 0, 0xFFFFFFF);
+
+        //activate stencil
+        gl.glStencilOp(GL.GL_KEEP, GL.GL_INCR_WRAP, GL.GL_KEEP);
+        gl.glEnable(GL.GL_CULL_FACE);
+        gl.glFrontFace(GL.GL_CW);
+
+        //draw frontface
+        gl.glCallList(this.shadowList);
+
+        //draw backfaces
+        gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR_WRAP, GL.GL_KEEP);
+        gl.glFrontFace(GL.GL_CCW);
+
+        gl.glCallList(this.shadowList);
+
+
+        //skybox
+        gl.glStencilFunc(GL.GL_NOTEQUAL, 0, 0xFFFFFFFF);
+
+        gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR, GL.GL_KEEP);
+        gl.glDepthFunc(GL.GL_NEVER);
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDepthMask(true);
+
+        //draw skybox over the actual shadow
+        this.engine.skybox.draw();
+
+        gl.glColorMask(true, true, true, true);
+        gl.glStencilFunc(GL.GL_NOTEQUAL, 0, 0xFFFFFFFF);
+        gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+        gl.glDepthFunc(GL.GL_ALWAYS);
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDepthMask(true);
+
+
+        gl.glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+        gl.glEnable(GL.GL_CULL_FACE);
+        gl.glFrontFace(GL.GL_CCW);
+        gl.glDisable(GL.GL_LIGHTING);
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glBegin(GL.GL_TRIANGLE_STRIP);
+        gl.glVertex3f(-0.1f, 0.1f, -0.1f);
+        gl.glVertex3f(-0.1f, -0.1f, -0.1f);
+        gl.glVertex3f(0.1f, 0.1f, -0.1f);
+        gl.glVertex3f(0.1f, -0.1f, -0.1f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+
+        gl.glDepthFunc(GL.GL_LESS);
+
+        gl.glDisable(GL.GL_STENCIL_TEST);
+
+        this.engine.skybox.draw();
+
     }
 
     public void drawBox(GL gl) {

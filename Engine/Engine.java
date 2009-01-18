@@ -105,6 +105,7 @@ public class Engine implements GLEventListener {
         //OpenGL housekeeping
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
         gl.glLoadIdentity();
         gl.glEnable(GL.GL_TEXTURE_2D);
 
@@ -120,14 +121,11 @@ public class Engine implements GLEventListener {
         this.cam.translateAccordingToCameraPosition(gl);
         this.cam.updateFrustMiddle();
 
-        //draw objects
-        this.root.drawOctree(gl);
-
         //make shadows
         this.root.drawLightVolume(gl);
 
-        //make skybox
-        this.skybox.draw();
+        //draw objects
+        this.root.drawOctree(gl);
 
         //if true draw Info on screen
         frame();

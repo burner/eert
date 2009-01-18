@@ -163,4 +163,32 @@ public class VectorUtil {
         return ret;
     }
 
+    public static float[] invertModelView(float[] in) {
+        float[] tmp = new float[16];
+        //Rotation
+        tmp[1] = in[4];
+        tmp[2] = in[8];
+        tmp[4] = in[1];
+        tmp[6] = in[9];
+        tmp[8] = in[2];
+        tmp[9] = in[6];
+        //Translation
+        tmp[12] = -tmp[12];
+        tmp[13] = -tmp[14];
+        tmp[14] = -tmp[15];
+        return tmp;
+    }
+
+    public static Vector multWithGLMatrix(float[] m, Vector in) {
+        Vector tmp = new Vector();
+        tmp.x = m[0] * in.x + m[1] * in.x + m[2] * in.x;
+        tmp.y = m[4] * in.y + m[5] * in.y + m[6] * in.y;
+        tmp.z = m[8] * in.x + m[9] * in.x + m[10] * in.x;
+
+        tmp.x += m[12];
+        tmp.y += m[13];
+        tmp.z += m[14];
+
+        return tmp;
+    }
 }

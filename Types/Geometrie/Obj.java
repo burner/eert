@@ -353,13 +353,15 @@ public class Obj {
         gl.glGetFloatv(GL.GL_MODELVIEW_MATRIX, mvMatrix, 0);
         gl.glPopMatrix();
 
-        float[] inverseModel = VectorUtil.invertFFMatrix(mvMatrix);
-  
-
         //make sphere coord
         //need to make the rotation
         //of the object to appear in the light
         PointLight toLight = new PointLight(this.engine.lights.lights.get(0));
+
+        float[] inverseModel = VectorUtil.invertModelView(mvMatrix);
+
+        toLight.origin = VectorUtil.multWithGLMatrix(mvMatrix, toLight.origin);
+  
 
         Face[] forTest = this.fac.get(res);
         for (Face toTest : forTest) {
@@ -372,7 +374,7 @@ public class Obj {
         }
     }
 
-    public void makeSilhouette(int res) {
+    public void makeSilhouette() {
         /* if a friend is not lit add the Edge to the
          * list to be extruded*/
         for (Face toTest : this.cap) {
