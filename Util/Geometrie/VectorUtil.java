@@ -19,6 +19,7 @@ package Util.Geometrie;
 
 import Types.Geometrie.Vector4;
 import Types.Geometrie.Face;
+import Types.Geometrie.TexCoor;
 import Types.Geometrie.Vector;
 
 public class VectorUtil {
@@ -190,5 +191,40 @@ public class VectorUtil {
         tmp.z += m[14];
 
         return tmp;
+    }
+
+    public static Vector[] calcTBN(Face foo) {
+        Vector v2v1 = VectorUtil.sub(foo.v2, foo.v1);
+        Vector v3v1 = VectorUtil.sub(foo.v3, foo.v1);
+
+        TexCoor uv21 = TexCoorUtil.sub(foo.vt2, foo.vt1);
+        TexCoor uv31 = TexCoorUtil.sub(foo.vt3, foo.vt1);
+
+        Vector[] ret = new Vector[3];
+        //tangent
+        ret[0] = VectorUtil.sub(VectorUtil.mult(v2v1, uv31.t), VectorUtil.mult(v3v1, uv21.t));
+        ret[0].normalize();
+        
+        //binormal
+        ret[1] = VectorUtil.sub(VectorUtil.mult(v3v1, uv21.s), VectorUtil.mult(v2v1, uv31.s));
+        ret[1].normalize();
+
+        //normal
+        ret[2] = VectorUtil.crossProduct(ret[0], ret[1]);
+        ret[2].normalize();
+
+        //Gram-Schmidt orthogonalization
+        ret[0].sub(VectorUtil.mult(ret[2], VectorUtil.dotProduct(ret[2], ret[0])));
+        ret[0].normalize();
+
+        //check if right handed TBN
+        boolean right = VectorUtil.dotProduct(VectorUtil.crossProduct(ret[0], ret[1]), ret[2]) >= 0;
+        ret[1] = VectorUtil.crossProduct(ret[2], ret[0]);
+
+        if(!right) {
+            ret[1].mult(-1);
+        }
+
+        return ret;
     }
 }
