@@ -64,19 +64,57 @@ public class JObjParse {
 
     private void makeFriends() {
         //this one is expensive
-        for(int i = 0; i < this.faces.size(); i++) {
-            for(int j = i+1; j < this.faces.size(); j++) {                
-		Face faceToTest = this.faces.get(i);
-		Face faceForTest = this.faces.get(j);
-                if(faceToTest.v1 == faceForTest.v1 && faceToTest.v2 == faceForTest.v2) {
-                    faceToTest.fr1 = faceForTest;
+        for (int i = 0; i < this.faces.size(); i++) {
+            for (int j = i + 1; j < this.faces.size(); j++) {
+                int count = 0;
+                Face faceToTest = this.faces.get(i);
+                Face faceForTest = this.faces.get(j);
+
+                //test all vertices against all
+
+                //this is the first edge
+                if (faceToTest.v1 == faceForTest.v1 && faceToTest.v2 == faceForTest.v2) {
+                    faceToTest.fr1 = faceForTest.fr1;
+                    faceForTest.fr1 = faceToTest.fr1;
                 }
-                if(faceToTest.v2 == faceForTest.v2 && faceToTest.v3 == faceForTest.v3) {
-                    faceToTest.fr2 = faceForTest;
+                if (faceToTest.v1 == faceForTest.v2 && faceToTest.v2 == faceForTest.v3) {
+                    faceToTest.fr1 = faceForTest.fr2;
+                    faceForTest.fr2 = faceToTest.fr1;
                 }
-                if(faceToTest.v3 == faceForTest.v3 && faceToTest.v1 == faceForTest.v1) {
-                    faceToTest.fr3 = faceForTest;
+                if (faceToTest.v1 == faceForTest.v3 && faceToTest.v2 == faceForTest.v1) {
+                    faceToTest.fr1 = faceForTest.fr3;
+                    faceForTest.fr3 = faceToTest.fr1;
                 }
+
+                //this is the second edge
+                if (faceToTest.v2 == faceForTest.v1 && faceToTest.v3 == faceForTest.v2) {
+                    faceToTest.fr2 = faceForTest.fr1;
+                    faceForTest.fr1 = faceToTest.fr2;
+
+                }
+                if (faceToTest.v2 == faceForTest.v2 && faceToTest.v3 == faceForTest.v3) {
+                    faceToTest.fr2 = faceForTest.fr2;
+                    faceForTest.fr2 = faceToTest.fr2;
+                }
+                if (faceToTest.v2 == faceForTest.v3 && faceToTest.v3 == faceForTest.v1) {
+                    faceToTest.fr2 = faceForTest.fr3;
+                    faceForTest.fr3 = faceToTest.fr2;
+                }
+
+                //this is the thrid edge
+                if (faceToTest.v2 == faceForTest.v1 && faceToTest.v3 == faceForTest.v2) {
+                    faceToTest.fr3 = faceForTest.fr1;
+                    faceForTest.fr1 = faceToTest.fr3;
+                }
+                if (faceToTest.v2 == faceForTest.v2 && faceToTest.v3 == faceForTest.v3) {
+                    faceToTest.fr3 = faceForTest.fr2;
+                    faceForTest.fr2 = faceToTest.fr3;
+                }
+                if (faceToTest.v2 == faceForTest.v3 && faceToTest.v3 == faceForTest.v1) {
+                    faceToTest.fr3 = faceForTest.fr3;
+                    faceForTest.fr3 = faceToTest.fr3;
+                }
+
             }
         }
     }
@@ -259,7 +297,7 @@ public class JObjParse {
     private void makeMiddle() {
         Vector middleM = new Vector();
         int number = this.vectors.size();
-        for(Vector forMiddle : this.vectors) {
+        for (Vector forMiddle : this.vectors) {
             middleM.x += forMiddle.x / number;
             middleM.y += forMiddle.y / number;
             middleM.z += forMiddle.z / number;
@@ -269,13 +307,14 @@ public class JObjParse {
 
     public void makeBoundingSphere() {
         float dis = 0f;
-        for(Vector toTest : this.vectors) {
-            float newDis = (float)Math.sqrt(Math.pow(toTest.x - this.middle.x, 2) +
-                                     Math.pow(toTest.y - this.middle.y, 2) +
-                                     Math.pow(toTest.z - this.middle.z, 2));
+        for (Vector toTest : this.vectors) {
+            float newDis = (float) Math.sqrt(Math.pow(toTest.x - this.middle.x, 2) +
+                    Math.pow(toTest.y - this.middle.y, 2) +
+                    Math.pow(toTest.z - this.middle.z, 2));
 
-            if(newDis > dis)
+            if (newDis > dis) {
                 dis = newDis;
+            }
         }
 
         this.boudingRadius = dis;
