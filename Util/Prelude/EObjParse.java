@@ -27,6 +27,8 @@ import java.io.*;
 import Types.*;
 import Types.Geometrie.ESkyBox;
 import Types.Geometrie.Vector;
+import Types.Illumination.LightManagement;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -120,6 +122,8 @@ public class EObjParse {
                     addPathPoint();
                 } else if (curLine.charAt(0) == 's') {
                     addSkyBox();
+                } else if (curLine.charAt(0) == 'l') {
+                    addLight();
                 } else {
                     continue;
                 }
@@ -360,7 +364,7 @@ public class EObjParse {
         float expanse = new Float(distance.toString()).floatValue();
 
         StringBuffer buffer = new StringBuffer();
-                
+
         i++;
         for (; i < curLine.length(); i++) {
             if (curLine.charAt(i) == ' ') {
@@ -372,6 +376,69 @@ public class EObjParse {
         String texName = buffer.toString();
 
         this.engine.skybox = new ESkyBox(gl, this.engine, this.engine.cam, texName, expanse);
+
+    }
+
+    private void addLight() {
+        // String Buffer for the posVector of the ligth
+        StringBuffer[] foo = new StringBuffer[3];
+        foo[0] = new StringBuffer();
+        foo[1] = new StringBuffer();
+        foo[2] = new StringBuffer();
+
+        int fIdx = 0;
+
+        int i;
+        for (i = 2; i < curLine.length() && fIdx != 3; i++) {
+            if (curLine.charAt(i) == ' ') {
+                fIdx++;
+            } else {
+                foo[fIdx].append(curLine.charAt(i));
+            }
+        }
+
+        Vector pos = new Vector(Float.valueOf(foo[0].toString()),
+                Float.valueOf(foo[1].toString()),
+                Float.valueOf(foo[2].toString()));
+
+
+         //get the light color
+        foo[0] = new StringBuffer();
+        foo[1] = new StringBuffer();
+        foo[2] = new StringBuffer();
+        fIdx = 0;
+        for(; i < curLine.length() && fIdx != 3; i++) {
+            if(curLine.charAt(i) == ' ') {
+                fIdx++;
+            } else {
+                foo[fIdx].append(curLine.charAt(i));
+            }
+        }
+
+        Color col = new Color(Integer.valueOf(foo[0].toString()),
+                Integer.valueOf(foo[1].toString()),
+                Integer.valueOf(foo[2].toString()));
+
+
+        //get the radius of the light
+        foo[0] = new StringBuffer();
+        for(; i < curLine.length();i++) {
+            if(curLine.charAt(i) == ' ') {
+                break;
+            } else {
+                foo[0].append(curLine.charAt(i));
+            }
+        }
+        
+        float radius = Float.valueOf(foo[0].toString());
+
+
+        //make new lightManagment for the engine if not existing
+        if (this.engine.lights == null) {
+            this.engine.lights = new LightManagement();
+        }
+
+        this.engine.lights.addLight(pos, radius, col);
 
     }
 
