@@ -65,56 +65,64 @@ public class JObjParse {
     private void makeFriends() {
         //this one is expensive
         for (int i = 0; i < this.faces.size(); i++) {
-            for (int j = i + 1; j < this.faces.size(); j++) {
-                int count = 0;
+            for (int j = 0; j < this.faces.size(); j++) {
+                //not a good idea to check against one self
+                if(i == j)
+                    continue;
+                
+                int countV1 = 0;
+                int countV2 = 0;
+                int countV3 = 0;
                 Face faceToTest = this.faces.get(i);
                 Face faceForTest = this.faces.get(j);
 
                 //test all vertices against all
 
-                //this is the first edge
-                if (faceToTest.v1 == faceForTest.v1 && faceToTest.v2 == faceForTest.v2) {
-                    faceToTest.fr1 = faceForTest.fr1;
-                    faceForTest.fr1 = faceToTest.fr1;
+                //this is the first vertex
+                if(faceToTest.v1 == faceForTest.v1) {
+                    countV1++;
                 }
-                if (faceToTest.v1 == faceForTest.v2 && faceToTest.v2 == faceForTest.v3) {
-                    faceToTest.fr1 = faceForTest.fr2;
-                    faceForTest.fr2 = faceToTest.fr1;
+                if(faceToTest.v1 == faceForTest.v2) {
+                    countV1++;
                 }
-                if (faceToTest.v1 == faceForTest.v3 && faceToTest.v2 == faceForTest.v1) {
-                    faceToTest.fr1 = faceForTest.fr3;
-                    faceForTest.fr3 = faceToTest.fr1;
+                if(faceToTest.v1 == faceForTest.v3) {
+                    countV1++;
                 }
 
-                //this is the second edge
-                if (faceToTest.v2 == faceForTest.v1 && faceToTest.v3 == faceForTest.v2) {
-                    faceToTest.fr2 = faceForTest.fr1;
-                    faceForTest.fr1 = faceToTest.fr2;
-
+                //this is the second vertex
+                if(faceToTest.v2 == faceForTest.v1) {
+                    countV2++;
                 }
-                if (faceToTest.v2 == faceForTest.v2 && faceToTest.v3 == faceForTest.v3) {
-                    faceToTest.fr2 = faceForTest.fr2;
-                    faceForTest.fr2 = faceToTest.fr2;
+                if(faceToTest.v2 == faceForTest.v2) {
+                    countV2++;
                 }
-                if (faceToTest.v2 == faceForTest.v3 && faceToTest.v3 == faceForTest.v1) {
-                    faceToTest.fr2 = faceForTest.fr3;
-                    faceForTest.fr3 = faceToTest.fr2;
+                if(faceToTest.v2 == faceForTest.v3) {
+                    countV2++;
                 }
 
-                //this is the thrid edge
-                if (faceToTest.v2 == faceForTest.v1 && faceToTest.v3 == faceForTest.v2) {
-                    faceToTest.fr3 = faceForTest.fr1;
-                    faceForTest.fr1 = faceToTest.fr3;
+                //this is the thrid vertex
+                if(faceToTest.v3 == faceForTest.v1) {
+                    countV3++;
                 }
-                if (faceToTest.v2 == faceForTest.v2 && faceToTest.v3 == faceForTest.v3) {
-                    faceToTest.fr3 = faceForTest.fr2;
-                    faceForTest.fr2 = faceToTest.fr3;
+                if(faceToTest.v3 == faceForTest.v2) {
+                    countV3++;
                 }
-                if (faceToTest.v2 == faceForTest.v3 && faceToTest.v3 == faceForTest.v1) {
-                    faceToTest.fr3 = faceForTest.fr3;
-                    faceForTest.fr3 = faceToTest.fr3;
+                if(faceToTest.v3 == faceForTest.v3) {
+                    countV3++;
                 }
 
+                //assign friends
+                if(countV1 > 0 && countV2 > 0) {
+                    faceToTest.fr1 = faceForTest;
+                }
+
+                if(countV1 > 0 && countV3 > 0) {
+                    faceToTest.fr3 = faceForTest;
+                }
+
+                if(countV2 > 0 && countV3 > 0) {
+                    faceToTest.fr2 = faceForTest;
+                }
             }
         }
     }
