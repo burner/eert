@@ -40,6 +40,7 @@ public class JObjParse {
         makeFriends();
         makeMiddle();
         makeBoundingSphere();
+        checkFacesEdges();
     }
 
     public Vector[] getVector() {
@@ -60,6 +61,24 @@ public class JObjParse {
     public Face[] getFace() {
         Face[] vector = this.faces.toArray(new Face[this.faces.size()]);
         return vector;
+    }
+
+    private void checkFacesEdges() {
+        for(Face toTest : this.faces) {
+            if(toTest.fr1 == null)
+                System.out.println("Friend1 Missing");
+            if(toTest.fr2 == null)
+                System.out.println("Friend2 Missing");
+            if(toTest.fr3 == null)
+                System.out.println("Friend3 Missing");
+
+            if(toTest.ed1 == null)
+                System.out.println("Edge1 Missing");
+            if(toTest.ed1 == null)
+                System.out.println("Edge1 Missing");
+            if(toTest.ed1 == null)
+                System.out.println("Edge1 Missing");
+        }
     }
 
     private void makeFriends() {

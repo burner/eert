@@ -43,22 +43,7 @@ public class Face {
         makeEdges();
     }
 
-    public Face(Vector v1, Vector v2, Vector v3, Vector vn1, Vector vn2, Vector vn3, TexCoor vt1, TexCoor vt2) {
-        this.v1 = v1;
-        this.v2 = v2;
-        this.v3 = v3;
-
-        this.vn1 = vn1;
-        this.vn2 = vn2;
-        this.vn3 = vn3;
-
-        this.vt1 = vt1;
-        this.vt2 = vt2;
-        this.vt3 = vt3;
-        makeEdges();
-    }
-
-    public void makeEdges() {
+     public void makeEdges() {
         this.ed1 = new Edge(v1,v2);
         this.ed2 = new Edge(v2,v3);
         this.ed3 = new Edge(v3,v1);

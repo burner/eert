@@ -316,7 +316,7 @@ public class Obj {
         drawShadowVolume(obNumb);
 
         //clean up so next objIns finds anything clear
-        this.edgesToExtrude = new LinkedList<Edge>();
+        
         this.cap = new LinkedList<Face>();
     }
 
@@ -396,18 +396,22 @@ public class Obj {
     }
 
     public void makeSilhouette() {
+        this.edgesToExtrude = new LinkedList<Edge>();
         /* if a friend is not lit add the Edge to the
          * list to be extruded*/
         for (Face toTest : this.cap) {
+            if(toTest.fr1 != null) {
             if (!toTest.fr1.lit) {
                 this.edgesToExtrude.add(toTest.ed1);
-            }
+            }}
+            if(toTest.fr2 != null) {
             if (!toTest.fr2.lit) {
                 this.edgesToExtrude.add(toTest.ed2);
-            }
+            }}
+            if(toTest.fr3 != null) {
             if (!toTest.fr3.lit) {
                 this.edgesToExtrude.add(toTest.ed3);
-            }
+            }}
         }
     }
 
