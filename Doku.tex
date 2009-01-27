@@ -1,0 +1,90 @@
+
+	\documentclass[a4paper,titlepage]{article}
+%packages
+	\usepackage{amsmath, amssymb, amsfonts}
+	\usepackage[ngerman]{babel}
+	\usepackage[usenames]{color}
+	\usepackage[utf8]{inputenc}
+	\usepackage{listings}
+	\usepackage{graphicx}
+	%Kopf und Fusszeile
+	\usepackage{fancyhdr}
+	%Seitenabstaende (margins)
+	\usepackage[left=3cm,right=2cm,top=2cm,bottom=2cm,includeheadfoot]{geometry}
+
+%pagestyle fuer Kopf und Fusszeile
+	\pagestyle{fancy}
+	\fancyhf{}
+	%Kopfzeile
+		\fancyhead[L]{OpenGL EERT}
+		\fancyhead[R]{Robert Schadek}
+		\renewcommand{\headrulewidth}{0.5pt}
+	%Fusszeile
+		\fancyfoot[C]{Seite \thepage}
+		\renewcommand{\footrulewidth}{0.5pt}
+%Titel
+\title{
+	{\huge OpenGL EERT\\
+	\huge - Einzelprojekt -\\
+	{\large Universit\"at Oldenburg}\\
+	\large Wintersemester 2008/2009\\
+	%Abgabe: 18.01.2008\\
+	}
+	\date{\today}
+	\author{\\
+		\large 	Robert Schadek\\
+	}
+}
+
+%Sonstiges
+	% keine Einrckung bei neuen Abstzen
+	\setlength{\parindent}{0em}
+
+
+
+%Dukumentanfang
+\begin{document}
+%Titel erzeugen und danach eine neue Seite bgeinnen
+\maketitle
+\tableofcontents
+\section{Einleitung}
+Der Name meines Projektes lautet EERT. Dies steht f"ur EERT enhanced rendering technology.
+Die Idee hinter dem Projekt ist jene, dass ich ein Programm schaffen wollte, welches neun
+Szenen darstellen kann, ohne jedes mal neu kompiliert zu werden. Au"serdem wollte ich Frustum Culling
+implementieren, da dies wie ich finde zu jeder Grafikanwendung geh"ort die Echtzeit f"ahig 
+sein soll.
+\section{Techniken}
+\subsection{Allgemein}
+Zu den verwendeten Techniken kann man allgemein sagen, dass ich nicht versucht habe, auf biegen und brechen, jede vorgestellte Technik aus der Vorlesung in mein Projekt einzubauen. Ich habe vielmehr versucht Techniken zu implementieren, die nicht vorgestellt wurden, aber doch zu jeder Grafik-Engine dazugeh"oren. Au"serdem wollte ich es erm"oglichen Szenen von gro"sen Polygonenumfang zu zeichnen. ($>$ 1Mil)
+
+\subsection{Szenenbeschreibung}
+Meine Szenenbeschreibung sieht so aus, dass ich mir eine Dateistruktur ausgedacht hab in der man speichern kann welches Object geladen wird, welche Texturen zu ihm geh"oren, wo sich die Objektinstanzen befinden, wie sich jene verschieben und rotieren usw. Und mir die Arbeit einfach zu machen habe ich mich mir das .obj Format als Vorbild genommen.
+
+\subsection{Objektloader}
+Der Implementierte Objektloader ist in der Lage jede Form von Mesh zu laden, solange sie nur aus Dreiecken besteht. Wie oben bereits angedeutet lade ich Objekte des Typs .obj. Ich habe dieses Format gew"ahlt da es recht einfach zu verstehen ist und f"ur meine Zwecke vollkommen ausreicht.
+
+\subsection{Per Pixel Lightning}
+Wie der Name es bereits andeutet, soll das fertige Programm die beleutung durch Per-Pixel Lightning realisieren. Aus dem einfachen Grund, da dies zur Zeit stand der Technik ist. Sollte ich die Zeit finden, werde ich versuchen zus"atzlich das Per Pixel Lightning noch mit Normal-Maps zu verbinden.
+
+\subsection{Objektinstanzen}
+Unter Objektinstanzen hat man eine Technik zu verstehen, die es mir erm"oglichteinen Mesh nur einmal im Speicher zu halten in aber an vielen Stellen der Szene mit verschiedenen Eigentschaften zu zeichnen. Dies ist Sinnvoll, die Objekte die ich in meine Demoszene laden alleine ca. 2MB gro"s sind. Nimmt man nun an ich w"urde diese Objekte nun 400 mal laden um sie an 400 Stellen zu zeichnen br"aucht ich alleine ca. 800MB Speicher nur f"ur die Objektdaten.\\
+Dank der Objektinstanzen muss ich die Objektdaten nur einmal laden und f"ur jede Instanz einen Postions- sowie Rotationsvektor.
+
+\subsection{UV-Texturing}
+Beim UV-Texturing oder auch UV-Mapping genannt wird ein komplexes 3D Objekt derart auseinander gefallt, dass es sich auf einen 2D Fl"ache sprich Texture darstellen l"asst. Dies erm"oglicht es Objekte zu texturieren ohne dabei auf den Hilfsmittel von OpenGL zur"uckzugreifen. Dies macht Sinn, da es mit diesen Hilfsmitteln nicht M"oglich ist die Texturen beliebig komplex auf Objekten abzubilden. Das UV-Mapping steht in enger Verbindung mit dem Objektloader, da beim erstellen der Objekte bereits die sogenante UV-Map erstellt werden muss. Dies kann dann sp"ater in einem Beliebigen Zeichnenprogramm bearbeitet werden.
+
+\subsection{Level of Detail}
+Level of Detail kann man als Mipmapping f"ur Dreiecke verstehen. Ich setze voraus das jedes Objekt welches in EERT darstellt werden soll in sechs Aufl"osungen vorliegt. Beispielhaft von 10000 bis 300 Dreiecken. Dies mache ich mir so zu nutze, dass ich sage, wenn ein Objekt so weit von der Kamera entfernt ist, dass es nurnoch wenige Pixel auf dem Bildschirm einnimmt, brauch es nicht aus mehrere tausend Dreiecken bestehen, es reicht wenn es ein paar hundert sind.
+Betrachtet man nun mehrere diese Stufen f"allt es dem Benutzer nicht auf das bei bestimmen Abst"anden von der Kamera eigentlich verschiedene Objekte gezeichnet werden.
+
+\subsection{Octree}
+Die Idee hinter dem Octree ist es, den Raum in dem sich die zu zeichnen Objekte befinden in acht Unterr"aume aufzuteilen. Nachdem der Raum das erste mal aufgeteilt ist wird "uberpr"uft welche Objekte in welche Unterraum liegen. Danach wird jeder Unterraum wiederrum in acht Unter"aume aufgeteilt und es wird erneut "uberpr"uft welche Objekte sich in ihm befinden. Dies wird solange fortgef"uhrt bis eine bestimmte Rekursionstiefe erreicht ist. Ist ist darauf zu achten was f"ur eine Rekursionstiefe man w"ahlt da die Anzahl der Knoten mit $8^n$ w"achst.\\\\
+
+Beim Rendern "uberpr"uft man nun ob sich die root-node im Frustum der Camera befindet ist dies nicht so ist der Rendervorgang bereits vorbei, da es ausgeschlossen ist das sich irgendeine weitere Node und somit irgendein Objekt im Frustum befindet. Sollte sich eine Node im Frustum befinden werde alle ihre Kinder "uberpr"uft. Dies geschieht solange bis die "Uberpr"uft Node keine Kinder mehr hat, sollte sie sich immernoch im Frustum befinden werden alle Objekte dies sich in ihr befinden gezeichnet.\\\\
+
+Dies erm"oglicht ein "uberaus effektives Frustum Culling. Die Datenstruktur ist zudem so schnell aufzubauen, dass es m"öglich ist diese jedem Frame neu aufzubauen. Somit k"onnen alle Objekte frei bewegt werden.
+
+\section{Bedienung}
+\subsection{Args Argumente}
+\subsection{EERT Steuerung}
+\end{document}
