@@ -122,7 +122,7 @@ public class EOcMaster {
         gl.glDisable(GL.GL_TEXTURE);
     }
 
-    public void drawLightVolume(GL gl) {
+/*    public void drawLightVolume(GL gl) {
         this.lightDrawn = new boolean[this.objs.length];
 
         //make the list of shadow volumes
@@ -197,7 +197,7 @@ public class EOcMaster {
 
         this.engine.skybox.draw();
         gl.glFlush();
-    }
+    }*/
 
     public void drawBox(GL gl) {
         gl.glPushMatrix();
@@ -349,9 +349,9 @@ public class EOcMaster {
         this.frustum[5][2] /= t;
         this.frustum[5][3] /= t;
 
-
+/*
         //Boudingsphere around the frustum and all lights
-        this.engine.cam.updateFrustMiddle();
+ //       this.engine.cam.updateFrustMiddle();
 
         //Check if a light is outside of the boundingsphere
         //and if so extend the radius of the sphere
@@ -364,7 +364,7 @@ public class EOcMaster {
             if (dis > this.frustLight) {
                 this.frustLight = dis;
             }
-        }
+        }*/
 
     }
 }

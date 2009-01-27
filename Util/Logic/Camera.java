@@ -193,7 +193,7 @@ public class Camera {
         gl.glTranslatef(-loc.x, -loc.y, -loc.z);
 
     }
-
+/*
     public void makeBoundingSphere() {
         float x = (float) (Math.sin(this.pitch) * Math.cos(this.heading));
         float y = (float) (Math.sin(this.pitch) * Math.sin(this.heading));
@@ -227,7 +227,7 @@ public class Camera {
         this.frustMiddle = VectorUtil.add(this.loc, VectorUtil.mult(this.dirVector, this.zHalf + this.nearPlane));
 
     }
-
+*/
     public void drawCam() {
         GLU glu = new GLU();
         glu.gluLookAt(this.loc.x, this.loc.y, this.loc.z,

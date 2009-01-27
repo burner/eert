@@ -91,7 +91,7 @@ public class EOcNode {
         }
     }
 
-    public void drawLight(GL gl) {
+ /*   public void drawLight(GL gl) {
         //If this node has no more child
         //draw all objIns not yet drawn
         if (this.childs == null) {
@@ -125,7 +125,7 @@ public class EOcNode {
             return false;
         }
         return true;
-    }
+    }*/
 
     private float SphereInFrustum(float x, float y, float z, float radius) {
         int p;
