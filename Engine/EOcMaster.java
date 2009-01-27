@@ -196,7 +196,7 @@ public class EOcMaster {
         gl.glDisable(GL.GL_STENCIL_TEST);
 
         this.engine.skybox.draw();
-
+        gl.glFlush();
     }
 
     public void drawBox(GL gl) {

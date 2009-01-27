@@ -40,7 +40,7 @@ public final class UHPT {
         UHPT.currentTime = System.nanoTime();
         UHPT.timeDiff = UHPT.currentTime - UHPT.lastFrame;
         if (System.currentTimeMillis() > UHPT.timeIntervalTimer + timer) {
-            System.out.println("timerInterval Update");
+            //System.out.println("timerInterval Update");
             UHPT.timeInterval++;
             UHPT.timeIntervalTimer = System.currentTimeMillis();
         }

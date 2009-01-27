@@ -73,6 +73,7 @@ public class Engine implements GLEventListener {
     }
 
     public void init(GLAutoDrawable glDrawable) {
+
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
         this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
@@ -80,7 +81,22 @@ public class Engine implements GLEventListener {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
+
+        float lightAmbient0[] = {0.3f, 0.3f, 0.3f, 0.0f};
+        float lightDiffuse0[] = {0.9f, 0.9f, 0.9f, 0.0f};
+        float lightPos[] = {this.lights.lights.get(0).origin.x, this.lights.lights.get(0).origin.y, this.lights.lights.get(0).origin.z, 0f};
         //gl.glEnable(GL.GL_LIGHTING);
+        gl.glEnable(GL.GL_LIGHT0);
+
+
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, lightDiffuse0, 0);
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightAmbient0, 0);
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPos, 0);
+
+        gl.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 0.1f);
+        gl.glLightf(GL.GL_LIGHT0, GL.GL_LINEAR_ATTENUATION, 0.1f);
+        gl.glLightf(GL.GL_LIGHT0, GL.GL_QUADRATIC_ATTENUATION, 0.001f);
+
         gl.glPushMatrix();
         gl.glPopMatrix();
         gl.glEnable(GL.GL_CULL_FACE);
@@ -106,9 +122,6 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
-        gl.glLoadIdentity();
-        gl.glEnable(GL.GL_TEXTURE_2D);
-
 
         //build octree
         long ocTimeTest = System.currentTimeMillis();
@@ -119,13 +132,16 @@ public class Engine implements GLEventListener {
         //set cam location
         //and make middle
         this.cam.translateAccordingToCameraPosition(gl);
-        this.cam.updateFrustMiddle();
+        //this.cam.updateFrustMiddle();
 
-        //make shadows
-        this.root.drawLightVolume(gl);
+        //draw skybox
+        this.skybox.draw();
 
         //draw objects
         this.root.drawOctree(gl);
+
+        //make shadows
+        //this.root.drawLightVolume(gl);
 
         //if true draw Info on screen
         frame();

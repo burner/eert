@@ -17,6 +17,8 @@
  */
 package Types.Geometrie;
 
+import Util.Geometrie.VectorUtil;
+
 public class Face {
 
     public Vector v1,  v2,  v3;
@@ -41,6 +43,7 @@ public class Face {
         this.vt2 = vt2;
         this.vt3 = vt3;
         makeEdges();
+        makeNormal();
     }
 
      public void makeEdges() {
@@ -48,4 +51,12 @@ public class Face {
         this.ed2 = new Edge(v2,v3);
         this.ed3 = new Edge(v3,v1);
     }
+
+     private void makeNormal() {
+         Vector normal = new Vector(this.vn1.x + this.vn2.x + this.vn3.x,
+                 this.vn1.y + this.vn2.y + this.vn3.y,
+                 this.vn3.z + this.vn3.z + this.vn3.z);
+         normal.normalize();
+         this.faceNormal = normal;
+     }
 }

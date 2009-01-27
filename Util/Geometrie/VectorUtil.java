@@ -28,6 +28,10 @@ public class VectorUtil {
         return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
     }
 
+    public static float angleVec(Vector v1, Vector v2) {
+        return (float) Math.acos((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
+    }
+
     public static float angle(Face f1, Vector v1) {
         /*
          * acos(dotProduct(faceNormal, dirPointToFaceMiddle)

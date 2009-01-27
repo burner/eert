@@ -87,7 +87,7 @@ public class Obj {
             this.fac.add(parse.getFace());
         }
         makeBoundingSphere();
-        makeFaceNormals();
+        //makeFaceNormals();
 
         this.facNum[0] = this.fac.get(0).length;
         this.facNum[1] = this.fac.get(1).length;
@@ -316,7 +316,7 @@ public class Obj {
         drawShadowVolume(obNumb);
 
         //clean up so next objIns finds anything clear
-        
+
         this.cap = new LinkedList<Face>();
     }
 
@@ -370,9 +370,9 @@ public class Obj {
         toLight.origin = VectorUtil.multWithGLMatrix(inverseModel, toLight.origin);
 
         int res;
-        if(dis < 10.0f) {
+        if (dis < 10.0f) {
             res = 0;
-        } else if(dis < 20.0f) {
+        } else if (dis < 20.0f) {
             res = 1;
         } else if (dis < 40.0f) {
             res = 2;
@@ -383,10 +383,10 @@ public class Obj {
         } else {
             res = 5;
         }
-  
+
         Face[] forTest = this.fac.get(res);
         for (Face toTest : forTest) {
-            if (90 > VectorUtil.angle(toTest, toLight.origin)) {
+            if (0f < VectorUtil.dotProduct(toTest.faceNormal, toLight.origin) / this.origin.getLength() * toTest.faceNormal.getLength()) {
                 this.cap.add(toTest);
                 toTest.lit = true;
             } else {
@@ -400,18 +400,18 @@ public class Obj {
         /* if a friend is not lit add the Edge to the
          * list to be extruded*/
         for (Face toTest : this.cap) {
-            if(toTest.fr1 != null) {
+            //if(toTest.fr1 != null) {
             if (!toTest.fr1.lit) {
                 this.edgesToExtrude.add(toTest.ed1);
-            }}
-            if(toTest.fr2 != null) {
+            }//}
+            //if(toTest.fr2 != null) {
             if (!toTest.fr2.lit) {
                 this.edgesToExtrude.add(toTest.ed2);
-            }}
-            if(toTest.fr3 != null) {
+            }//}
+            //if(toTest.fr3 != null) {
             if (!toTest.fr3.lit) {
                 this.edgesToExtrude.add(toTest.ed3);
-            }}
+            }//}
         }
     }
 
@@ -461,8 +461,8 @@ public class Obj {
             this.gl.glBegin(GL.GL_QUADS);
             this.gl.glVertex3f(lightEx2.x, lightEx2.y, lightEx2.z);
             this.gl.glVertex3f(lightEx1.x, lightEx1.y, lightEx1.z);
-            this.gl.glVertex3f(extrude.x1.x, extrude.x1.y, extrude.x1.z);
-            this.gl.glVertex3f(extrude.x2.x, extrude.x2.y, extrude.x2.z);
+            this.gl.glVertex3f(extrude.x1.x, extrude.x1.y, extrude.x1.z);       
+            this.gl.glVertex3f(extrude.x2.x, extrude.x2.y, extrude.x2.z);                   
             this.gl.glEnd();
         }
 
