@@ -82,6 +82,12 @@ public class VectorUtil {
                 v1.z + v2.z);
     }
 
+    public static Vector add(Vector v1, Vector v2, Vector v3) {
+        return new Vector(v1.x + v2.x + v3.x,
+                v1.y + v2.y + v3.y,
+                v1.z + v2.z + v3.z);
+    }
+
     public static Vector crossProduct(Vector vector1, Vector vector2) {
         return new Vector(
                 vector1.y * vector2.z - vector1.z * vector2.y,
@@ -208,7 +214,7 @@ public class VectorUtil {
         //tangent
         ret[0] = VectorUtil.sub(VectorUtil.mult(v2v1, uv31.t), VectorUtil.mult(v3v1, uv21.t));
         ret[0].normalize();
-        
+
         //binormal
         ret[1] = VectorUtil.sub(VectorUtil.mult(v3v1, uv21.s), VectorUtil.mult(v2v1, uv31.s));
         ret[1].normalize();
@@ -225,7 +231,7 @@ public class VectorUtil {
         boolean right = VectorUtil.dotProduct(VectorUtil.crossProduct(ret[0], ret[1]), ret[2]) >= 0;
         ret[1] = VectorUtil.crossProduct(ret[2], ret[0]);
 
-        if(!right) {
+        if (!right) {
             ret[1].mult(-1);
         }
 
