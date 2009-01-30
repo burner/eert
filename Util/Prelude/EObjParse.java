@@ -51,7 +51,9 @@ public class EObjParse {
     private Engine engine;
     public String[] textures;
     public Vector[] camPath;
+    public long camSpeed;
     public Vector[] camLook;
+    public long camLookSpeed;
 
     public EObjParse(Camera cam, String file, GL gl, Engine engine) {
         //Save parameter
@@ -447,6 +449,21 @@ public class EObjParse {
     }
 
     private void addLookPoint() {
+        int i;
+
+        //speed of the movement
+        StringBuffer timeSlice = new StringBuffer();
+        for (i = 2; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
+                i++;
+                break;
+            } else {
+                timeSlice.append(curLine.charAt(i));
+            }
+        }
+
+        this.camLookSpeed = Long.parseLong(timeSlice.toString());
+
         LinkedList<Vector> path = new LinkedList<Vector>();
 
         // String Buffer for the posVector of the ligth
@@ -457,8 +474,8 @@ public class EObjParse {
 
         int fIdx = 0;
 
-        int i;
-        for (i = 2; i < curLine.length(); i++) {
+
+        for (; i < curLine.length(); i++) {
             //after three floats add a Vector to a path
             if (fIdx == 3) {
                 Vector pos = new Vector(Float.valueOf(foo[0].toString()),
@@ -471,7 +488,7 @@ public class EObjParse {
 
                 //if its the third vector add it another time
                 //because it's the first of the next three
-                if(path.size() == 3) {
+                if (path.size() == 3) {
                     path.add(pos);
                 }
             }
@@ -488,6 +505,21 @@ public class EObjParse {
     }
 
     private void addPathPoint() {
+        int i;
+
+        //speed of the movement
+        StringBuffer timeSlice = new StringBuffer();
+        for (i = 2; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
+                i++;
+                break;
+            } else {
+                timeSlice.append(curLine.charAt(i));
+            }
+        }
+
+        this.camSpeed = Long.parseLong(timeSlice.toString());
+
         LinkedList<Vector> path = new LinkedList<Vector>();
 
         // String Buffer for the posVector of the ligth
@@ -498,7 +530,6 @@ public class EObjParse {
 
         int fIdx = 0;
 
-        int i;
         for (i = 2; i < curLine.length(); i++) {
             //after three floats add a Vector to a path
             if (fIdx == 3) {
@@ -509,10 +540,10 @@ public class EObjParse {
 
                 //reseting StrBufferArrayPointer
                 fIdx = 0;
-                
+
                 //if its the third vector add it another time
                 //because it's the first of the next three
-                if(path.size() == 3) {
+                if (path.size() == 3) {
                     path.add(pos);
                 }
             }
