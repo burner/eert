@@ -50,6 +50,8 @@ public class EObjParse {
     private Camera cam;
     private Engine engine;
     public String[] textures;
+    public Vector[] camPath;
+    public Vector[] camLook;
 
     public EObjParse(Camera cam, String file, GL gl, Engine engine) {
         //Save parameter
@@ -120,6 +122,8 @@ public class EObjParse {
                     }
                 } else if (curLine.charAt(0) == 'p') {
                     addPathPoint();
+                } else if (curLine.charAt(0) == 'a') {
+                    addLookPoint();
                 } else if (curLine.charAt(0) == 's') {
                     addSkyBox();
                 } else if (curLine.charAt(0) == 'l') {
@@ -402,13 +406,13 @@ public class EObjParse {
                 Float.valueOf(foo[2].toString()));
 
 
-         //get the light color
+        //get the light color
         foo[0] = new StringBuffer();
         foo[1] = new StringBuffer();
         foo[2] = new StringBuffer();
         fIdx = 0;
-        for(; i < curLine.length() && fIdx != 3; i++) {
-            if(curLine.charAt(i) == ' ') {
+        for (; i < curLine.length() && fIdx != 3; i++) {
+            if (curLine.charAt(i) == ' ') {
                 fIdx++;
             } else {
                 foo[fIdx].append(curLine.charAt(i));
@@ -422,14 +426,14 @@ public class EObjParse {
 
         //get the radius of the light
         foo[0] = new StringBuffer();
-        for(; i < curLine.length();i++) {
-            if(curLine.charAt(i) == ' ') {
+        for (; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
                 break;
             } else {
                 foo[0].append(curLine.charAt(i));
             }
         }
-        
+
         float radius = Float.valueOf(foo[0].toString());
 
 
@@ -442,7 +446,86 @@ public class EObjParse {
 
     }
 
+    private void addLookPoint() {
+        LinkedList<Vector> path = new LinkedList<Vector>();
+
+        // String Buffer for the posVector of the ligth
+        StringBuffer[] foo = new StringBuffer[3];
+        foo[0] = new StringBuffer();
+        foo[1] = new StringBuffer();
+        foo[2] = new StringBuffer();
+
+        int fIdx = 0;
+
+        int i;
+        for (i = 2; i < curLine.length(); i++) {
+            //after three floats add a Vector to a path
+            if (fIdx == 3) {
+                Vector pos = new Vector(Float.valueOf(foo[0].toString()),
+                        Float.valueOf(foo[1].toString()),
+                        Float.valueOf(foo[2].toString()));
+                path.add(pos);
+
+                //reseting StrBufferArrayPointer
+                fIdx = 0;
+
+                //if its the third vector add it another time
+                //because it's the first of the next three
+                if(path.size() == 3) {
+                    path.add(pos);
+                }
+            }
+            if (curLine.charAt(i) == ' ') {
+                fIdx++;
+            } else {
+                foo[fIdx].append(curLine.charAt(i));
+            }
+        }
+
+        Vector[] conMoveArray = new Vector[path.size()];
+        conMoveArray = path.toArray(conMoveArray);
+        this.camLook = conMoveArray;
+    }
+
     private void addPathPoint() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        LinkedList<Vector> path = new LinkedList<Vector>();
+
+        // String Buffer for the posVector of the ligth
+        StringBuffer[] foo = new StringBuffer[3];
+        foo[0] = new StringBuffer();
+        foo[1] = new StringBuffer();
+        foo[2] = new StringBuffer();
+
+        int fIdx = 0;
+
+        int i;
+        for (i = 2; i < curLine.length(); i++) {
+            //after three floats add a Vector to a path
+            if (fIdx == 3) {
+                Vector pos = new Vector(Float.valueOf(foo[0].toString()),
+                        Float.valueOf(foo[1].toString()),
+                        Float.valueOf(foo[2].toString()));
+                path.add(pos);
+
+                //reseting StrBufferArrayPointer
+                fIdx = 0;
+                
+                //if its the third vector add it another time
+                //because it's the first of the next three
+                if(path.size() == 3) {
+                    path.add(pos);
+                }
+            }
+            if (curLine.charAt(i) == ' ') {
+                fIdx++;
+            } else {
+                foo[fIdx].append(curLine.charAt(i));
+            }
+        }
+
+        Vector[] conMoveArray = new Vector[path.size()];
+        conMoveArray = path.toArray(conMoveArray);
+        this.camPath = conMoveArray;
+
     }
 }
