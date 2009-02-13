@@ -75,15 +75,6 @@ public class EObjParse {
         addObjInsToObj();
     }
 
-
-    //walk along all objIns's and add them to the
-    //ObjIns LinkedList within the right obj
-    private void addObjInsToObj() {
-        for (ObjIns obIns : this.objectIns) {
-            this.objects.get(obIns.objNumber).objIns.add(obIns);
-        }
-    }
-
     private void parse() {
         //needed to read a file
         FileInputStream input;
@@ -147,6 +138,15 @@ public class EObjParse {
         }
 
     }
+
+    //walk along all objIns's and add them to the
+    //ObjIns LinkedList within the right obj
+    private void addObjInsToObj() {
+        for (ObjIns obIns : this.objectIns) {
+            this.objects.get(obIns.objNumber).objIns.add(obIns);
+        }
+    }
+
 
     //parse a new object
     private void addObj() {
@@ -449,20 +449,7 @@ public class EObjParse {
     }
 
     private void addLookPoint() {
-        int i;
 
-        //speed of the movement
-        StringBuffer timeSlice = new StringBuffer();
-        for (i = 2; i < curLine.length(); i++) {
-            if (curLine.charAt(i) == ' ') {
-                i++;
-                break;
-            } else {
-                timeSlice.append(curLine.charAt(i));
-            }
-        }
-
-        this.camLookSpeed = Long.parseLong(timeSlice.toString());
 
         LinkedList<Vector> path = new LinkedList<Vector>();
 
@@ -475,7 +462,7 @@ public class EObjParse {
         int fIdx = 0;
 
 
-        for (; i < curLine.length(); i++) {
+        for (int i = 2; i < curLine.length(); i++) {
             //after three floats add a Vector to a path
             if (fIdx == 3) {
                 Vector pos = new Vector(Float.valueOf(foo[0].toString()),
@@ -491,6 +478,9 @@ public class EObjParse {
                 if (path.size() == 3) {
                     path.add(pos);
                 }
+                foo[0] = new StringBuffer();
+                foo[1] = new StringBuffer();
+                foo[2] = new StringBuffer();
             }
             if (curLine.charAt(i) == ' ') {
                 fIdx++;
@@ -498,6 +488,11 @@ public class EObjParse {
                 foo[fIdx].append(curLine.charAt(i));
             }
         }
+
+        Vector pos = new Vector(Float.valueOf(foo[0].toString()),
+                Float.valueOf(foo[1].toString()),
+                Float.valueOf(foo[2].toString()));
+        path.add(pos);
 
         Vector[] conMoveArray = new Vector[path.size()];
         conMoveArray = path.toArray(conMoveArray);
@@ -530,9 +525,10 @@ public class EObjParse {
 
         int fIdx = 0;
 
-        for (i = 2; i < curLine.length(); i++) {
+        for (; i < curLine.length(); i++) {
             //after three floats add a Vector to a path
             if (fIdx == 3) {
+                //System.out.println(foo[0].toString() + " " + foo[1].toString() + " " + foo[2].toString());
                 Vector pos = new Vector(Float.valueOf(foo[0].toString()),
                         Float.valueOf(foo[1].toString()),
                         Float.valueOf(foo[2].toString()));
@@ -546,13 +542,22 @@ public class EObjParse {
                 if (path.size() == 3) {
                     path.add(pos);
                 }
+                foo[0] = new StringBuffer();
+                foo[1] = new StringBuffer();
+                foo[2] = new StringBuffer();
             }
             if (curLine.charAt(i) == ' ') {
                 fIdx++;
             } else {
                 foo[fIdx].append(curLine.charAt(i));
             }
+
         }
+        //System.out.println(foo[0].toString() + " " + foo[1].toString() + " " + foo[2].toString());
+        Vector pos = new Vector(Float.valueOf(foo[0].toString()),
+                Float.valueOf(foo[1].toString()),
+                Float.valueOf(foo[2].toString()));
+        path.add(pos);
 
         Vector[] conMoveArray = new Vector[path.size()];
         conMoveArray = path.toArray(conMoveArray);

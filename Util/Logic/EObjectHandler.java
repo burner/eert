@@ -4,6 +4,7 @@ import Engine.Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
 import Types.*;
+import Types.Geometrie.Vector;
 import Util.Logic.Camera;
 import Util.Prelude.EObjParse;
 import java.io.DataOutputStream;
@@ -24,6 +25,9 @@ public class EObjectHandler {
     private String szene;
     private Engine engine;
     public String[] textures;
+    public Vector[] walkPath;
+    public Vector[] lookPath;
+    public long timeSlice;
 
     //Constuctor
     public EObjectHandler(Camera cam, String szene, GL gl, Engine engine) {
@@ -38,6 +42,9 @@ public class EObjectHandler {
 
         //parse the szene file
         EObjParse eObjParse = new EObjParse(this.cam, szene, this.gl, this.engine);
+        this.walkPath = eObjParse.camPath;
+        this.lookPath = eObjParse.camLook;
+        this.timeSlice = eObjParse.camSpeed;
 
         //save the objects parse by EObjParse
         this.obj = new Obj[eObjParse.objects.size()];

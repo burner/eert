@@ -29,21 +29,20 @@ public class CamMove {
     private Vector[] pOn;
     private Vector[] pTo;
     private long startTime;
-    private long timeSlice;
-    private int counter;
-    private long interval;
-
+    private long timeSlice;     //timeslice length
+    private int counter;        //counts which interval is current
+    
     public Vector pos;
     public Vector lookAt;
     public boolean aktiv;
 
-    public CamMove(int timeSlice, int interval, Vector[] pOn, Vector[] pTo) {
+    public CamMove(long interval, Vector[] pOn, Vector[] pTo) {
+        this.timeSlice = interval;
         this.aktiv = true;
-        this.timeSlice = timeSlice;
-        this.interval = interval;
         this.pOn = pOn;
         this.pTo = pTo;
         this.counter = 1;
+        setStartTime();
     }
 
     public void setStartTime() {
@@ -53,13 +52,16 @@ public class CamMove {
     public void updatePos() {
         //check if the time passed another timeslice
         long currentTime = System.currentTimeMillis();
-        long timeDiff = currentTime - ((this.timeSlice * this.counter) - this.startTime);
+        long timeDiff = currentTime - this.timeSlice * this.counter - this.startTime;
+
+        //System.out.println("timediff = " + timeDiff);
 
         if ((this.startTime + (this.timeSlice * this.counter)) < currentTime) {
             //this needs to be done because more than one timeSlice could have passed
-            for (int i = 0; i < (int) timeDiff / this.timeSlice; i++) {
+            //System.out.println("foo");
+            //for (int i = 0; i < (int) timeDiff / this.timeSlice; i++) {
                 this.counter++;
-            }
+            //}
         }
 
         //check if camera Move should still be updated
@@ -70,8 +72,12 @@ public class CamMove {
             this.aktiv = true;
         }
 
+        timeDiff = -timeDiff;
+
         
-        double lamda = timeDiff / this.timeSlice;
+        double lamda = 1.0 - (double)timeDiff / (double)this.timeSlice;
+
+        System.out.println(timeDiff + " / " + this.timeSlice + " = "+ lamda);
 
         //Quadratic Bézier curves
         //gone cheat a bit
@@ -92,6 +98,8 @@ public class CamMove {
 
         p2 = VectorUtil.mult(this.pTo[3 * this.counter - 1], (float) Math.pow(lamda, 2));
 
-        this.pos = VectorUtil.add(p0, p1, p2);
+        this.lookAt = VectorUtil.add(p0, p1, p2);
+
+        //System.out.println(this.pos.toString() + " " + this.lookAt.toString());
     }
 }

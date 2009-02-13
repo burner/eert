@@ -18,7 +18,9 @@
 package Engine;
 
 import Types.Geometrie.ESkyBox;
+import Types.Geometrie.Vector;
 import Types.Illumination.LightManagement;
+import Util.Logic.CamMove;
 import Util.Logic.EObjectHandler;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLEventListener;
@@ -52,12 +54,20 @@ public class Engine implements GLEventListener {
     public ESkyBox skybox;
     public LightManagement lights;
 
+    //Camera Movement
+    public CamMove camMove;
+    private Vector[] walkPoints;
+    private Vector[] lookPoints;
+    private long timeSlice;
+    private GLU glu;
+
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
 
         //Setup the camera and make
         //the boundingSphere for it
         this.cam = cam;
+        this.cam.engine = this;
         this.cam.farPlane = 500.0f;
         this.cam.nearPlane = 1.0f;
         this.cam.viewAngle = 45.0f;
@@ -69,7 +79,8 @@ public class Engine implements GLEventListener {
 
         //MP3 Player runs in own thread
         this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
-        this.music.play();
+
+        this.glu = new GLU();
     }
 
     public void init(GLAutoDrawable glDrawable) {
@@ -77,6 +88,15 @@ public class Engine implements GLEventListener {
         final GL gl = glDrawable.getGL();
         this.objectHandler = new EObjectHandler(this.cam, this.szene, gl, this);
         this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
+
+        //get the cam path
+        this.walkPoints = this.objectHandler.walkPath;
+        this.lookPoints = this.objectHandler.lookPath;
+        this.timeSlice = this.objectHandler.timeSlice;
+
+        this.camMove = new CamMove(this.timeSlice, this.walkPoints, this.lookPoints);
+
+
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
@@ -85,7 +105,9 @@ public class Engine implements GLEventListener {
         float lightAmbient0[] = {0.3f, 0.3f, 0.3f, 0.0f};
         float lightDiffuse0[] = {0.9f, 0.9f, 0.9f, 0.0f};
         float lightPos[] = {this.lights.lights.get(0).origin.x, this.lights.lights.get(0).origin.y, this.lights.lights.get(0).origin.z, 0f};
-        //gl.glEnable(GL.GL_LIGHTING);
+        gl.glDisable(GL.GL_LIGHTING);
+        /*
+        gl.glEnable(GL.GL_LIGHTING);
         gl.glEnable(GL.GL_LIGHT0);
 
 
@@ -96,7 +118,7 @@ public class Engine implements GLEventListener {
         gl.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 0.1f);
         gl.glLightf(GL.GL_LIGHT0, GL.GL_LINEAR_ATTENUATION, 0.1f);
         gl.glLightf(GL.GL_LIGHT0, GL.GL_QUADRATIC_ATTENUATION, 0.001f);
-
+         */
         gl.glPushMatrix();
         gl.glPopMatrix();
         gl.glEnable(GL.GL_CULL_FACE);
@@ -107,6 +129,7 @@ public class Engine implements GLEventListener {
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
         this.eInfo = new EInfo(this);
+        this.music.play();
     }
 
     public void display(GLAutoDrawable glDrawable) {
@@ -124,25 +147,47 @@ public class Engine implements GLEventListener {
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
         gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
 
+        //set cam location
+        //and make middle
+        if (this.camMove.aktiv) {
+            this.camMove.updatePos();
+        }
+
+/*
+        float[] foo = new float[16];
+        gl.glGetFloatv(GL.GL_MODELVIEW, foo, 0);
+
+        System.out.println(foo[0] + " " + foo[1] + " " + foo[2] + " " + foo[3] + " " +
+                foo[4] + " " + foo[5] + " " + foo[6] + " " + foo[7] + " " +
+                foo[8] + " " + foo[9] + " " + foo[10] + " " + foo[11] + " " +
+                foo[12] + " " + foo[13] + " " + foo[14] + " " + foo[15]);
+*/
+        if (this.camMove.aktiv && !this.input.camMoveGranted) {
+            //this make the camera run along the pathnau
+            //System.out.println(this.camMove.pos.toString());
+            this.cam.eertLookAt(gl);
+        } else {
+            this.cam.translateAccordingToCameraPosition(gl);
+        }
+
+
+        //this.cam.updateFrustMiddle();
         //build octree
         long ocTimeTest = System.currentTimeMillis();
         this.root = new EOcMaster(this, this.objectHandler.objIns, this.objectHandler.obj, gl, this.cam);
         long ocTimeTestA = System.currentTimeMillis();
 
 
-        //set cam location
-        //and make middle
-        this.cam.translateAccordingToCameraPosition(gl);
-        //this.cam.updateFrustMiddle();
-
         //draw skybox
         this.skybox.draw();
+
 
         //draw objects
         this.root.drawOctree(gl);
 
+
         //make shadows
-//        this.root.drawLightVolume(gl);
+        //this.root.drawLightVolume(gl);
 
         //if true draw Info on screen
         frame();
@@ -150,9 +195,6 @@ public class Engine implements GLEventListener {
             this.eInfo.octimeBuild = new Long(ocTimeTestA - ocTimeTest).toString();
             this.eInfo.drawInfo(glDrawable);
         }
-
-
-
     }
 
     public void displayChanged(GLAutoDrawable gl, boolean modeChanged, boolean devChanged) {

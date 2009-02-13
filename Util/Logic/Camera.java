@@ -17,6 +17,7 @@
  */
 package Util.Logic;
 
+import Engine.Engine;
 import Util.Logic.UHPT;
 import Types.Geometrie.Vector;
 import Util.Geometrie.VectorUtil;
@@ -48,6 +49,7 @@ public class Camera {
     public Vector dirVector;
     public Vector frustMiddle;
     public float frustRadius;
+    public Engine engine;
 
     public Camera() {
         this.loc = new Vector(0.0f, 0.0f, 8.0f);
@@ -193,6 +195,25 @@ public class Camera {
         gl.glTranslatef(-loc.x, -loc.y, -loc.z);
 
     }
+
+    public void eertLookAt(GL gl) {
+        Vector toAngle = new Vector(0f, 0f, 1f);
+        Vector xAngle = VectorUtil.abs(VectorUtil.sub(this.engine.camMove.pos, this.engine.camMove.lookAt));
+        xAngle.x = 0f;
+
+        float pitchE = VectorUtil.angleVec(toAngle, xAngle);
+
+        Vector yAngle = VectorUtil.abs(VectorUtil.sub(this.engine.camMove.pos, this.engine.camMove.lookAt));
+        yAngle.y = 0;
+
+        float headingE = VectorUtil.angleVec(toAngle, yAngle);
+
+        gl.glRotatef(pitchE, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(headingE, 0.0f, 1.0f, 0.0f);
+        gl.glTranslatef(-this.engine.camMove.pos.x, -this.engine.camMove.pos.y, -this.engine.camMove.pos.z);
+
+    }
+
 /*
     public void makeBoundingSphere() {
         float x = (float) (Math.sin(this.pitch) * Math.cos(this.heading));

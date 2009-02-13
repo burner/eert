@@ -95,6 +95,12 @@ public class VectorUtil {
                 vector1.x * vector2.y - vector1.y * vector2.x);
     }
 
+    public static Vector abs(Vector vec) {
+        return new Vector(Math.abs(vec.x),
+                Math.abs(vec.y),
+                Math.abs(vec.z));
+    }
+
     public static Vector threePlaneIntersec(Vector n1, float d1, Vector n2, float d2, Vector n3, float d3) {
         /*
         d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )

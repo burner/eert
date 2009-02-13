@@ -40,6 +40,7 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
     private boolean keySlideRight;
     private boolean keyUp;
     private boolean keyDown;
+    public boolean camMoveGranted;
     private Camera camera;
     private Thread camAnimator;
     private Engine engine;
@@ -54,6 +55,7 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
         this.mouseOldY = 0;
 
         this.camera = camera;
+        this.camMoveGranted = false;
 
         this.camAnimator = new Thread(this);
         this.camAnimator.start();
@@ -125,11 +127,18 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
         if (keyCode == 'u') {
             setFullScreenMode();
         }
-        if(keyCode == 'r') {
+        if (keyCode == 'r') {
             try {
                 this.engine.objectHandler.writeObjInsInfo();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(EInput.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (keyCode == 'h') {
+            if (this.camMoveGranted) {
+                this.camMoveGranted = false;
+            } else {
+                this.camMoveGranted = true;
             }
         }
     }
