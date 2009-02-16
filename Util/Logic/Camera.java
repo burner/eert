@@ -197,21 +197,12 @@ public class Camera {
     }
 
     public void eertLookAt(GL gl) {
-        Vector toAngle = new Vector(0f, 0f, 1f);
-        Vector xAngle = VectorUtil.abs(VectorUtil.sub(this.engine.camMove.pos, this.engine.camMove.lookAt));
-        xAngle.x = 0f;
 
-        float pitchE = VectorUtil.angleVec(toAngle, xAngle);
+        GLU glu = new GLU();
 
-        Vector yAngle = VectorUtil.abs(VectorUtil.sub(this.engine.camMove.pos, this.engine.camMove.lookAt));
-        yAngle.y = 0;
-
-        float headingE = VectorUtil.angleVec(toAngle, yAngle);
-
-        gl.glRotatef(pitchE, 1.0f, 0.0f, 0.0f);
-        gl.glRotatef(headingE, 0.0f, 1.0f, 0.0f);
-        gl.glTranslatef(-this.engine.camMove.pos.x, -this.engine.camMove.pos.y, -this.engine.camMove.pos.z);
-
+        glu.gluLookAt(this.engine.camMove.pos.x, this.engine.camMove.pos.y, this.engine.camMove.pos.z,
+                this.engine.camMove.lookAt.x, this.engine.camMove.lookAt.y, this.engine.camMove.lookAt.z,
+                0f, 1f, 0f);
     }
 
 /*

@@ -56,7 +56,7 @@ public class CamMove {
 
         //System.out.println("timediff = " + timeDiff);
 
-        if ((this.startTime + (this.timeSlice * this.counter)) < currentTime) {
+        if ((this.startTime + (this.timeSlice * (this.counter))) < currentTime) {
             //this needs to be done because more than one timeSlice could have passed
             //System.out.println("foo");
             //for (int i = 0; i < (int) timeDiff / this.timeSlice; i++) {
@@ -72,12 +72,12 @@ public class CamMove {
             this.aktiv = true;
         }
 
-        timeDiff = -timeDiff;
+        timeDiff = Math.abs(timeDiff);
 
         
         double lamda = 1.0 - (double)timeDiff / (double)this.timeSlice;
 
-        System.out.println(timeDiff + " / " + this.timeSlice + " = "+ lamda);
+        //System.out.println(timeDiff + " / " + this.timeSlice + " = "+ lamda);
 
         //Quadratic Bézier curves
         //gone cheat a bit

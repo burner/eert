@@ -49,8 +49,9 @@ public class EInfo {
         renderer.draw(new String("OctreeNodes = " + this.engine.root.numNodes), 20, glDrawable.getHeight() - 80);
         renderer.draw(new String("Drawn leaves = " + this.drawnNodes), 20, glDrawable.getHeight() - 92);
         renderer.draw(new String("Camera Pos = " + this.engine.cam.loc.toString()), 20, glDrawable.getHeight() - 104);
-        renderer.draw(new String("ObjIns = " + this.engine.objectHandler.objIns.length), 20, glDrawable.getHeight() - 116);
-        renderer.draw(new String("Drawn Obj = " + this.drawObj), 20, glDrawable.getHeight() - 128);
+        renderer.draw(new String("Camera Lookangle Pitch = " + this.engine.cam.pitch + " Heading = " + this.engine.cam.heading), 20, glDrawable.getHeight() - 116);
+        renderer.draw(new String("ObjIns = " + this.engine.objectHandler.objIns.length), 20, glDrawable.getHeight() - 128);
+        renderer.draw(new String("Drawn Obj = " + this.drawObj), 20, glDrawable.getHeight() - 140);
         renderer.endRendering();
         renderer.setColor(1f, 1f, 1f, 1f);
         this.drawnNodes = 0;
