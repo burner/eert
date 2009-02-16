@@ -475,7 +475,7 @@ public class EObjParse {
 
                 //if its the third vector add it another time
                 //because it's the first of the next three
-                if (path.size() == 3) {
+                if ((path.size() % 3) == 0) {
                     path.add(pos);
                 }
                 foo[0] = new StringBuffer();
@@ -539,7 +539,7 @@ public class EObjParse {
 
                 //if its the third vector add it another time
                 //because it's the first of the next three
-                if (path.size() == 3) {
+                if ((path.size() % 3) == 0) {
                     path.add(pos);
                 }
                 foo[0] = new StringBuffer();

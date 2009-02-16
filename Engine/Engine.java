@@ -212,7 +212,7 @@ public class Engine implements GLEventListener {
 
         //Info needed to make the sphere
         //around the frustum
-        this.cam.farPlane = 500.0f;
+        this.cam.farPlane = 550.0f;
         this.cam.nearPlane = 1.0f;
         this.cam.viewAngle = 45.0f;
         this.cam.zHalf = (this.cam.farPlane - this.cam.nearPlane) / 2;

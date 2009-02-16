@@ -199,7 +199,7 @@ public class Camera {
     public void eertLookAt(GL gl) {
 
         GLU glu = new GLU();
-
+        this.loc = this.engine.camMove.pos;
         glu.gluLookAt(this.engine.camMove.pos.x, this.engine.camMove.pos.y, this.engine.camMove.pos.z,
                 this.engine.camMove.lookAt.x, this.engine.camMove.lookAt.y, this.engine.camMove.lookAt.z,
                 0f, 1f, 0f);
