@@ -17,6 +17,7 @@
  */
 package Types.Geometrie;
 
+import Content.Textures.Textures;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -46,10 +47,8 @@ public class ETexture {
     }
 
     void loadImage(String filename) throws FileNotFoundException {
-        try {
-            File file = new File("./Textures/" + filename);
-            fileInputStream = new FileInputStream(file);
-            bufferedImage = ImageIO.read(fileInputStream);
+        try {            
+            bufferedImage = ImageIO.read(Textures.class.getResourceAsStream(filename));
             width = bufferedImage.getWidth();
             height = bufferedImage.getHeight();
         } catch (IOException ex) {

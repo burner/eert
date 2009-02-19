@@ -23,6 +23,7 @@ import Types.Geometrie.Vector;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class JObjParse {
     public float boudingRadius;
 
     public JObjParse(String file) {
-        readFile("./Objects/" + file);
+        readFile(file);
         makeFriends();
         makeMiddle();
         makeBoundingSphere();
@@ -152,9 +153,11 @@ public class JObjParse {
         DataInputStream dataInputStream2;
         BufferedReader bufferedReader;
         BufferedReader bufferedReader2;
+        InputStream input;
         try {
-            dataInputStream = new DataInputStream(new FileInputStream(file));
-            dataInputStream2 = new DataInputStream(new FileInputStream(file));
+            input = Object.class.getResourceAsStream(file);
+            dataInputStream = new DataInputStream(input);
+            dataInputStream2 = new DataInputStream(input);
             bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
             bufferedReader2 = new BufferedReader(new InputStreamReader(dataInputStream2));
 

@@ -17,6 +17,7 @@
  */
 package Util.Prelude;
 
+import Content.Szenes.Szenes;
 import Engine.Engine;
 import Types.Geometrie.Obj;
 import Types.Geometrie.ObjIns;
@@ -80,7 +81,7 @@ public class EObjParse {
 
     private void parse() {
         //needed to read a file
-        FileInputStream input;
+        InputStream input;
         DataInputStream data;
         BufferedReader reader;
         try {
@@ -88,7 +89,7 @@ public class EObjParse {
             System.out.println(new File(".").getAbsolutePath());
 
             //setup to read the file line by line
-            input = new FileInputStream("./Szenes/" + this.file);
+            input = Szenes.class.getResourceAsStream(this.file);
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));
 

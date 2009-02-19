@@ -21,6 +21,7 @@
  */
 package Util.Prelude;
 
+import Content.Shader.Shader;
 import com.sun.opengl.util.StreamUtil;
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,8 +87,7 @@ public class ShaderLoader {
         String[] vsrc = null;
 		try
 		{
-			vsrc = (new String (StreamUtil.readAll (new FileInputStream ("Shader/" +
-				vertFile)))).split ("\n");
+			vsrc = (new String (StreamUtil.readAll (Shader.class.getResourceAsStream(vertFile)))).split ("\n");
 		}
 		catch (Exception ex)
 		{
@@ -102,8 +102,7 @@ public class ShaderLoader {
         String[] fsrc = null;
 		try
 		{
-			fsrc = (new String (StreamUtil.readAll (new FileInputStream ("Shader/" +
-				fragFile)))).split ("\n");
+			fsrc = (new String (StreamUtil.readAll (Shader.class.getResourceAsStream(fragFile)))).split ("\n");
 		}
 		catch (Exception ex)
 		{

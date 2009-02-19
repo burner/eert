@@ -17,6 +17,7 @@
  */
 package Engine;
 // Import the JLayer classes
+import Content.Music.Music;
 import javazoom.jl.player.AudioDevice;
 import javazoom.jl.player.FactoryRegistry;
 import javazoom.jl.player.advanced.AdvancedPlayer;
@@ -40,7 +41,7 @@ public class EMusicPlayerMP3 implements Runnable {
 
     public void play() {
         try {
-            InputStream is = new BufferedInputStream(new FileInputStream(this.name));
+            InputStream is = new BufferedInputStream(Music.class.getResourceAsStream(this.name));
 
             FactoryRegistry r = FactoryRegistry.systemRegistry();
             device = r.createAudioDevice();
@@ -63,8 +64,6 @@ public class EMusicPlayerMP3 implements Runnable {
             thread = new Thread(this);
             thread.start();
         } catch (JavaLayerException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
