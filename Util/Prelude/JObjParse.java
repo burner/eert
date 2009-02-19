@@ -174,13 +174,16 @@ public class JObjParse {
                         readVertexTexCoordLine(line, 3);
                     }
                 }
+                if (line.charAt(0) == 'f') {
+                    readFaceLine(line, 2);
+                }
                 line = bufferedReader.readLine();
             }
-            line = bufferedReader2.readLine();
+          /*  line = bufferedReader2.readLine();
 
             //Faces
             while (line != null) {
-
+                System.out.println(line);
                 if (line == null) {
                     break;
                 }
@@ -188,7 +191,7 @@ public class JObjParse {
                     readFaceLine(line, 2);
                 }
                 line = bufferedReader2.readLine();
-            }
+            }*/
             bufferedReader.close();
         } catch (Exception e) {
             System.out.println("e: " + e.getMessage());

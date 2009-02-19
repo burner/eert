@@ -269,6 +269,7 @@ public class Obj {
 
         this.engine.eInfo.drawObj++;
 
+
         //get ObjIns
         ObjIns tmp = this.objIns.get(number);
 

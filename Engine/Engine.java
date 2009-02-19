@@ -174,8 +174,7 @@ public class Engine implements GLEventListener {
         this.root.drawOctree(gl);
         gl.glUseProgramObjectARB(0);
 
-
-        //make shadows
+         //make shadows
         //this.root.drawLightVolume(gl);
 
         //if true draw Info on screen
