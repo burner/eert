@@ -85,10 +85,9 @@ public class EObjParse {
         DataInputStream data;
         BufferedReader reader;
         try {
-            //to know where you are
-            System.out.println(new File(".").getAbsolutePath());
-
+         
             //setup to read the file line by line
+            System.out.println(this.file);
             input = Szenes.class.getResourceAsStream(this.file);
             data = new DataInputStream(input);
             reader = new BufferedReader(new InputStreamReader(data));

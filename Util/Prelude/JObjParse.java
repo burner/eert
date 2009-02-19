@@ -17,12 +17,11 @@
  */
 package Util.Prelude;
 
+import Content.Objects.Objects;
 import Types.Geometrie.Face;
 import Types.Geometrie.TexCoor;
 import Types.Geometrie.Vector;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -149,17 +148,13 @@ public class JObjParse {
 
     void readFile(String file) {
         System.out.println(file);
-        DataInputStream dataInputStream;
-        DataInputStream dataInputStream2;
         BufferedReader bufferedReader;
         BufferedReader bufferedReader2;
         InputStream input;
         try {
-            input = Object.class.getResourceAsStream(file);
-            dataInputStream = new DataInputStream(input);
-            dataInputStream2 = new DataInputStream(input);
-            bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
-            bufferedReader2 = new BufferedReader(new InputStreamReader(dataInputStream2));
+            input = Objects.class.getResourceAsStream(file);
+            bufferedReader = new BufferedReader(new InputStreamReader(input));
+            bufferedReader2 = new BufferedReader(new InputStreamReader(input));
 
             String line = bufferedReader.readLine();
 
