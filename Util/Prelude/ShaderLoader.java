@@ -22,26 +22,17 @@
 package Util.Prelude;
 
 import com.sun.opengl.util.StreamUtil;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.LinkedList;
 import javax.media.opengl.GL;
 
-/**
- *
- * @author burner
- */
 public class ShaderLoader {
 
     private GL gl;
     public int program;
     private int[] status;
     public int shaderprogram;
-    private int shaderprogramG;
+    public int shaderprogramG;
 
     public ShaderLoader(GL gl, boolean verOrFra, String filename) {
         //save the gl context
@@ -62,7 +53,7 @@ public class ShaderLoader {
         //open File containing shader
         String[] source = null;
         try {
-            source = (new String(StreamUtil.readAll(new FileInputStream(filename)))).split("\n");
+            source = (new String(StreamUtil.readAll(new FileInputStream("Shader/" + filename)))).split("\n");
         } catch (Exception ex) {
             System.err.println(ex);
         }
@@ -95,7 +86,7 @@ public class ShaderLoader {
         String[] vsrc = null;
 		try
 		{
-			vsrc = (new String (StreamUtil.readAll (new FileInputStream (
+			vsrc = (new String (StreamUtil.readAll (new FileInputStream ("Shader/" +
 				vertFile)))).split ("\n");
 		}
 		catch (Exception ex)
@@ -111,7 +102,7 @@ public class ShaderLoader {
         String[] fsrc = null;
 		try
 		{
-			fsrc = (new String (StreamUtil.readAll (new FileInputStream (
+			fsrc = (new String (StreamUtil.readAll (new FileInputStream ("Shader/" +
 				fragFile)))).split ("\n");
 		}
 		catch (Exception ex)
@@ -141,7 +132,7 @@ public class ShaderLoader {
       System.out.println("No error in "+(type==0?"vertex":"fragment")+" compilation");
       return true;
     }
-    byte[] log = new byte[1000];
+    byte[] log = new byte[10000];
     this.gl.glGetShaderInfoLog(shader, GL.GL_OBJECT_INFO_LOG_LENGTH_ARB, success, 0, log, 0);
     System.out.println("Error in "+(type==0?"vertex":"fragment")+" compilation");
     for (int i = 0; i < success[0]; i++) {

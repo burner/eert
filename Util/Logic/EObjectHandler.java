@@ -29,6 +29,9 @@ public class EObjectHandler {
     public Vector[] lookPath;
     public long timeSlice;
 
+    public String vertShader;
+    public String fragShader;
+
     //Constuctor
     public EObjectHandler(Camera cam, String szene, GL gl, Engine engine) {
         //Save all the parameter
@@ -53,6 +56,10 @@ public class EObjectHandler {
         //save the objInstances parsed by EObjParse
         this.objIns = new ObjIns[eObjParse.objectIns.size()];
         this.objIns = eObjParse.objectIns.toArray(this.objIns);
+
+        //save the shaderfiles
+        this.vertShader = eObjParse.vertShader;
+        this.fragShader = eObjParse.fragShader;
     }
 
     //update all the objInstances

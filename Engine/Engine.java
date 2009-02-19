@@ -33,6 +33,7 @@ import Util.Logic.EFrame;
 import Util.Logic.EInfo;
 import Util.Logic.EInput;
 import Util.Logic.UHPT;
+import Util.Prelude.ShaderLoader;
 import java.util.Calendar;
 
 public class Engine implements GLEventListener {
@@ -60,6 +61,9 @@ public class Engine implements GLEventListener {
     private Vector[] lookPoints;
     private long timeSlice;
     private GLU glu;
+
+    //Shader Program
+    ShaderLoader program;
 
     public Engine(Camera cam, String szene, EFrame frame) {
         this.szene = szene;
@@ -117,6 +121,7 @@ public class Engine implements GLEventListener {
         glDrawable.addKeyListener(this.input);
         glDrawable.addMouseListener(this.input);
         glDrawable.addMouseMotionListener(this.input);
+        this.program = new ShaderLoader(gl, this.objectHandler.vertShader, this.objectHandler.fragShader);
         this.eInfo = new EInfo(this);
         this.music.play();
     }
@@ -163,11 +168,11 @@ public class Engine implements GLEventListener {
         //draw skybox
         this.skybox.draw();
 
-        gl.glEnable(GL.GL_LIGHTING);
+        this.program.bindProgram();
         this.lights.draw(gl);
         //draw objects
         this.root.drawOctree(gl);
-        gl.glDisable(GL.GL_LIGHTING);
+        gl.glUseProgramObjectARB(0);
 
 
         //make shadows

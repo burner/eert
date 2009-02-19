@@ -55,6 +55,8 @@ public class EObjParse {
     public long camSpeed;
     public Vector[] camLook;
     public long camLookSpeed;
+    public String vertShader;
+    public String fragShader;
 
     public EObjParse(Camera cam, String file, GL gl, Engine engine) {
         //Save parameter
@@ -122,6 +124,8 @@ public class EObjParse {
                     addSkyBox();
                 } else if (curLine.charAt(0) == 'l') {
                     addLight();
+                } else if (curLine.charAt(0) == 'g') {
+                    addShader();
                 } else {
                     continue;
                 }
@@ -139,6 +143,25 @@ public class EObjParse {
         }
 
     }
+
+    private void addShader() {
+        StringBuffer vert = new StringBuffer();
+        StringBuffer frag = new StringBuffer();
+
+        int fIdx = 0;
+        for (int i = 2; i < curLine.length(); i++) {
+            if (curLine.charAt(i) == ' ') {
+                fIdx++;
+            } else if (fIdx == 0) {
+                vert.append(curLine.charAt(i));
+            } else {
+                frag.append(curLine.charAt(i));
+            }
+        }
+        this.vertShader = vert.toString();
+        this.fragShader = frag.toString();
+    }
+
 
     //walk along all objIns's and add them to the
     //ObjIns LinkedList within the right obj
