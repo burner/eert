@@ -1,1 +1,2 @@
 wc `find . -name \*.java`
+http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp

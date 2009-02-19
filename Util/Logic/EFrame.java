@@ -32,8 +32,10 @@ public class EFrame extends Frame {
     public GLCanvas canvas;
     private Camera cam;
     public final Animator animator;
+    public boolean info;
 
-    public EFrame(String szene, boolean fullScreen) {
+    public EFrame(String szene, boolean fullScreen, boolean info) {
+        this.info = info;
         this.cam = new Camera();
         this.setSize(1024, 640);
         this.canvas = new GLCanvas();

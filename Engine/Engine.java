@@ -83,6 +83,7 @@ public class Engine implements GLEventListener {
 
         //MP3 Player runs in own thread
         this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
+        this.drawInfo = this.frame.info;
 
         this.glu = new GLU();
     }
