@@ -27,6 +27,7 @@ import java.io.*;
 import Types.*;
 import Types.Geometrie.ESkyBox;
 import Types.Geometrie.Vector;
+import Types.Geometrie.Vector4;
 import Types.Illumination.LightManagement;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -403,9 +404,10 @@ public class EObjParse {
             }
         }
 
-        Vector pos = new Vector(Float.valueOf(foo[0].toString()),
+        Vector4 dir = new Vector4(Float.valueOf(foo[0].toString()),
                 Float.valueOf(foo[1].toString()),
-                Float.valueOf(foo[2].toString()));
+                Float.valueOf(foo[2].toString()),
+                0f);
 
 
         //get the light color
@@ -421,22 +423,10 @@ public class EObjParse {
             }
         }
 
-        Color col = new Color(Integer.valueOf(foo[0].toString()),
-                Integer.valueOf(foo[1].toString()),
-                Integer.valueOf(foo[2].toString()));
+        Vector col = new Vector(Float.valueOf(foo[0].toString()),
+                Float.valueOf(foo[1].toString()),
+                Float.valueOf(foo[2].toString()));
 
-
-        //get the radius of the light
-        foo[0] = new StringBuffer();
-        for (; i < curLine.length(); i++) {
-            if (curLine.charAt(i) == ' ') {
-                break;
-            } else {
-                foo[0].append(curLine.charAt(i));
-            }
-        }
-
-        float radius = Float.valueOf(foo[0].toString());
 
 
         //make new lightManagment for the engine if not existing
@@ -444,7 +434,7 @@ public class EObjParse {
             this.engine.lights = new LightManagement();
         }
 
-        this.engine.lights.addLight(pos, radius, col);
+        this.engine.lights.addLight(dir, col);
 
     }
 

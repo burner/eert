@@ -18,27 +18,28 @@
 package Types.Illumination;
 
 import Types.Geometrie.Vector;
+import Types.Geometrie.Vector4;
 import java.awt.Color;
 import javax.media.opengl.GL;
 
-public class PointLight implements ELight {
-    public Vector origin;
-    public float radius;
-    public Color color;
+class DirLight implements ELight {
 
-    public PointLight(Vector origin, float radius, Color color) {
-        this.origin = origin;
-        this.radius = radius;
-        this.color = color;
-    }
+    private Vector4 dir;
+    private Vector4 col;
+    private float[] ambiant;
 
-    public PointLight(PointLight toCopy) {
-        this.origin = new Vector(toCopy.origin);
-        this.radius = toCopy.radius;
-        this.color = new Color(toCopy.color.getRGB());
+    public DirLight(Vector4 dir, Vector col) {
+        this.dir = dir;
+        this.col = new Vector4(col.x, col.y, col.z, 1f);
+        float[] foo = {0.3f, 0.3f, 0.3f, 1f};
+        this.ambiant = foo;
+
     }
 
     public void draw(GL gl) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, this.dir.toArray(), 0);
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, this.ambiant, 0);
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, col.toArray(),0);
+        gl.glEnable(GL.GL_LIGHT0);
     }
 }

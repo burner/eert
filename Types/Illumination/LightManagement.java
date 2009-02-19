@@ -18,17 +18,29 @@
 package Types.Illumination;
 
 import Types.Geometrie.Vector;
+import Types.Geometrie.Vector4;
 import java.awt.Color;
 import java.util.LinkedList;
+import javax.media.opengl.GL;
 
 public class LightManagement {
-    public LinkedList<PointLight> lights;
+    public LinkedList<ELight> lights;
 
     public LightManagement() {
-        this.lights = new LinkedList<PointLight>();
+        this.lights = new LinkedList<ELight>();
     }
 
     public void addLight(Vector origin, float radius, Color color) {
         this.lights.add(new PointLight(origin, radius, color));
+    }
+
+    public void addLight(Vector4 dir, Vector col) {
+        this.lights.add(new DirLight(dir, col));
+    }
+
+    public void draw(GL gl) {
+        for(ELight light: this.lights) {
+            light.draw(gl);
+        }
     }
 }

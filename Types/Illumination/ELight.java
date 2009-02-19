@@ -17,28 +17,9 @@
  */
 package Types.Illumination;
 
-import Types.Geometrie.Vector;
-import java.awt.Color;
 import javax.media.opengl.GL;
 
-public class PointLight implements ELight {
-    public Vector origin;
-    public float radius;
-    public Color color;
 
-    public PointLight(Vector origin, float radius, Color color) {
-        this.origin = origin;
-        this.radius = radius;
-        this.color = color;
-    }
-
-    public PointLight(PointLight toCopy) {
-        this.origin = new Vector(toCopy.origin);
-        this.radius = toCopy.radius;
-        this.color = new Color(toCopy.color.getRGB());
-    }
-
-    public void draw(GL gl) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+public interface ELight {
+    public void draw(GL gl);
 }

@@ -51,4 +51,14 @@ public class Vector4 {
         this.z = old.z;
         this.w = old.w;
     }
+
+    public float[] toArray() {
+        float[] foo = {
+            this.x,
+            this.y,
+            this.z,
+            this.w};
+        return foo;
+        
+    }
 }

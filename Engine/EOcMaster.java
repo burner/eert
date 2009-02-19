@@ -109,6 +109,11 @@ public class EOcMaster {
         }
         this.drawn = new boolean[this.objs.length];
 
+        float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        float mat_shininess[] = {50.0f};
+
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0);
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
         //actually draw
         //drawBox(gl);
         extractFrustum();
@@ -122,83 +127,82 @@ public class EOcMaster {
         gl.glDisable(GL.GL_TEXTURE);
     }
 
-/*    public void drawLightVolume(GL gl) {
-        this.lightDrawn = new boolean[this.objs.length];
+    /*    public void drawLightVolume(GL gl) {
+    this.lightDrawn = new boolean[this.objs.length];
 
-        //make the list of shadow volumes
-        //this one gone take a lot of juice
-        //goes all the way done the octree
-        gl.glNewList(this.shadowList, GL.GL_COMPILE);
-        this.root.drawLight(gl);
-        gl.glEndList();
-
-
-        //setup Opengl
-        gl.glColorMask(false, false, false, false);
-        gl.glDepthMask(false);
-
-        gl.glEnable(GL.GL_STENCIL_TEST);
-        gl.glStencilFunc(GL.GL_ALWAYS, 0, 0xFFFFFFF);
-
-        //activate stencil
-        gl.glStencilOp(GL.GL_KEEP, GL.GL_INCR_WRAP, GL.GL_KEEP);
-        gl.glEnable(GL.GL_CULL_FACE);
-        gl.glFrontFace(GL.GL_CW);
-
-        //draw frontface
-        gl.glCallList(this.shadowList);
-
-        //draw backfaces
-        gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR_WRAP, GL.GL_KEEP);
-        gl.glFrontFace(GL.GL_CCW);
-
-        gl.glCallList(this.shadowList);
+    //make the list of shadow volumes
+    //this one gone take a lot of juice
+    //goes all the way done the octree
+    gl.glNewList(this.shadowList, GL.GL_COMPILE);
+    this.root.drawLight(gl);
+    gl.glEndList();
 
 
-        //skybox
-        gl.glStencilFunc(GL.GL_NOTEQUAL, 0, 0xFFFFFFFF);
+    //setup Opengl
+    gl.glColorMask(false, false, false, false);
+    gl.glDepthMask(false);
 
-        gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR, GL.GL_KEEP);
-        gl.glDepthFunc(GL.GL_NEVER);
-        gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glDepthMask(true);
+    gl.glEnable(GL.GL_STENCIL_TEST);
+    gl.glStencilFunc(GL.GL_ALWAYS, 0, 0xFFFFFFF);
 
-        //draw skybox over the actual shadow
-        this.engine.skybox.draw();
+    //activate stencil
+    gl.glStencilOp(GL.GL_KEEP, GL.GL_INCR_WRAP, GL.GL_KEEP);
+    gl.glEnable(GL.GL_CULL_FACE);
+    gl.glFrontFace(GL.GL_CW);
 
-        gl.glColorMask(true, true, true, true);
-        gl.glStencilFunc(GL.GL_NOTEQUAL, 0, 0xFFFFFFFF);
-        gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
-        gl.glDepthFunc(GL.GL_ALWAYS);
-        gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glDepthMask(true);
+    //draw frontface
+    gl.glCallList(this.shadowList);
+
+    //draw backfaces
+    gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR_WRAP, GL.GL_KEEP);
+    gl.glFrontFace(GL.GL_CCW);
+
+    gl.glCallList(this.shadowList);
 
 
-        gl.glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
-        gl.glEnable(GL.GL_CULL_FACE);
-        gl.glFrontFace(GL.GL_CCW);
-        gl.glDisable(GL.GL_LIGHTING);
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        gl.glPushMatrix();
-        gl.glLoadIdentity();
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-        gl.glVertex3f(-0.1f, 0.1f, -0.1f);
-        gl.glVertex3f(-0.1f, -0.1f, -0.1f);
-        gl.glVertex3f(0.1f, 0.1f, -0.1f);
-        gl.glVertex3f(0.1f, -0.1f, -0.1f);
-        gl.glEnd();
-        gl.glPopMatrix();
-        gl.glDisable(GL.GL_BLEND);
+    //skybox
+    gl.glStencilFunc(GL.GL_NOTEQUAL, 0, 0xFFFFFFFF);
 
-        gl.glDepthFunc(GL.GL_LESS);
+    gl.glStencilOp(GL.GL_KEEP, GL.GL_DECR, GL.GL_KEEP);
+    gl.glDepthFunc(GL.GL_NEVER);
+    gl.glEnable(GL.GL_DEPTH_TEST);
+    gl.glDepthMask(true);
 
-        gl.glDisable(GL.GL_STENCIL_TEST);
+    //draw skybox over the actual shadow
+    this.engine.skybox.draw();
 
-        this.engine.skybox.draw();
-        gl.glFlush();
+    gl.glColorMask(true, true, true, true);
+    gl.glStencilFunc(GL.GL_NOTEQUAL, 0, 0xFFFFFFFF);
+    gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+    gl.glDepthFunc(GL.GL_ALWAYS);
+    gl.glEnable(GL.GL_DEPTH_TEST);
+    gl.glDepthMask(true);
+
+
+    gl.glColor4f(0.0f, 0.0f, 0.0f, 0.8f);
+    gl.glEnable(GL.GL_CULL_FACE);
+    gl.glFrontFace(GL.GL_CCW);
+    gl.glDisable(GL.GL_LIGHTING);
+    gl.glEnable(GL.GL_BLEND);
+    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+    gl.glPushMatrix();
+    gl.glLoadIdentity();
+    gl.glBegin(GL.GL_TRIANGLE_STRIP);
+    gl.glVertex3f(-0.1f, 0.1f, -0.1f);
+    gl.glVertex3f(-0.1f, -0.1f, -0.1f);
+    gl.glVertex3f(0.1f, 0.1f, -0.1f);
+    gl.glVertex3f(0.1f, -0.1f, -0.1f);
+    gl.glEnd();
+    gl.glPopMatrix();
+    gl.glDisable(GL.GL_BLEND);
+
+    gl.glDepthFunc(GL.GL_LESS);
+
+    gl.glDisable(GL.GL_STENCIL_TEST);
+
+    this.engine.skybox.draw();
+    gl.glFlush();
     }*/
-
     public void drawBox(GL gl) {
         gl.glPushMatrix();
         gl.glTranslatef(this.middle.x, this.middle.y, this.middle.z);
@@ -349,22 +353,22 @@ public class EOcMaster {
         this.frustum[5][2] /= t;
         this.frustum[5][3] /= t;
 
-/*
-        //Boudingsphere around the frustum and all lights
- //       this.engine.cam.updateFrustMiddle();
+    /*
+    //Boudingsphere around the frustum and all lights
+    //       this.engine.cam.updateFrustMiddle();
 
-        //Check if a light is outside of the boundingsphere
-        //and if so extend the radius of the sphere
-        if (this.engine.lights == null) {
-            return;
-        }
-        for (PointLight light : this.engine.lights.lights) {
-            this.frustLight = this.cam.frustRadius;
-            float dis = VectorUtil.distance(this.cam.frustMiddle, light.origin);
-            if (dis > this.frustLight) {
-                this.frustLight = dis;
-            }
-        }*/
+    //Check if a light is outside of the boundingsphere
+    //and if so extend the radius of the sphere
+    if (this.engine.lights == null) {
+    return;
+    }
+    for (PointLight light : this.engine.lights.lights) {
+    this.frustLight = this.cam.frustRadius;
+    float dis = VectorUtil.distance(this.cam.frustMiddle, light.origin);
+    if (dis > this.frustLight) {
+    this.frustLight = dis;
+    }
+    }*/
 
     }
 }

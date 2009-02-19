@@ -102,23 +102,12 @@ public class Engine implements GLEventListener {
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
 
-        float lightAmbient0[] = {0.3f, 0.3f, 0.3f, 0.0f};
-        float lightDiffuse0[] = {0.9f, 0.9f, 0.9f, 0.0f};
-        float lightPos[] = {this.lights.lights.get(0).origin.x, this.lights.lights.get(0).origin.y, this.lights.lights.get(0).origin.z, 0f};
-        gl.glDisable(GL.GL_LIGHTING);
-        /*
-        gl.glEnable(GL.GL_LIGHTING);
-        gl.glEnable(GL.GL_LIGHT0);
+        float mat_specular[] = {1f, 1f, 1f, 1f};
+        float mat_shininess[] = {50f};
 
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0);
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
 
-        gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, lightDiffuse0, 0);
-        gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, lightAmbient0, 0);
-        gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, lightPos, 0);
-
-        gl.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 0.1f);
-        gl.glLightf(GL.GL_LIGHT0, GL.GL_LINEAR_ATTENUATION, 0.1f);
-        gl.glLightf(GL.GL_LIGHT0, GL.GL_QUADRATIC_ATTENUATION, 0.001f);
-         */
         gl.glPushMatrix();
         gl.glPopMatrix();
         gl.glEnable(GL.GL_CULL_FACE);
@@ -153,15 +142,8 @@ public class Engine implements GLEventListener {
             this.camMove.updatePos();
         }
 
-/*
-        float[] foo = new float[16];
-        gl.glGetFloatv(GL.GL_MODELVIEW, foo, 0);
 
-        System.out.println(foo[0] + " " + foo[1] + " " + foo[2] + " " + foo[3] + " " +
-                foo[4] + " " + foo[5] + " " + foo[6] + " " + foo[7] + " " +
-                foo[8] + " " + foo[9] + " " + foo[10] + " " + foo[11] + " " +
-                foo[12] + " " + foo[13] + " " + foo[14] + " " + foo[15]);
-*/
+
         if (this.camMove.aktiv && !this.input.camMoveGranted) {
             //this make the camera run along the pathnau
             //System.out.println(this.camMove.pos.toString());
@@ -181,9 +163,11 @@ public class Engine implements GLEventListener {
         //draw skybox
         this.skybox.draw();
 
-
+        gl.glEnable(GL.GL_LIGHTING);
+        this.lights.draw(gl);
         //draw objects
         this.root.drawOctree(gl);
+        gl.glDisable(GL.GL_LIGHTING);
 
 
         //make shadows

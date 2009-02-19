@@ -310,7 +310,7 @@ public class Obj {
         gl.glPopMatrix();
     }
 
-    public void renderShadow(int obNumb) {
+/*    public void renderShadow(int obNumb) {
         //draw stuff
         makeSilhouette();
         drawShadowVolume(obNumb);
@@ -318,7 +318,7 @@ public class Obj {
         //clean up so next objIns finds anything clear
 
         this.cap = new LinkedList<Face>();
-    }
+    }*/
 
     private void makeFaceNormals() {
         Face face;
@@ -338,7 +338,7 @@ public class Obj {
         }
     }
 
-    public void findFacesFacingLight(float dis, int numberOfObjIns) {
+/*    public void findFacesFacingLight(float dis, int numberOfObjIns) {
         //transform and rotate the
         //according to the modelviewMatrix
 
@@ -393,7 +393,7 @@ public class Obj {
                 toTest.lit = false;
             }
         }
-    }
+    }*/
 
     public void makeSilhouette() {
         this.edgesToExtrude = new LinkedList<Edge>();
@@ -431,7 +431,7 @@ public class Obj {
         this.bR = dis;
     }
 
-    private void drawShadowVolume(int number) {
+/*    private void drawShadowVolume(int number) {
 
         this.gl.glPushMatrix();
         ObjIns tmp = this.objIns.get(number);
@@ -496,6 +496,6 @@ public class Obj {
         this.gl.glEnd();
 
         this.gl.glPopMatrix();
-    }
+    }*/
 }
 
