@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2008.12.7)  28 JAN 2009 18:39
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2008.12.7)  21 FEB 2009 00:20
 entering extended mode
  %&-line parsing enabled.
 **Doku.tex
@@ -492,49 +492,101 @@ File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 \tf@toc=\write3
 \openout3 = `Doku.toc'.
 
- [1]
-Underfull \hbox (badness 10000) in paragraph at lines 122--128
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--57
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 122--128
+Underfull \hbox (badness 10000) in paragraph at lines 65--70
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--73
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 74--78
+
+ []
+
+[1]
+Underfull \hbox (badness 10000) in paragraph at lines 79--83
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 88--91
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--96
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 129--134
+Underfull \hbox (badness 10000) in paragraph at lines 132--138
+
+ []
+
+<t10138u_Suzanne.png, id=16, 1027.84pt x 1027.84pt>
+File: t10138u_Suzanne.png Graphic file (type png)
+ <use t10138u_Suzanne.png>
+Underfull \hbox (badness 10000) in paragraph at lines 139--141
+
+ []
+
+[3 <./t10138u_Suzanne.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 159--166
+
+ []
+
+<oc1.png, id=20, 1680.2775pt x 1049.9225pt>
+File: oc1.png Graphic file (type png)
+ <use oc1.png>
+Underfull \hbox (badness 10000) in paragraph at lines 167--169
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 129--134
+Underfull \hbox (badness 10000) in paragraph at lines 170--175
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 140--145
+[4 <./oc1.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 176--178
 
  []
 
-[3] (./Doku.aux) ) 
+<oc2.png, id=27, 1853.92625pt x 1091.07625pt>
+File: oc2.png Graphic file (type png)
+ <use oc2.png> [5 <./oc2.png>]
+(./Doku.aux) ) 
 Here is how much of TeX's memory you used:
- 4146 strings out of 94080
- 52218 string characters out of 1165311
+ 4162 strings out of 94080
+ 52444 string characters out of 1165311
  113840 words of memory out of 1500000
- 7380 multiletter control sequences out of 10000+50000
+ 7392 multiletter control sequences out of 10000+50000
  11811 words of font info for 46 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 27i,11n,43p,228b,218s stack positions out of 5000i,500n,6000p,200000b,5000s
-</usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmbx10.pfb><
-/usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmbx12.pfb></usr/share/texmf-te
-xlive/fonts/type1/bluesky/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/b
-luesky/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmr10.pfb>
-</usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf-te
-xlive/fonts/type1/bluesky/cm/cmr17.pfb>
-Output written on Doku.pdf (4 pages, 60421 bytes).
+ 27i,12n,43p,228b,218s stack positions out of 5000i,500n,6000p,200000b,5000s
+</usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmbx10.pfb></usr
+/share/texmf-texlive/fonts/type1/bluesky/cm/cmbx12.pfb></usr/share/texmf-texliv
+e/fonts/type1/bluesky/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/blues
+ky/cm/cmmi7.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmr10.pfb></us
+r/share/texmf-texlive/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf-texliv
+e/fonts/type1/bluesky/cm/cmr17.pfb>
+Output written on Doku.pdf (6 pages, 1906461 bytes).
 PDF statistics:
- 43 PDF objects out of 1000 (max. 8388607)
+ 54 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

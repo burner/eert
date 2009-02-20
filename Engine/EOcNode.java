@@ -204,6 +204,7 @@ public class EOcNode {
         gl.glVertex3f(this.radius, this.radius, this.radius);
         gl.glVertex3f(this.radius, this.radius, -this.radius);
         gl.glEnd();
+        gl.glColor3f(1f,1f,1f);
 
         gl.glPopMatrix();
     }
