@@ -63,7 +63,7 @@ public class EOcNode {
             //If the distance is 0.0
             //the node is not within
             //the frustun
-            //drawBox(gl);
+            if(this.root.engine.frame.octree)drawBox(gl);
             if (0.0f == (dis = SphereInFrustum(this.middle.x, this.middle.y, this.middle.z, this.radius))) {
                 return;
             } else {

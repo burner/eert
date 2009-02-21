@@ -141,6 +141,13 @@ public final class EInput implements KeyListener, MouseListener, MouseMotionList
                 this.camMoveGranted = true;
             }
         }
+        if(keyCode == 'o') {
+            if(this.camera.engine.frame.octree == false) {
+                this.camera.engine.frame.octree = true;
+            } else {
+                this.camera.engine.frame.octree = false;
+            }
+        }
     }
 
     public void keyReleased(KeyEvent e) {

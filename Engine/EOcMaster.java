@@ -115,7 +115,7 @@ public class EOcMaster {
         gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular, 0);
         gl.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess, 0);
         //actually draw
-        //drawBox(gl);
+        if(this.engine.frame.octree)drawBox(gl);
         extractFrustum();
         this.facRender = 0;
         this.root.draw(gl);
@@ -241,6 +241,7 @@ public class EOcMaster {
         gl.glEnd();
 
         gl.glPopMatrix();
+        gl.glColor3f(1f,1f,1f);
     }
 
     private void extractFrustum() {

@@ -33,8 +33,10 @@ public class EFrame extends Frame {
     private Camera cam;
     public final Animator animator;
     public boolean info;
+    public boolean octree;
 
-    public EFrame(String szene, boolean fullScreen, boolean info) {
+    public EFrame(String szene, boolean fullScreen, boolean info, boolean octree) {
+        this.octree = octree;
         this.info = info;
         this.cam = new Camera();
         this.setSize(1024, 640);
