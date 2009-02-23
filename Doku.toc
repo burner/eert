@@ -12,4 +12,4 @@
 \contentsline {subsection}{\numberline {2.9}Level of Detail}{4}
 \contentsline {subsection}{\numberline {2.10}Shadow Volumes}{4}
 \contentsline {subsection}{\numberline {2.11}Octree}{4}
-\contentsline {section}{\numberline {3}Zusammenfassung}{5}
+\contentsline {section}{\numberline {3}Schluss}{5}
