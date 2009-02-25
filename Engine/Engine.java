@@ -81,8 +81,7 @@ public class Engine implements GLEventListener {
 
         this.frame = frame;
 
-        //MP3 Player runs in own thread
-        this.music = new EMusicPlayerMP3("04-portishead-the_rip.mp3");
+       
         this.drawInfo = this.frame.info;
 
         this.glu = new GLU();
@@ -101,6 +100,8 @@ public class Engine implements GLEventListener {
 
         this.camMove = new CamMove(this.timeSlice, this.walkPoints, this.lookPoints);
 
+         //MP3 Player runs in own thread
+        this.music = new EMusicPlayerMP3(this.objectHandler.music);
 
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);

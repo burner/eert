@@ -58,6 +58,7 @@ public class EObjParse {
     public long camLookSpeed;
     public String vertShader;
     public String fragShader;
+    public String music;
 
     public EObjParse(Camera cam, String file, GL gl, Engine engine) {
         //Save parameter
@@ -85,7 +86,7 @@ public class EObjParse {
         DataInputStream data;
         BufferedReader reader;
         try {
-         
+
             //setup to read the file line by line
             System.out.println(this.file);
             input = Szenes.class.getResourceAsStream(this.file);
@@ -126,6 +127,8 @@ public class EObjParse {
                     addLight();
                 } else if (curLine.charAt(0) == 'g') {
                     addShader();
+                } else if (curLine.charAt(0) == 'm') {
+                    addMusic();
                 } else {
                     continue;
                 }
@@ -141,6 +144,18 @@ public class EObjParse {
             System.out.println("Unknown Error");
             e.printStackTrace();
         }
+
+    }
+
+    private void addMusic() {
+        StringBuffer mu = new StringBuffer();
+        for(int i = 2; i <curLine.length(); i++) {
+            if(curLine.charAt(i) == ' ')
+                break;
+            else
+                mu.append(curLine.charAt(i));
+        }
+        this.music = mu.toString();
 
     }
 

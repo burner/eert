@@ -1,0 +1,9 @@
+\beamer@endinputifotherversion {3.07pt}
+\select@language {german}
+\beamer@sectionintoc {1}{Motivation}{3}{0}{1}
+\beamer@sectionintoc {2}{Techniken}{4}{0}{2}
+\beamer@sectionintoc {3}{Quadratische B\'{e}zierkurven}{5}{0}{3}
+\beamer@sectionintoc {4}{Objektinstanzen}{6}{0}{4}
+\beamer@sectionintoc {5}{Level of Detail}{7}{0}{5}
+\beamer@sectionintoc {6}{Octree}{8}{0}{6}
+\beamer@sectionintoc {7}{Fragen}{12}{0}{7}

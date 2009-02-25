@@ -32,6 +32,8 @@ public class EObjectHandler {
     public String vertShader;
     public String fragShader;
 
+    public String music;
+
     //Constuctor
     public EObjectHandler(Camera cam, String szene, GL gl, Engine engine) {
         //Save all the parameter
@@ -60,6 +62,9 @@ public class EObjectHandler {
         //save the shaderfiles
         this.vertShader = eObjParse.vertShader;
         this.fragShader = eObjParse.fragShader;
+
+        //save the music
+        this.music = eObjParse.music;
     }
 
     //update all the objInstances
